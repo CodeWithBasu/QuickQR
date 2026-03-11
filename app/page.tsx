@@ -7,20 +7,18 @@ import { QRCodeSVG } from "qrcode.react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
-import { Download, Link as LinkIcon, Palette, Droplet, Frame, QrCode, ShieldCheck } from "lucide-react"
-
-type ErrorCorrectionLevel = "L" | "M" | "Q" | "H"
+import { Download, Link as LinkIcon, QrCode } from "lucide-react"
 
 export default function QRCodeGenerator() {
   const [url, setUrl] = useState("https://your-website.com")
   const [debouncedUrl, setDebouncedUrl] = useState(url)
-  const [color, setColor] = useState("#ffffff")
-  const [backgroundColor, setBackgroundColor] = useState("#000000")
-  const [size, setSize] = useState(280)
-  const [errorCorrection, setErrorCorrection] = useState<ErrorCorrectionLevel>("H")
   const [isHovered, setIsHovered] = useState(false)
+
+  // Hardcoded optimized defaults for the removed controls
+  const QR_COLOR = "#ffffff"
+  const QR_BG_COLOR = "#000000"
+  const QR_SIZE = 280
+  const QR_LEVEL = "H"
 
   // Auto-update QR code on URL change with debounce
   useEffect(() => {
@@ -38,8 +36,8 @@ export default function QRCodeGenerator() {
     const ctx = canvas.getContext("2d")
     const img = new Image()
     img.onload = () => {
-      canvas.width = size
-      canvas.height = size
+      canvas.width = QR_SIZE
+      canvas.height = QR_SIZE
       ctx?.drawImage(img, 0, 0)
       const pngFile = canvas.toDataURL("image/png")
       const downloadLink = document.createElement("a")
@@ -53,22 +51,22 @@ export default function QRCodeGenerator() {
   return (
     <div className="min-h-screen relative flex items-center justify-center bg-black text-zinc-100 font-sans selection:bg-white/20 overflow-hidden">
       
-      {/* MagicUI Animated Dot Pattern Background */}
+      {/* MagicUI Animated Dot Pattern Background - Optimized to prevent lag */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <DotPattern
-          width={20}
-          height={20}
+          width={32}
+          height={32}
           cx={1}
           cy={1}
           cr={1.5}
-          glow={true}
+          glow={false}
           className={cn(
-            "[mask-image:radial-gradient(900px_circle_at_center,white,transparent)] fill-white/80 opacity-100 h-screen w-screen"
+            "[mask-image:radial-gradient(900px_circle_at_center,white,transparent)] fill-white/20 opacity-100 h-screen w-screen"
           )}
         />
       </div>
 
-      <div className="relative z-10 w-full max-w-6xl px-6 py-16 md:px-12">
+      <div className="relative z-10 w-full max-w-4xl px-6 py-16 md:px-12">
         
         {/* Sleek Header Section */}
         <div className="flex flex-col items-center mb-16 space-y-5">
@@ -83,10 +81,10 @@ export default function QRCodeGenerator() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+        <div className="flex flex-col lg:flex-row gap-10 lg:gap-14 items-center justify-center">
           
           {/* Main Controls Console - Brutalist & Clean */}
-          <div className="lg:col-span-7 space-y-10 group bg-black/60 backdrop-blur-md p-8 rounded-3xl border border-zinc-800/50 shadow-2xl">
+          <div className="w-full lg:w-1/2 space-y-8 group bg-black/60 backdrop-blur-md p-8 rounded-3xl border border-zinc-800/50 shadow-2xl">
             
             {/* URL Input Section */}
             <div className="space-y-4">
@@ -106,112 +104,17 @@ export default function QRCodeGenerator() {
                 />
               </div>
             </div>
+            
+            <p className="text-zinc-500 text-sm leading-relaxed border-l-2 border-zinc-800 pl-4 py-1">
+              Your link is encoded immediately with highest precision error correction.
+            </p>
 
-            {/* Color Controls Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 relative z-20">
-              {/* Foreground */}
-              <div className="space-y-4">
-                <Label htmlFor="color" className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">
-                  <Palette className="w-4 h-4 mr-3 text-zinc-500" />
-                  Foreground Color
-                </Label>
-                <div className="flex items-center space-x-4 bg-zinc-950/50 p-2.5 rounded-xl border border-zinc-800 hover:border-zinc-700 transition-colors">
-                  <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0 border border-zinc-800 focus-within:ring-2 focus-within:ring-white/20">
-                    <input
-                      id="color"
-                      type="color"
-                      value={color}
-                      onChange={(e) => setColor(e.target.value)}
-                      suppressHydrationWarning
-                      className="absolute -top-4 -left-4 w-24 h-24 cursor-pointer"
-                    />
-                  </div>
-                  <Input 
-                    type="text" 
-                    value={color} 
-                    onChange={(e) => setColor(e.target.value)}
-                    suppressHydrationWarning
-                    className="bg-transparent border-none text-zinc-300 focus-visible:ring-0 px-2 uppercase font-mono h-10 w-full relative z-20"
-                  />
-                </div>
-              </div>
-
-              {/* Background */}
-              <div className="space-y-4">
-                <Label htmlFor="backgroundColor" className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">
-                  <Droplet className="w-4 h-4 mr-3 text-zinc-500" />
-                  Background Color
-                </Label>
-                <div className="flex items-center space-x-4 bg-zinc-950/50 p-2.5 rounded-xl border border-zinc-800 hover:border-zinc-700 transition-colors">
-                  <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0 border border-zinc-800 focus-within:ring-2 focus-within:ring-white/20">
-                    <input
-                      id="backgroundColor"
-                      type="color"
-                      value={backgroundColor}
-                      onChange={(e) => setBackgroundColor(e.target.value)}
-                      suppressHydrationWarning
-                      className="absolute -top-4 -left-4 w-24 h-24 cursor-pointer"
-                    />
-                  </div>
-                  <Input 
-                    type="text" 
-                    value={backgroundColor} 
-                    onChange={(e) => setBackgroundColor(e.target.value)}
-                    suppressHydrationWarning
-                    className="bg-transparent border-none text-zinc-300 focus-visible:ring-0 px-2 uppercase font-mono h-10 w-full relative z-20"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-4 relative z-20">
-              {/* Geometric Fidelity (Size) */}
-              <div className="space-y-6">
-                <div className="flex justify-between items-center">
-                  <Label htmlFor="size" className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">
-                    <Frame className="w-4 h-4 mr-3 text-zinc-500" />
-                    Scale
-                  </Label>
-                  <span className="text-xs font-mono text-zinc-500">
-                    {size}px
-                  </span>
-                </div>
-                <Slider
-                  id="size"
-                  min={120}
-                  max={1000}
-                  step={10}
-                  value={[size]}
-                  onValueChange={(value) => setSize(value[0])}
-                  className="py-2 cursor-ew-resize [&_[role=slider]]:bg-white [&_[role=slider]]:border-zinc-800 [&_[role=slider]]:w-5 [&_[role=slider]]:h-5 [&_.bg-primary]:bg-white [&_.bg-secondary]:bg-zinc-800 relative z-20"
-                />
-              </div>
-
-              {/* Error Resilience */}
-              <div className="space-y-4">
-                <Label htmlFor="errorCorrection" className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">
-                  <ShieldCheck className="w-4 h-4 mr-3 text-zinc-500" />
-                  Error Correction
-                </Label>
-                <Select value={errorCorrection} onValueChange={(val: ErrorCorrectionLevel) => setErrorCorrection(val)}>
-                  <SelectTrigger suppressHydrationWarning id="errorCorrection" className="w-full bg-zinc-950/50 border-zinc-800 text-zinc-100 h-12 rounded-xl px-4 hover:border-zinc-700 transition-colors focus:ring-1 focus:ring-white/20 focus:border-white/20 relative z-20">
-                    <SelectValue placeholder="Select level" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-100 rounded-xl shadow-2xl z-50">
-                    <SelectItem value="L" className="py-3 px-4 focus:bg-zinc-800 cursor-pointer text-sm">Low (7%)</SelectItem>
-                    <SelectItem value="M" className="py-3 px-4 focus:bg-zinc-800 cursor-pointer text-sm">Medium (15%)</SelectItem>
-                    <SelectItem value="Q" className="py-3 px-4 focus:bg-zinc-800 cursor-pointer text-sm">Quartile (25%)</SelectItem>
-                    <SelectItem value="H" className="py-3 px-4 focus:bg-zinc-800 cursor-pointer text-sm font-medium">High (30%)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
           </div>
 
           {/* Minimalist Output Display */}
-          <div className="lg:col-span-5 flex flex-col items-center">
+          <div className="w-full lg:w-1/2 flex flex-col items-center">
             
-            <div className="w-full bg-zinc-950/80 backdrop-blur-md border border-zinc-800 rounded-3xl p-8 flex flex-col items-center justify-center relative shadow-2xl overflow-hidden min-h-[450px]">
+            <div className="w-full bg-zinc-950/80 backdrop-blur-md border border-zinc-800 rounded-3xl p-8 flex flex-col items-center justify-center relative shadow-2xl overflow-hidden min-h-[400px]">
               
               <div className="absolute top-6 left-6 flex space-x-2">
                 <div className="w-2.5 h-2.5 rounded-full bg-zinc-800" />
@@ -233,17 +136,17 @@ export default function QRCodeGenerator() {
                 <div 
                   className="p-4 rounded-xl shadow-2xl border"
                   style={{ 
-                    backgroundColor: backgroundColor,
+                    backgroundColor: QR_BG_COLOR,
                     borderColor: 'rgba(255,255,255,0.05)'
                   }}
                 >
                   <QRCodeSVG
                     id="qr-code-svg"
                     value={debouncedUrl || "https://your-website.com"}
-                    size={220}
-                    fgColor={color}
-                    bgColor={backgroundColor}
-                    level={errorCorrection}
+                    size={200}
+                    fgColor={QR_COLOR}
+                    bgColor={QR_BG_COLOR}
+                    level={QR_LEVEL}
                     includeMargin={true}
                     className="block relative z-20"
                   />
