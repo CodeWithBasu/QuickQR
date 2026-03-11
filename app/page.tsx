@@ -25,6 +25,12 @@ export default function QRCodeGenerator() {
     setMounted(true)
     if (typeof window !== "undefined") {
       setQrValue(window.location.origin)
+      
+      // Check for errors in the URL (from failed redirects)
+      const params = new URLSearchParams(window.location.search)
+      if (params.get("error") === "notfound") {
+        toast.error("The scanned QR link was not found or has expired.")
+      }
     }
   }, [])
 
@@ -68,6 +74,7 @@ export default function QRCodeGenerator() {
         // Build complete URL based on the current window origin pointing to the shortlink
         const trackingUrl = `${window.location.origin}/q/${data.data.shortId}`
         setQrValue(trackingUrl)
+        console.log("Generated tracking URL:", trackingUrl)
         toast.success("QR Code generated successfully!")
       } else {
         console.error("Failed:", data.error)

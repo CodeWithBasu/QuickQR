@@ -26,7 +26,15 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(
-      { success: true, data: newQrEntry },
+      { 
+        success: true, 
+        data: {
+          shortId: newQrEntry.shortId,
+          url: newQrEntry.url,
+          type: newQrEntry.type,
+          filename: newQrEntry.filename
+        } 
+      },
       { status: 201 }
     );
   } catch (error: any) {
