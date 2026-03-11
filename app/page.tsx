@@ -64,25 +64,29 @@ export default function QRCodeGenerator() {
   const generateQRCode = async (inputUrl: string, type: "url" | "doc" | "video" | "audio", filename?: string) => {
     try {
       setIsGenerating(true)
+      toast.loading("Registering QR in database...", { id: "qr-gen" })
+      
       const res = await fetch("/api/qr", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url: inputUrl, type, filename })
       })
+      
       const data = await res.json()
+      
       if (data.success) {
         // Build complete URL based on the current window origin pointing to the shortlink
         const trackingUrl = `${window.location.origin}/q/${data.data.shortId}`
         setQrValue(trackingUrl)
         console.log("Generated tracking URL:", trackingUrl)
-        toast.success("QR Code generated successfully!")
+        toast.success("QR Code ready to scan!", { id: "qr-gen" })
       } else {
         console.error("Failed:", data.error)
-        toast.error("Failed to generate QR Code")
+        toast.error(`Error: ${data.error || "Generation failed"}`, { id: "qr-gen" })
       }
     } catch (error) {
       console.error(error)
-      toast.error("An error occurred")
+      toast.error("Network error. Check your connection.", { id: "qr-gen" })
     } finally {
       setIsGenerating(false)
     }

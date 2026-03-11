@@ -16,8 +16,10 @@ export async function GET(
 
     await dbConnect();
 
-    // Find the QR data by shortId
-    const qrData = await QRCode.findOne({ shortId });
+    // Find the QR data by shortId (case-insensitive for safety)
+    const qrData = await QRCode.findOne({ 
+      shortId: { $regex: new RegExp(`^${shortId}$`, 'i') } 
+    });
 
     if (!qrData || !qrData.url) {
       console.error(`QR data not found for ID: ${shortId}`);
