@@ -8,7 +8,9 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Download, Link as LinkIcon, QrCode, FileText, Video, Music, CheckCircle2, Loader2, Zap } from "lucide-react"
+import { Download, Link as LinkIcon, QrCode, FileText, Video, Music, Loader2, Zap } from "lucide-react"
+import { UploadDropzone } from "@/lib/uploadthing"
+import { toast } from "sonner"
 
 export default function QRCodeGenerator() {
   const [url, setUrl] = useState("https://your-website.com")
@@ -57,22 +59,17 @@ export default function QRCodeGenerator() {
         // Build complete URL based on the current window origin pointing to the shortlink
         const trackingUrl = `${window.location.origin}/q/${data.data.shortId}`
         setQrValue(trackingUrl)
+        toast.success("QR Code generated successfully!")
       } else {
         console.error("Failed:", data.error)
+        toast.error("Failed to generate QR Code")
       }
     } catch (error) {
       console.error(error)
+      toast.error("An error occurred")
     } finally {
       setIsGenerating(false)
     }
-  }
-
-  const handleFileUpload = (generatedUrl: string, typeName: string, filename: string) => {
-    let docType: "doc" | "video" | "audio" = "doc";
-    if (typeName === "Video") docType = "video"
-    if (typeName === "Audio") docType = "audio"
-    
-    generateQRCode(generatedUrl, docType, filename)
   }
 
   return (
@@ -152,30 +149,57 @@ export default function QRCodeGenerator() {
               </TabsContent>
 
               <TabsContent value="doc" className="mt-0">
-                <FileUploader 
-                  type="Document" 
-                  accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx" 
-                  icon={<FileText className="w-8 h-8 text-zinc-500 mb-3" />}
-                  onUpload={(url, name) => handleFileUpload(url, "Document", name)} 
-                />
+                <div className="space-y-4">
+                  <Label className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">Upload Document (PDF, DOCX)</Label>
+                  <UploadDropzone
+                    endpoint="mediaPost"
+                    onClientUploadComplete={(res) => {
+                      if (res && res[0]) {
+                        generateQRCode(res[0].url, "doc", res[0].name)
+                      }
+                    }}
+                    onUploadError={(error: Error) => {
+                      toast.error(`Upload failed: ${error.message}`)
+                    }}
+                    className="ut-label:text-zinc-400 ut-button:bg-zinc-800 ut-button:hover:bg-zinc-700 border-zinc-800 bg-zinc-950/30 h-40"
+                  />
+                </div>
               </TabsContent>
 
               <TabsContent value="video" className="mt-0">
-                <FileUploader 
-                  type="Video" 
-                  accept=".mp4,.mkv,.webm,.mov" 
-                  icon={<Video className="w-8 h-8 text-zinc-500 mb-3" />}
-                  onUpload={(url, name) => handleFileUpload(url, "Video", name)} 
-                />
+                <div className="space-y-4">
+                   <Label className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">Upload Video (MP4, MKV)</Label>
+                   <UploadDropzone
+                    endpoint="mediaPost"
+                    onClientUploadComplete={(res) => {
+                      if (res && res[0]) {
+                        generateQRCode(res[0].url, "video", res[0].name)
+                      }
+                    }}
+                    onUploadError={(error: Error) => {
+                      toast.error(`Upload failed: ${error.message}`)
+                    }}
+                    className="ut-label:text-zinc-400 ut-button:bg-zinc-800 ut-button:hover:bg-zinc-700 border-zinc-800 bg-zinc-950/30 h-40"
+                  />
+                </div>
               </TabsContent>
 
               <TabsContent value="audio" className="mt-0">
-                <FileUploader 
-                  type="Audio" 
-                  accept=".mp3,.wav,.ogg" 
-                  icon={<Music className="w-8 h-8 text-zinc-500 mb-3" />}
-                  onUpload={(url, name) => handleFileUpload(url, "Audio", name)} 
-                />
+                <div className="space-y-4">
+                  <Label className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">Upload Audio (MP3, WAV)</Label>
+                  <UploadDropzone
+                    endpoint="mediaPost"
+                    onClientUploadComplete={(res) => {
+                      if (res && res[0]) {
+                        generateQRCode(res[0].url, "audio", res[0].name)
+                      }
+                    }}
+                    onUploadError={(error: Error) => {
+                      toast.error(`Upload failed: ${error.message}`)
+                    }}
+                    className="ut-label:text-zinc-400 ut-button:bg-zinc-800 ut-button:hover:bg-zinc-700 border-zinc-800 bg-zinc-950/30 h-40"
+                  />
+                </div>
               </TabsContent>
             </Tabs>
             
@@ -183,7 +207,7 @@ export default function QRCodeGenerator() {
               <p className="text-zinc-500 text-sm leading-relaxed border-l-2 border-zinc-800 pl-4 py-1">
                 {activeTab === "url" 
                   ? "Enter a URL to safely encode into the database."
-                  : "Cloud-hosted file link will be generated and encoded securely."}
+                  : "Upload a file to generate a secure sharing link."}
               </p>
             </div>
 
@@ -241,95 +265,6 @@ export default function QRCodeGenerator() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  )
-}
-
-// --- FILE UPLOADER COMPONENT (MOCK SIMULATION) ---
-function FileUploader({ type, accept, icon, onUpload }: { type: string, accept: string, icon: React.ReactNode, onUpload: (url: string, filename: string) => void }) {
-  const [isUploading, setIsUploading] = useState(false)
-  const [progress, setProgress] = useState(0)
-  const [success, setSuccess] = useState(false)
-  const [filename, setFilename] = useState("")
-  const fileInputRef = useRef<HTMLInputElement>(null)
-
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0]
-      setFilename(file.name)
-      setIsUploading(true)
-      setSuccess(false)
-      setProgress(0)
-
-      // Simulate a cloud upload (e.g., to AWS S3 / Vercel Blob)
-      let currentProgress = 0
-      const interval = setInterval(() => {
-        currentProgress += Math.floor(Math.random() * 20) + 10
-        if (currentProgress > 100) {
-          currentProgress = 100
-        }
-        setProgress(currentProgress)
-        
-        if (currentProgress === 100) {
-          clearInterval(interval)
-          setTimeout(() => {
-            setIsUploading(false)
-            setSuccess(true)
-            // Generate a mock secure public URL for the QR code
-            const mockUrl = `https://quickqr.cloud/f/${file.name.replace(/\s+/g, '-').toLowerCase()}`
-            onUpload(mockUrl, file.name)
-          }, 400)
-        }
-      }, 300)
-    }
-  }
-
-  return (
-    <div className="flex flex-col space-y-4">
-      <Label className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">
-        Upload {type}
-      </Label>
-      
-      <div 
-        onClick={() => !isUploading && fileInputRef.current?.click()}
-        className={cn(
-          "w-full h-36 rounded-xl border-2 border-dashed flex flex-col items-center justify-center transition-all bg-zinc-950/30",
-          success ? "border-green-500/50 hover:border-green-500/80 bg-green-500/5 cursor-pointer" : "border-zinc-800 hover:border-zinc-600 hover:bg-zinc-900/50 cursor-pointer",
-          isUploading && "pointer-events-none opacity-80"
-        )}
-      >
-        <input 
-          type="file" 
-          accept={accept} 
-          className="hidden" 
-          ref={fileInputRef} 
-          onChange={handleFileSelect}
-        />
-
-        {!isUploading && !success && (
-          <>
-            {icon}
-            <span className="text-zinc-300 font-medium font-sans">Click to browse {type}</span>
-            <span className="text-zinc-600 text-xs mt-1 font-mono">Accepts {accept.replace(/,/g, ', ')}</span>
-          </>
-        )}
-
-        {isUploading && (
-          <div className="flex flex-col items-center">
-            <Loader2 className="w-8 h-8 text-white animate-spin mb-3" />
-            <span className="text-white font-medium font-mono text-sm">{progress}% Uploading...</span>
-            <span className="text-zinc-500 text-xs mt-1 truncate max-w-[200px]">{filename}</span>
-          </div>
-        )}
-
-        {success && !isUploading && (
-          <div className="flex flex-col items-center">
-             <CheckCircle2 className="w-8 h-8 text-green-400 mb-3" />
-             <span className="text-green-400 font-medium font-sans text-sm">Upload Complete!</span>
-             <span className="text-zinc-500 text-xs mt-1 truncate max-w-[250px]">{filename}</span>
-          </div>
-        )}
       </div>
     </div>
   )
