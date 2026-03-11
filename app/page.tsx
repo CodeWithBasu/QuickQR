@@ -85,10 +85,10 @@ export default function QRCodeGenerator() {
           height={40}
           cx={1}
           cy={1}
-          cr={1.2}
+          cr={1.5}
           glow={true}
           className={cn(
-            "[mask-image:radial-gradient(900px_circle_at_center,white,transparent)] fill-white opacity-40 h-screen w-screen"
+            "[mask-image:radial-gradient(1000px_circle_at_center,white,transparent)] fill-white/50 opacity-100 h-screen w-screen"
           )}
         />
       </div>
