@@ -185,16 +185,18 @@ export default function QRCodeGenerator() {
                       label: "PDF, DOCX up to 16MB",
                       allowedContent: "Drop files or click to upload",
                       button({ ready, isUploading }) {
-                        if (isUploading) return "Uploading...";
-                        if (ready) return "Choose File";
-                        return "Initializing...";
+                        return (
+                          <span className="text-black font-semibold">
+                            {isUploading ? "Uploading..." : "Choose File"}
+                          </span>
+                        )
                       }
                     }}
                     appearance={{
                       button: ({ ready, isUploading }) => {
                         return cn(
-                          "w-64 h-12 rounded-xl border-0 font-semibold transition-all duration-300 shadow-lg px-6",
-                          ready ? "bg-white text-black hover:bg-zinc-200 cursor-pointer" : "bg-zinc-800 text-zinc-500",
+                          "w-64 h-12 rounded-xl border-0 transition-all duration-300 shadow-lg px-6",
+                          ready ? "bg-white hover:bg-zinc-200 cursor-pointer" : "bg-zinc-800 text-zinc-500",
                           isUploading && "bg-zinc-900 cursor-not-allowed opacity-50"
                         )
                       },
@@ -223,16 +225,18 @@ export default function QRCodeGenerator() {
                       label: "MP4, MKV up to 32MB",
                       allowedContent: "Drop files or click to upload",
                       button({ ready, isUploading }) {
-                        if (isUploading) return "Uploading...";
-                        if (ready) return "Choose File";
-                        return "Initializing...";
+                        return (
+                          <span className="text-black font-semibold">
+                            {isUploading ? "Uploading..." : "Choose File"}
+                          </span>
+                        )
                       }
                     }}
                     appearance={{
                       button: ({ ready, isUploading }) => {
                         return cn(
-                          "w-64 h-12 rounded-xl border-0 font-semibold transition-all duration-300 shadow-lg px-6",
-                          ready ? "bg-white text-black hover:bg-zinc-200 cursor-pointer" : "bg-zinc-800 text-zinc-500",
+                          "w-64 h-12 rounded-xl border-0 transition-all duration-300 shadow-lg px-6",
+                          ready ? "bg-white hover:bg-zinc-200 cursor-pointer" : "bg-zinc-800 text-zinc-500",
                           isUploading && "bg-zinc-900 cursor-not-allowed opacity-50"
                         )
                       },
@@ -261,16 +265,18 @@ export default function QRCodeGenerator() {
                       label: "MP3, WAV up to 16MB",
                       allowedContent: "Drop files or click to upload",
                       button({ ready, isUploading }) {
-                        if (isUploading) return "Uploading...";
-                        if (ready) return "Choose File";
-                        return "Initializing...";
+                        return (
+                          <span className="text-black font-semibold">
+                            {isUploading ? "Uploading..." : "Choose File"}
+                          </span>
+                        )
                       }
                     }}
                     appearance={{
                       button: ({ ready, isUploading }) => {
                         return cn(
-                          "w-64 h-12 rounded-xl border-0 font-semibold transition-all duration-300 shadow-lg px-6",
-                          ready ? "bg-white text-black hover:bg-zinc-200 cursor-pointer" : "bg-zinc-800 text-zinc-500",
+                          "w-64 h-12 rounded-xl border-0 transition-all duration-300 shadow-lg px-6",
+                          ready ? "bg-white hover:bg-zinc-200 cursor-pointer" : "bg-zinc-800 text-zinc-500",
                           isUploading && "bg-zinc-900 cursor-not-allowed opacity-50"
                         )
                       },
