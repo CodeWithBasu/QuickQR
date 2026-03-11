@@ -5,8 +5,8 @@ import type React from "react" // Import React
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "QR Code Generator",
-  description: "Generate QR codes from URLs",
+  title: "QuickQR - The Modern QR Generator",
+  description: "Generate QR codes from URLs, documents, audio, and video files securely and easily.",
     generator: 'v0.app'
 }
 

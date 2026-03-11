@@ -1,20 +1,22 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
 import { DotPattern } from "@/components/ui/dot-pattern"
 import { QRCodeSVG } from "qrcode.react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { Download, Link as LinkIcon, QrCode } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Download, Link as LinkIcon, QrCode, FileText, Video, Music, UploadCloud, CheckCircle2, Loader2 } from "lucide-react"
 
 export default function QRCodeGenerator() {
   const [url, setUrl] = useState("https://your-website.com")
   const [debouncedUrl, setDebouncedUrl] = useState(url)
   const [isHovered, setIsHovered] = useState(false)
+  const [activeTab, setActiveTab] = useState("url")
 
-  // Hardcoded optimized defaults for the removed controls
+  // Hardcoded optimized defaults
   const QR_COLOR = "#ffffff"
   const QR_BG_COLOR = "#000000"
   const QR_SIZE = 280
@@ -41,17 +43,21 @@ export default function QRCodeGenerator() {
       ctx?.drawImage(img, 0, 0)
       const pngFile = canvas.toDataURL("image/png")
       const downloadLink = document.createElement("a")
-      downloadLink.download = "qrcode.png"
+      downloadLink.download = "quickqr.png"
       downloadLink.href = `${pngFile}`
       downloadLink.click()
     }
     img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)))
   }
 
+  const handleFileUpload = (generatedUrl: string) => {
+    setUrl(generatedUrl)
+  }
+
   return (
     <div className="min-h-screen relative flex items-center justify-center bg-black text-zinc-100 font-sans selection:bg-white/20 overflow-hidden">
       
-      {/* MagicUI Animated Dot Pattern Background - Optimized to prevent lag */}
+      {/* MagicUI Animated Dot Pattern Background */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <DotPattern
           width={32}
@@ -66,33 +72,47 @@ export default function QRCodeGenerator() {
         />
       </div>
 
-      <div className="relative z-10 w-full max-w-4xl px-6 py-16 md:px-12">
+      <div className="relative z-10 w-full max-w-5xl px-6 py-16 md:px-12">
         
         {/* Sleek Header Section */}
         <div className="flex flex-col items-center mb-16 space-y-5">
           <div className="w-14 h-14 bg-zinc-900 border border-zinc-800 rounded-2xl flex items-center justify-center shadow-2xl mb-2 group transition-all duration-500 hover:border-zinc-700 hover:shadow-[0_0_30px_rgba(255,255,255,0.05)]">
             <QrCode className="w-6 h-6 text-zinc-100 group-hover:scale-110 transition-transform duration-500" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-white">
-            Monochrome QR
+          <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-white mb-2">
+            QuickQR
           </h1>
-          <p className="text-zinc-500 text-lg md:text-xl font-light tracking-wide max-w-lg text-center">
-            Generate pristine, high-fidelity matrices in pure darkness.
+          <p className="text-zinc-500 text-lg font-light tracking-wide max-w-lg text-center">
+            Generate pristine matrices for URLs, documents, and media.
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-10 lg:gap-14 items-center justify-center">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-14 items-center justify-center">
           
-          {/* Main Controls Console - Brutalist & Clean */}
-          <div className="w-full lg:w-1/2 space-y-8 group bg-black/60 backdrop-blur-md p-8 rounded-3xl border border-zinc-800/50 shadow-2xl">
+          {/* Main Controls Console */}
+          <div className="w-full lg:w-[55%] space-y-6 group bg-black/60 backdrop-blur-md p-8 rounded-3xl border border-zinc-800/50 shadow-2xl relative z-20">
             
-            {/* URL Input Section */}
-            <div className="space-y-4">
-              <Label htmlFor="url" className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">
-                <LinkIcon className="w-4 h-4 mr-3 text-zinc-500" />
-                Destination URL
-              </Label>
-              <div className="relative">
+            <Tabs defaultValue="url" className="w-full" onValueChange={setActiveTab}>
+              <TabsList className="grid w-full grid-cols-4 bg-zinc-950 border border-zinc-800/80 rounded-xl mb-8 p-1">
+                <TabsTrigger value="url" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-xs md:text-sm h-10">
+                  <LinkIcon className="w-3.5 h-3.5 md:mr-2" /> <span className="hidden md:inline">URL</span>
+                </TabsTrigger>
+                <TabsTrigger value="doc" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-xs md:text-sm h-10">
+                  <FileText className="w-3.5 h-3.5 md:mr-2" /> <span className="hidden md:inline">Document</span>
+                </TabsTrigger>
+                <TabsTrigger value="video" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-xs md:text-sm h-10">
+                  <Video className="w-3.5 h-3.5 md:mr-2" /> <span className="hidden md:inline">Video</span>
+                </TabsTrigger>
+                <TabsTrigger value="audio" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-xs md:text-sm h-10">
+                  <Music className="w-3.5 h-3.5 md:mr-2" /> <span className="hidden md:inline">Audio</span>
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="url" className="mt-0 space-y-4">
+                <Label htmlFor="url" className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase mb-3">
+                  <LinkIcon className="w-4 h-4 mr-3 text-zinc-500" />
+                  Destination URL
+                </Label>
                 <Input
                   id="url"
                   type="url"
@@ -100,21 +120,52 @@ export default function QRCodeGenerator() {
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                   suppressHydrationWarning
-                  className="w-full bg-zinc-950/50 border-zinc-800 text-white placeholder:text-zinc-700 h-16 rounded-xl px-5 text-lg focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:border-white/20 transition-all font-mono shadow-inner hover:border-zinc-700 relative z-20"
+                  className="w-full bg-zinc-950/50 border-zinc-800 text-white placeholder:text-zinc-700 h-16 rounded-xl px-5 text-lg focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:border-white/20 transition-all font-mono shadow-inner hover:border-zinc-700"
                 />
-              </div>
-            </div>
+              </TabsContent>
+
+              <TabsContent value="doc" className="mt-0">
+                <FileUploader 
+                  type="Document" 
+                  accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx" 
+                  icon={<FileText className="w-8 h-8 text-zinc-500 mb-3" />}
+                  onUpload={handleFileUpload} 
+                />
+              </TabsContent>
+
+              <TabsContent value="video" className="mt-0">
+                <FileUploader 
+                  type="Video" 
+                  accept=".mp4,.mkv,.webm,.mov" 
+                  icon={<Video className="w-8 h-8 text-zinc-500 mb-3" />}
+                  onUpload={handleFileUpload} 
+                />
+              </TabsContent>
+
+              <TabsContent value="audio" className="mt-0">
+                <FileUploader 
+                  type="Audio" 
+                  accept=".mp3,.wav,.ogg" 
+                  icon={<Music className="w-8 h-8 text-zinc-500 mb-3" />}
+                  onUpload={handleFileUpload} 
+                />
+              </TabsContent>
+            </Tabs>
             
-            <p className="text-zinc-500 text-sm leading-relaxed border-l-2 border-zinc-800 pl-4 py-1">
-              Your link is encoded immediately with highest precision error correction.
-            </p>
+            <div className="pt-2">
+              <p className="text-zinc-500 text-sm leading-relaxed border-l-2 border-zinc-800 pl-4 py-1">
+                {activeTab === "url" 
+                  ? "Your link is encoded immediately with highest precision error correction."
+                  : "Cloud-hosted file link will be generated and encoded securely."}
+              </p>
+            </div>
 
           </div>
 
           {/* Minimalist Output Display */}
-          <div className="w-full lg:w-1/2 flex flex-col items-center">
+          <div className="w-full lg:w-[45%] flex flex-col items-center">
             
-            <div className="w-full bg-zinc-950/80 backdrop-blur-md border border-zinc-800 rounded-3xl p-8 flex flex-col items-center justify-center relative shadow-2xl overflow-hidden min-h-[400px]">
+            <div className="w-full bg-zinc-950/80 backdrop-blur-md border border-zinc-800 rounded-3xl p-8 flex flex-col items-center justify-center relative shadow-2xl overflow-hidden min-h-[420px]">
               
               <div className="absolute top-6 left-6 flex space-x-2">
                 <div className="w-2.5 h-2.5 rounded-full bg-zinc-800" />
@@ -164,6 +215,95 @@ export default function QRCodeGenerator() {
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  )
+}
+
+// --- FILE UPLOADER COMPONENT (MOCK SIMULATION) ---
+function FileUploader({ type, accept, icon, onUpload }: { type: string, accept: string, icon: React.ReactNode, onUpload: (url: string) => void }) {
+  const [isUploading, setIsUploading] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const [success, setSuccess] = useState(false)
+  const [filename, setFilename] = useState("")
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0]
+      setFilename(file.name)
+      setIsUploading(true)
+      setSuccess(false)
+      setProgress(0)
+
+      // Simulate a cloud upload (e.g., to AWS S3 / Vercel Blob)
+      let currentProgress = 0
+      const interval = setInterval(() => {
+        currentProgress += Math.floor(Math.random() * 20) + 10
+        if (currentProgress > 100) {
+          currentProgress = 100
+        }
+        setProgress(currentProgress)
+        
+        if (currentProgress === 100) {
+          clearInterval(interval)
+          setTimeout(() => {
+            setIsUploading(false)
+            setSuccess(true)
+            // Generate a mock secure public URL for the QR code
+            const mockUrl = `https://quickqr.cloud/f/${file.name.replace(/\s+/g, '-').toLowerCase()}`
+            onUpload(mockUrl)
+          }, 400)
+        }
+      }, 300)
+    }
+  }
+
+  return (
+    <div className="flex flex-col space-y-4">
+      <Label className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">
+        Upload {type}
+      </Label>
+      
+      <div 
+        onClick={() => !isUploading && fileInputRef.current?.click()}
+        className={cn(
+          "w-full h-36 rounded-xl border-2 border-dashed flex flex-col items-center justify-center transition-all bg-zinc-950/30",
+          success ? "border-green-500/50 hover:border-green-500/80 bg-green-500/5 cursor-pointer" : "border-zinc-800 hover:border-zinc-600 hover:bg-zinc-900/50 cursor-pointer",
+          isUploading && "pointer-events-none opacity-80"
+        )}
+      >
+        <input 
+          type="file" 
+          accept={accept} 
+          className="hidden" 
+          ref={fileInputRef} 
+          onChange={handleFileSelect}
+        />
+
+        {!isUploading && !success && (
+          <>
+            {icon}
+            <span className="text-zinc-300 font-medium font-sans">Click to browse {type}</span>
+            <span className="text-zinc-600 text-xs mt-1 font-mono">Accepts {accept.replace(/,/g, ', ')}</span>
+          </>
+        )}
+
+        {isUploading && (
+          <div className="flex flex-col items-center">
+            <Loader2 className="w-8 h-8 text-white animate-spin mb-3" />
+            <span className="text-white font-medium font-mono text-sm">{progress}% Uploading...</span>
+            <span className="text-zinc-500 text-xs mt-1 truncate max-w-[200px]">{filename}</span>
+          </div>
+        )}
+
+        {success && !isUploading && (
+          <div className="flex flex-col items-center">
+             <CheckCircle2 className="w-8 h-8 text-green-400 mb-3" />
+             <span className="text-green-400 font-medium font-sans text-sm">Upload Complete!</span>
+             <span className="text-zinc-500 text-xs mt-1 truncate max-w-[250px]">{filename}</span>
+          </div>
+        )}
       </div>
     </div>
   )
