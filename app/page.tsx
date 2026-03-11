@@ -184,16 +184,21 @@ export default function QRCodeGenerator() {
                     content={{
                       label: "PDF, DOCX up to 16MB",
                       allowedContent: "Drop files or click to upload",
+                      button({ ready, isUploading }) {
+                        if (isUploading) return "Uploading...";
+                        if (ready) return "Choose File";
+                        return "Initializing...";
+                      }
                     }}
                     appearance={{
-                      button({ ready, isUploading }) {
+                      button: ({ ready, isUploading }) => {
                         return cn(
-                          "w-full h-12 rounded-xl border-0 font-medium transition-all duration-300",
-                          ready ? "bg-white text-black hover:bg-zinc-200" : "bg-zinc-800 text-zinc-500",
-                          isUploading && "bg-zinc-900 cursor-not-allowed"
+                          "w-64 h-12 rounded-xl border-0 font-semibold transition-all duration-300 shadow-lg px-6",
+                          ready ? "bg-white text-black hover:bg-zinc-200 cursor-pointer" : "bg-zinc-800 text-zinc-500",
+                          isUploading && "bg-zinc-900 cursor-not-allowed opacity-50"
                         )
                       },
-                      container: "border-zinc-800 bg-zinc-950/30 h-48 rounded-2xl border-2 border-dashed hover:border-zinc-700 transition-colors",
+                      container: "border-zinc-800 bg-zinc-950/30 h-56 rounded-2xl border-2 border-dashed hover:border-zinc-700 transition-colors py-8",
                       label: "text-zinc-400 font-medium",
                       allowedContent: "text-zinc-600 text-xs mt-1",
                     }}
@@ -217,16 +222,21 @@ export default function QRCodeGenerator() {
                     content={{
                       label: "MP4, MKV up to 32MB",
                       allowedContent: "Drop files or click to upload",
+                      button({ ready, isUploading }) {
+                        if (isUploading) return "Uploading...";
+                        if (ready) return "Choose File";
+                        return "Initializing...";
+                      }
                     }}
                     appearance={{
-                      button({ ready, isUploading }) {
+                      button: ({ ready, isUploading }) => {
                         return cn(
-                          "w-full h-12 rounded-xl border-0 font-medium transition-all duration-300",
-                          ready ? "bg-white text-black hover:bg-zinc-200" : "bg-zinc-800 text-zinc-500",
-                          isUploading && "bg-zinc-900 cursor-not-allowed"
+                          "w-64 h-12 rounded-xl border-0 font-semibold transition-all duration-300 shadow-lg px-6",
+                          ready ? "bg-white text-black hover:bg-zinc-200 cursor-pointer" : "bg-zinc-800 text-zinc-500",
+                          isUploading && "bg-zinc-900 cursor-not-allowed opacity-50"
                         )
                       },
-                      container: "border-zinc-800 bg-zinc-950/30 h-48 rounded-2xl border-2 border-dashed hover:border-zinc-700 transition-colors",
+                      container: "border-zinc-800 bg-zinc-950/30 h-56 rounded-2xl border-2 border-dashed hover:border-zinc-700 transition-colors py-8",
                       label: "text-zinc-400 font-medium",
                       allowedContent: "text-zinc-600 text-xs mt-1",
                     }}
@@ -250,16 +260,21 @@ export default function QRCodeGenerator() {
                     content={{
                       label: "MP3, WAV up to 16MB",
                       allowedContent: "Drop files or click to upload",
+                      button({ ready, isUploading }) {
+                        if (isUploading) return "Uploading...";
+                        if (ready) return "Choose File";
+                        return "Initializing...";
+                      }
                     }}
                     appearance={{
-                      button({ ready, isUploading }) {
+                      button: ({ ready, isUploading }) => {
                         return cn(
-                          "w-full h-12 rounded-xl border-0 font-medium transition-all duration-300",
-                          ready ? "bg-white text-black hover:bg-zinc-200" : "bg-zinc-800 text-zinc-500",
-                          isUploading && "bg-zinc-900 cursor-not-allowed"
+                          "w-64 h-12 rounded-xl border-0 font-semibold transition-all duration-300 shadow-lg px-6",
+                          ready ? "bg-white text-black hover:bg-zinc-200 cursor-pointer" : "bg-zinc-800 text-zinc-500",
+                          isUploading && "bg-zinc-900 cursor-not-allowed opacity-50"
                         )
                       },
-                      container: "border-zinc-800 bg-zinc-950/30 h-48 rounded-2xl border-2 border-dashed hover:border-zinc-700 transition-colors",
+                      container: "border-zinc-800 bg-zinc-950/30 h-56 rounded-2xl border-2 border-dashed hover:border-zinc-700 transition-colors py-8",
                       label: "text-zinc-400 font-medium",
                       allowedContent: "text-zinc-600 text-xs mt-1",
                     }}
