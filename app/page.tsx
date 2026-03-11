@@ -140,7 +140,6 @@ export default function QRCodeGenerator() {
                   placeholder="https://your-domain.com"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
-                  suppressHydrationWarning
                   className="w-full bg-zinc-950/50 border-zinc-800 text-white placeholder:text-zinc-700 h-16 rounded-xl px-5 text-lg focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:border-white/20 transition-all font-mono shadow-inner hover:border-zinc-700"
                 />
                 <Button 
@@ -234,7 +233,6 @@ export default function QRCodeGenerator() {
 
               <Button 
                 onClick={handleDownload}
-                suppressHydrationWarning
                 className="w-full mt-auto h-14 bg-white text-black hover:bg-zinc-200 border-0 rounded-xl font-semibold text-sm tracking-wide transition-all duration-300 flex items-center justify-center group relative z-20"
               >
                 <Download className="w-4 h-4 mr-2 group-hover:-translate-y-0.5 transition-transform" />
