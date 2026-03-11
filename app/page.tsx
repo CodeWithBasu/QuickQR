@@ -181,7 +181,22 @@ export default function QRCodeGenerator() {
                     onUploadError={(error: Error) => {
                       toast.error(`Upload failed: ${error.message}`)
                     }}
-                    className="ut-label:text-zinc-400 ut-button:bg-zinc-800 ut-button:hover:bg-zinc-700 border-zinc-800 bg-zinc-950/30 h-40"
+                    content={{
+                      label: "PDF, DOCX up to 16MB",
+                      allowedContent: "Drop files or click to upload",
+                    }}
+                    appearance={{
+                      button({ ready, isUploading }) {
+                        return cn(
+                          "w-full h-12 rounded-xl border-0 font-medium transition-all duration-300",
+                          ready ? "bg-white text-black hover:bg-zinc-200" : "bg-zinc-800 text-zinc-500",
+                          isUploading && "bg-zinc-900 cursor-not-allowed"
+                        )
+                      },
+                      container: "border-zinc-800 bg-zinc-950/30 h-48 rounded-2xl border-2 border-dashed hover:border-zinc-700 transition-colors",
+                      label: "text-zinc-400 font-medium",
+                      allowedContent: "text-zinc-600 text-xs mt-1",
+                    }}
                   />
                 </div>
               </TabsContent>
@@ -199,7 +214,22 @@ export default function QRCodeGenerator() {
                     onUploadError={(error: Error) => {
                       toast.error(`Upload failed: ${error.message}`)
                     }}
-                    className="ut-label:text-zinc-400 ut-button:bg-zinc-800 ut-button:hover:bg-zinc-700 border-zinc-800 bg-zinc-950/30 h-40"
+                    content={{
+                      label: "MP4, MKV up to 32MB",
+                      allowedContent: "Drop files or click to upload",
+                    }}
+                    appearance={{
+                      button({ ready, isUploading }) {
+                        return cn(
+                          "w-full h-12 rounded-xl border-0 font-medium transition-all duration-300",
+                          ready ? "bg-white text-black hover:bg-zinc-200" : "bg-zinc-800 text-zinc-500",
+                          isUploading && "bg-zinc-900 cursor-not-allowed"
+                        )
+                      },
+                      container: "border-zinc-800 bg-zinc-950/30 h-48 rounded-2xl border-2 border-dashed hover:border-zinc-700 transition-colors",
+                      label: "text-zinc-400 font-medium",
+                      allowedContent: "text-zinc-600 text-xs mt-1",
+                    }}
                   />
                 </div>
               </TabsContent>
@@ -217,7 +247,22 @@ export default function QRCodeGenerator() {
                     onUploadError={(error: Error) => {
                       toast.error(`Upload failed: ${error.message}`)
                     }}
-                    className="ut-label:text-zinc-400 ut-button:bg-zinc-800 ut-button:hover:bg-zinc-700 border-zinc-800 bg-zinc-950/30 h-40"
+                    content={{
+                      label: "MP3, WAV up to 16MB",
+                      allowedContent: "Drop files or click to upload",
+                    }}
+                    appearance={{
+                      button({ ready, isUploading }) {
+                        return cn(
+                          "w-full h-12 rounded-xl border-0 font-medium transition-all duration-300",
+                          ready ? "bg-white text-black hover:bg-zinc-200" : "bg-zinc-800 text-zinc-500",
+                          isUploading && "bg-zinc-900 cursor-not-allowed"
+                        )
+                      },
+                      container: "border-zinc-800 bg-zinc-950/30 h-48 rounded-2xl border-2 border-dashed hover:border-zinc-700 transition-colors",
+                      label: "text-zinc-400 font-medium",
+                      allowedContent: "text-zinc-600 text-xs mt-1",
+                    }}
                   />
                 </div>
               </TabsContent>
