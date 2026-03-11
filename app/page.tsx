@@ -182,7 +182,7 @@ export default function QRCodeGenerator() {
                       toast.error(`Upload failed: ${error.message}`)
                     }}
                     content={{
-                      label: "PDF, DOCX up to 16MB",
+                      label: "PDF, DOCX up to 64MB",
                       allowedContent: "Drop files or click to upload",
                       button({ ready, isUploading }) {
                         return (
@@ -222,7 +222,7 @@ export default function QRCodeGenerator() {
                       toast.error(`Upload failed: ${error.message}`)
                     }}
                     content={{
-                      label: "MP4, MKV up to 32MB",
+                      label: "MP4, MKV up to 128MB",
                       allowedContent: "Drop files or click to upload",
                       button({ ready, isUploading }) {
                         return (
@@ -262,7 +262,7 @@ export default function QRCodeGenerator() {
                       toast.error(`Upload failed: ${error.message}`)
                     }}
                     content={{
-                      label: "MP3, WAV up to 16MB",
+                      label: "MP3, WAV up to 64MB",
                       allowedContent: "Drop files or click to upload",
                       button({ ready, isUploading }) {
                         return (
