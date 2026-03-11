@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { cn } from "@/lib/utils"
 import { DotPattern } from "@/components/ui/dot-pattern"
 import { QRCodeSVG } from "qrcode.react"
@@ -14,10 +14,17 @@ import { toast } from "sonner"
 
 export default function QRCodeGenerator() {
   const [url, setUrl] = useState("https://your-website.com")
-  const [qrValue, setQrValue] = useState("https://quickqr.cloud")
+  const [qrValue, setQrValue] = useState("")
   const [isHovered, setIsHovered] = useState(false)
   const [activeTab, setActiveTab] = useState("url")
   const [isGenerating, setIsGenerating] = useState(false)
+
+  // Initialize qrValue once window is available
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setQrValue(window.location.origin)
+    }
+  }, [])
 
   // Hardcoded optimized defaults
   const QR_COLOR = "#ffffff"
@@ -228,7 +235,7 @@ export default function QRCodeGenerator() {
               </div>
 
               <div 
-                className="relative mt-8 mb-12 flex items-center justify-center p-4 bg-zinc-900 border border-zinc-800 rounded-2xl transition-all duration-700 ease-out z-20"
+                className="relative mt-8 mb-8 flex items-center justify-center p-4 bg-zinc-900 border border-zinc-800 rounded-2xl transition-all duration-700 ease-out z-20"
                 style={{
                   transform: isHovered ? 'scale(1.02)' : 'scale(1)',
                 }}
@@ -254,6 +261,37 @@ export default function QRCodeGenerator() {
                   />
                 </div>
               </div>
+
+              {/* Debug URL Link */}
+              <div className="w-full mb-6 px-4 py-3 bg-zinc-950/50 border border-zinc-800/50 rounded-xl flex items-center justify-between group/url">
+                <div className="flex flex-col overflow-hidden">
+                  <span className="text-[9px] text-zinc-600 font-mono uppercase tracking-widest mb-1">Scanning URL</span>
+                  <span className="text-xs text-zinc-400 font-mono truncate max-w-[180px]">
+                    {qrValue}
+                  </span>
+                </div>
+                <Button 
+                  size="sm" 
+                  variant="ghost" 
+                  className="h-8 w-8 p-0 text-zinc-500 hover:text-white"
+                  onClick={() => {
+                    navigator.clipboard.writeText(qrValue)
+                    toast.success("Link copied to clipboard")
+                  }}
+                >
+                  <LinkIcon className="w-3.5 h-3.5" />
+                </Button>
+              </div>
+
+              {/* Localhost Warning */}
+              {typeof window !== 'undefined' && window.location.hostname === 'localhost' && (
+                <div className="mb-6 px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-lg flex items-center space-x-2">
+                   <Zap className="w-3.5 h-3.5 text-amber-500" />
+                   <p className="text-[10px] text-amber-500/80 font-medium">
+                     Running on localhost. Mobile scans may fail.
+                   </p>
+                </div>
+              )}
 
               <Button 
                 onClick={handleDownload}

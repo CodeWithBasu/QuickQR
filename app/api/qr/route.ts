@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import QRCode from "@/models/QRCode";
-import { nanoid } from "nanoid";
 
 export async function POST(req: Request) {
   try {
@@ -17,7 +16,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const shortId = nanoid(8); // Generates an 8-character unique string
+    const shortId = Math.random().toString(36).substring(2, 10); // Generates an 8-character unique string
 
     const newQrEntry = await QRCode.create({
       url,
