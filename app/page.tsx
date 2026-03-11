@@ -187,7 +187,7 @@ export default function QRCodeGenerator() {
                       button({ ready, isUploading }) {
                         return (
                           <span className="text-black font-semibold">
-                            {isUploading ? "Uploading..." : "Choose File"}
+                            {isUploading ? "Uploading..." : isGenerating ? "Processing..." : "Choose File"}
                           </span>
                         )
                       }
@@ -227,7 +227,7 @@ export default function QRCodeGenerator() {
                       button({ ready, isUploading }) {
                         return (
                           <span className="text-black font-semibold">
-                            {isUploading ? "Uploading..." : "Choose File"}
+                            {isUploading ? "Uploading..." : isGenerating ? "Processing..." : "Choose File"}
                           </span>
                         )
                       }
@@ -267,7 +267,7 @@ export default function QRCodeGenerator() {
                       button({ ready, isUploading }) {
                         return (
                           <span className="text-black font-semibold">
-                            {isUploading ? "Uploading..." : "Choose File"}
+                            {isUploading ? "Uploading..." : isGenerating ? "Processing..." : "Choose File"}
                           </span>
                         )
                       }
