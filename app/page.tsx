@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useRef } from "react"
 import { cn } from "@/lib/utils"
 import { DotPattern } from "@/components/ui/dot-pattern"
 import { QRCodeSVG } from "qrcode.react"
@@ -8,27 +8,20 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Download, Link as LinkIcon, QrCode, FileText, Video, Music, UploadCloud, CheckCircle2, Loader2 } from "lucide-react"
+import { Download, Link as LinkIcon, QrCode, FileText, Video, Music, CheckCircle2, Loader2, Zap } from "lucide-react"
 
 export default function QRCodeGenerator() {
   const [url, setUrl] = useState("https://your-website.com")
-  const [debouncedUrl, setDebouncedUrl] = useState(url)
+  const [qrValue, setQrValue] = useState("https://quickqr.cloud")
   const [isHovered, setIsHovered] = useState(false)
   const [activeTab, setActiveTab] = useState("url")
+  const [isGenerating, setIsGenerating] = useState(false)
 
   // Hardcoded optimized defaults
   const QR_COLOR = "#ffffff"
   const QR_BG_COLOR = "#000000"
   const QR_SIZE = 280
   const QR_LEVEL = "H"
-
-  // Auto-update QR code on URL change with debounce
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedUrl(url)
-    }, 300)
-    return () => clearTimeout(handler)
-  }, [url])
 
   const handleDownload = () => {
     const svg = document.getElementById("qr-code-svg")
@@ -50,8 +43,36 @@ export default function QRCodeGenerator() {
     img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)))
   }
 
-  const handleFileUpload = (generatedUrl: string) => {
-    setUrl(generatedUrl)
+  // Generates shortlink in the database
+  const generateQRCode = async (inputUrl: string, type: "url" | "doc" | "video" | "audio", filename?: string) => {
+    try {
+      setIsGenerating(true)
+      const res = await fetch("/api/qr", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: inputUrl, type, filename })
+      })
+      const data = await res.json()
+      if (data.success) {
+        // Build complete URL based on the current window origin pointing to the shortlink
+        const trackingUrl = `${window.location.origin}/q/${data.data.shortId}`
+        setQrValue(trackingUrl)
+      } else {
+        console.error("Failed:", data.error)
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsGenerating(false)
+    }
+  }
+
+  const handleFileUpload = (generatedUrl: string, typeName: string, filename: string) => {
+    let docType: "doc" | "video" | "audio" = "doc";
+    if (typeName === "Video") docType = "video"
+    if (typeName === "Audio") docType = "audio"
+    
+    generateQRCode(generatedUrl, docType, filename)
   }
 
   return (
@@ -122,6 +143,13 @@ export default function QRCodeGenerator() {
                   suppressHydrationWarning
                   className="w-full bg-zinc-950/50 border-zinc-800 text-white placeholder:text-zinc-700 h-16 rounded-xl px-5 text-lg focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:border-white/20 transition-all font-mono shadow-inner hover:border-zinc-700"
                 />
+                <Button 
+                  onClick={() => generateQRCode(url, "url")}
+                  disabled={isGenerating || !url}
+                  className="w-full h-14 mt-4 bg-white/10 hover:bg-white/20 text-white border border-zinc-700 rounded-xl font-medium tracking-wide transition-all duration-300"
+                >
+                  {isGenerating ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Zap className="w-4 h-4 mr-2" /> Generate Secure QR</>}
+                </Button>
               </TabsContent>
 
               <TabsContent value="doc" className="mt-0">
@@ -129,7 +157,7 @@ export default function QRCodeGenerator() {
                   type="Document" 
                   accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx" 
                   icon={<FileText className="w-8 h-8 text-zinc-500 mb-3" />}
-                  onUpload={handleFileUpload} 
+                  onUpload={(url, name) => handleFileUpload(url, "Document", name)} 
                 />
               </TabsContent>
 
@@ -138,7 +166,7 @@ export default function QRCodeGenerator() {
                   type="Video" 
                   accept=".mp4,.mkv,.webm,.mov" 
                   icon={<Video className="w-8 h-8 text-zinc-500 mb-3" />}
-                  onUpload={handleFileUpload} 
+                  onUpload={(url, name) => handleFileUpload(url, "Video", name)} 
                 />
               </TabsContent>
 
@@ -147,7 +175,7 @@ export default function QRCodeGenerator() {
                   type="Audio" 
                   accept=".mp3,.wav,.ogg" 
                   icon={<Music className="w-8 h-8 text-zinc-500 mb-3" />}
-                  onUpload={handleFileUpload} 
+                  onUpload={(url, name) => handleFileUpload(url, "Audio", name)} 
                 />
               </TabsContent>
             </Tabs>
@@ -155,7 +183,7 @@ export default function QRCodeGenerator() {
             <div className="pt-2">
               <p className="text-zinc-500 text-sm leading-relaxed border-l-2 border-zinc-800 pl-4 py-1">
                 {activeTab === "url" 
-                  ? "Your link is encoded immediately with highest precision error correction."
+                  ? "Enter a URL to safely encode into the database."
                   : "Cloud-hosted file link will be generated and encoded securely."}
               </p>
             </div>
@@ -193,7 +221,7 @@ export default function QRCodeGenerator() {
                 >
                   <QRCodeSVG
                     id="qr-code-svg"
-                    value={debouncedUrl || "https://your-website.com"}
+                    value={qrValue}
                     size={200}
                     fgColor={QR_COLOR}
                     bgColor={QR_BG_COLOR}
@@ -221,7 +249,7 @@ export default function QRCodeGenerator() {
 }
 
 // --- FILE UPLOADER COMPONENT (MOCK SIMULATION) ---
-function FileUploader({ type, accept, icon, onUpload }: { type: string, accept: string, icon: React.ReactNode, onUpload: (url: string) => void }) {
+function FileUploader({ type, accept, icon, onUpload }: { type: string, accept: string, icon: React.ReactNode, onUpload: (url: string, filename: string) => void }) {
   const [isUploading, setIsUploading] = useState(false)
   const [progress, setProgress] = useState(0)
   const [success, setSuccess] = useState(false)
@@ -252,7 +280,7 @@ function FileUploader({ type, accept, icon, onUpload }: { type: string, accept: 
             setSuccess(true)
             // Generate a mock secure public URL for the QR code
             const mockUrl = `https://quickqr.cloud/f/${file.name.replace(/\s+/g, '-').toLowerCase()}`
-            onUpload(mockUrl)
+            onUpload(mockUrl, file.name)
           }, 400)
         }
       }, 300)
