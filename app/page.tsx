@@ -182,7 +182,7 @@ export default function QRCodeGenerator() {
                       toast.error(`Upload failed: ${error.message}`)
                     }}
                     content={{
-                      label: "PDF, DOCX up to 64MB",
+                      label: "PDF, DOCX up to 100MB",
                       allowedContent: "Drop files or click to upload",
                       button({ ready, isUploading }) {
                         return (
