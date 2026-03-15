@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
 import { Switch } from "@/components/ui/switch"
-import { Download, Link as LinkIcon, QrCode, FileText, Video, Music, Loader2, Zap, Clock, Palette, Image as ImageIcon, Wifi, User, Shield, Phone, Mail, Building, Briefcase, Lock, Instagram, Github, Linkedin, ExternalLink } from "lucide-react"
+import { Download, Link as LinkIcon, QrCode, FileText, Video, Music, Loader2, Zap, Clock, Palette, Image as ImageIcon, Wifi, User, Shield, Phone, Mail, Building, Briefcase, Lock, Instagram, Github, Linkedin, ExternalLink, Code2, Coffee, Heart } from "lucide-react"
 import { UploadDropzone } from "@/lib/uploadthing"
 import { toast } from "sonner"
 import JSZip from "jszip"
@@ -528,29 +528,7 @@ TITLE:${vCardTitle}`
                        </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                       <div className="space-y-2 relative">
-                          <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Instagram</Label>
-                          <div className="relative">
-                             <Instagram className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-                             <Input placeholder="@username" value={vCardInstagram} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardInstagram(e.target.value)} className="bg-zinc-950 border-zinc-800 h-10 pl-10 text-xs" />
-                          </div>
-                       </div>
-                       <div className="space-y-2 relative">
-                          <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">GitHub</Label>
-                          <div className="relative">
-                             <Github className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-                             <Input placeholder="username" value={vCardGithub} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardGithub(e.target.value)} className="bg-zinc-950 border-zinc-800 h-10 pl-10 text-xs" />
-                          </div>
-                       </div>
-                       <div className="space-y-2 relative">
-                          <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">LinkedIn</Label>
-                          <div className="relative">
-                             <Linkedin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-                              <Input placeholder="username" value={vCardLinkedin} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardLinkedin(e.target.value)} className="bg-zinc-950 border-zinc-800 h-10 pl-10 text-xs" />
-                          </div>
-                       </div>
-                    </div>
+
 
                     <Button onClick={generateVCardQR} disabled={isGenerating || !vCardName} className="w-full h-14 bg-white/10 hover:bg-white/20 text-white rounded-xl border border-zinc-700">
                       {isGenerating ? <Loader2 className="w-5 h-5 animate-spin" /> : "Generate Business Card QR"}
@@ -810,35 +788,62 @@ TITLE:${vCardTitle}`
         </div>
         
         {/* Footer */}
-        <div className="mt-16 text-center space-y-6">
-          <div className="flex flex-col items-center gap-4">
-            <div className="flex items-center justify-center gap-3 text-zinc-500 text-sm font-medium tracking-wide">
-               <span>Made with <span className="text-red-500 mx-0.5 animate-pulse">❤️</span> and ☕ by</span>
-               <a href="https://github.com/CodeWithBasu" target="_blank" rel="noopener noreferrer" className="text-white hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">
-                  Basudev <ExternalLink className="w-3 h-3 text-zinc-600 group-hover:text-emerald-400 transition-colors" />
-               </a>
+        <div className="mt-20 flex flex-col items-center space-y-8 pb-10">
+          
+          <div className="flex flex-col items-center gap-6">
+            {/* Unique Developer Badge */}
+            <div className="flex items-center gap-2.5 px-5 py-2.5 bg-zinc-900/30 backdrop-blur-md border border-zinc-800/80 rounded-full hover:border-zinc-700/80 hover:bg-zinc-900/40 transition-all duration-500 group shadow-[0_0_20px_rgba(0,0,0,0.2)]">
+              <Code2 className="w-4 h-4 text-emerald-500 group-hover:rotate-12 transition-transform duration-500" />
+              <div className="w-[1px] h-4 bg-zinc-800 mx-0.5" />
+              <span className="text-zinc-400 text-xs font-medium tracking-tight">Crafted with</span>
+              <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500 animate-pulse" />
+              <span className="text-zinc-400 text-xs font-medium tracking-tight">&</span>
+              <Coffee className="w-3.5 h-3.5 text-amber-600 group-hover:-translate-y-0.5 transition-transform duration-500" />
+              <div className="w-[1px] h-4 bg-zinc-800 mx-0.5" />
+              <span className="text-zinc-400 text-xs font-medium tracking-tight">by</span>
+              <a 
+                href="https://github.com/CodeWithBasu" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-white hover:text-emerald-400 font-bold text-xs tracking-wide transition-all duration-300 ml-0.5 flex items-center gap-1.5"
+              >
+                Basudev
+                <ExternalLink className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-500" />
+              </a>
             </div>
             
-            <div className="flex items-center justify-center gap-5">
-              <a href="https://github.com/CodeWithBasu" target="_blank" rel="noopener noreferrer" className="p-2 bg-zinc-950 border border-zinc-900 rounded-lg text-zinc-500 hover:text-white transition-all hover:scale-110">
-                <Github className="w-4 h-4" />
-              </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="p-2 bg-zinc-950 border border-zinc-900 rounded-lg text-zinc-500 hover:text-pink-500 transition-all hover:scale-110">
-                <Instagram className="w-4 h-4" />
-              </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="p-2 bg-zinc-950 border border-zinc-900 rounded-lg text-zinc-500 hover:text-blue-400 transition-all hover:scale-110">
-                <Linkedin className="w-4 h-4" />
-              </a>
-              <div className="w-[1px] h-6 bg-zinc-900 mx-1" />
-              <a href="/docs" className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/5 border border-emerald-500/10 rounded-lg text-emerald-500/60 hover:text-emerald-400 text-[10px] font-bold uppercase tracking-widest transition-all">
-                <FileText className="w-3.5 h-3.5" /> Documentation
+            {/* Social & Docs Bar */}
+            <div className="flex items-center gap-4">
+              <div className="flex items-center bg-zinc-950/40 border border-zinc-900 rounded-xl p-1">
+                <a href="https://github.com/CodeWithBasu" target="_blank" rel="noopener noreferrer" className="p-2 text-zinc-500 hover:text-white hover:bg-zinc-800/50 rounded-lg transition-all duration-300">
+                  <Github className="w-4.5 h-4.5" />
+                </a>
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="p-2 text-zinc-500 hover:text-pink-500 hover:bg-zinc-800/50 rounded-lg transition-all duration-300">
+                  <Instagram className="w-4.5 h-4.5" />
+                </a>
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="p-2 text-zinc-500 hover:text-blue-400 hover:bg-zinc-800/50 rounded-lg transition-all duration-300">
+                  <Linkedin className="w-4.5 h-4.5" />
+                </a>
+              </div>
+              
+              <div className="w-[1px] h-8 bg-zinc-800/50" />
+              
+              <a href="/docs" className="flex items-center gap-2.5 px-4 py-2 bg-emerald-500/5 border border-emerald-500/10 rounded-xl text-emerald-500/60 hover:text-emerald-400 hover:bg-emerald-500/10 hover:border-emerald-500/20 text-[10px] font-bold uppercase tracking-[0.1em] transition-all duration-500 group">
+                <FileText className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" /> 
+                Documentation
               </a>
             </div>
           </div>
 
-          <p className="pt-2 text-[10px] text-zinc-600 opacity-40 uppercase tracking-[0.2em] font-medium">
-            &copy; 2026 QuickQR. All rights reserved.
-          </p>
+          <div className="flex flex-col items-center space-y-2">
+            <p className="text-[9px] text-zinc-700 uppercase tracking-[0.4em] font-medium leading-none">
+              &copy; 2026 QuickQR Engine
+            </p>
+            <div className="h-1 w-8 bg-gradient-to-r from-transparent via-zinc-800 to-transparent rounded-full" />
+            <p className="text-[8px] text-zinc-800 uppercase tracking-widest font-bold">
+              All Rights Reserved
+            </p>
+          </div>
         </div>
       </div>
     </div>
