@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Download, Link as LinkIcon, QrCode, FileText, Video, Music, Loader2, Zap } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Download, Link as LinkIcon, QrCode, FileText, Video, Music, Loader2, Zap, Clock } from "lucide-react"
 import { UploadDropzone } from "@/lib/uploadthing"
 import { toast } from "sonner"
 
@@ -18,6 +19,7 @@ export default function QRCodeGenerator() {
   const [isHovered, setIsHovered] = useState(false)
   const [activeTab, setActiveTab] = useState("url")
   const [isGenerating, setIsGenerating] = useState(false)
+  const [expiration, setExpiration] = useState("")
   const [mounted, setMounted] = useState(false)
 
   // Initialize once mounted
@@ -29,7 +31,9 @@ export default function QRCodeGenerator() {
       // Check for errors in the URL (from failed redirects)
       const params = new URLSearchParams(window.location.search)
       if (params.get("error") === "notfound") {
-        toast.error("The scanned QR link was not found or has expired.")
+        toast.error("The scanned QR link was not found.")
+      } else if (params.get("error") === "expired") {
+        toast.error("The scanned QR link has expired.", { icon: "⏳" })
       }
     }
   }, [])
@@ -69,7 +73,12 @@ export default function QRCodeGenerator() {
       const res = await fetch("/api/qr", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: inputUrl, type, filename })
+        body: JSON.stringify({ 
+          url: inputUrl, 
+          type, 
+          filename, 
+          expirationDuration: expiration || undefined 
+        })
       })
       
       const data = await res.json()
@@ -250,7 +259,23 @@ export default function QRCodeGenerator() {
               </TabsContent>
             </Tabs>
             
-            <div className="pt-2">
+            <div className="pt-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3 bg-zinc-950/50 border border-zinc-800/80 rounded-xl px-4 py-2 hover:border-zinc-700 transition-colors">
+                <Clock className="w-4 h-4 text-zinc-500" />
+                <Select value={expiration} onValueChange={setExpiration}>
+                  <SelectTrigger className="w-[140px] h-8 border-0 bg-transparent text-zinc-300 text-sm focus:ring-0 shadow-none p-0 flex justify-between">
+                    <SelectValue placeholder="No Expiration" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                    <SelectItem value="never">No Expiration</SelectItem>
+                    <SelectItem value="1h">1 Hour</SelectItem>
+                    <SelectItem value="1d">1 Day</SelectItem>
+                    <SelectItem value="7d">7 Days</SelectItem>
+                    <SelectItem value="30d">30 Days</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
               <p className="text-zinc-500 text-sm leading-relaxed border-l-2 border-zinc-800 pl-4 py-1">
                 {activeTab === "url" 
                   ? "Enter a URL to safely encode into the database."

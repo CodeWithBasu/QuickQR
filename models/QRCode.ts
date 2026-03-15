@@ -6,6 +6,7 @@ export interface IQRCode extends Document {
   shortId: string;
   filename?: string;
   createdAt: Date;
+  expiresAt?: Date;
 }
 
 const QRCodeSchema: Schema = new Schema({
@@ -18,6 +19,7 @@ const QRCodeSchema: Schema = new Schema({
   shortId: { type: String, required: true, unique: true },
   filename: { type: String },
   createdAt: { type: Date, default: Date.now },
+  expiresAt: { type: Date, expires: 0 },
 });
 
 // Since Next.js API Routes might recompile this file during dev,

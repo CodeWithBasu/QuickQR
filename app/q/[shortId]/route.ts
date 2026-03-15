@@ -27,6 +27,12 @@ export async function GET(
       return NextResponse.redirect(new URL("/?error=notfound", req.url));
     }
 
+    // Programmatic expiration check (in case MongoDB TTL hasn't run yet)
+    if (qrData.expiresAt && new Date() > new Date(qrData.expiresAt)) {
+      console.error(`QR data expired for ID: ${shortId}`);
+      return NextResponse.redirect(new URL("/?error=expired", req.url));
+    }
+
     // Redirect the user to the actual destination URL
     // Ensure the URL is absolute
     const destination = qrData.url.startsWith('http') ? qrData.url : `https://${qrData.url}`;

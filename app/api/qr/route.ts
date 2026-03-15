@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     await dbConnect();
 
     const body = await req.json();
-    const { url, type, filename } = body;
+    const { url, type, filename, expirationDuration } = body;
 
     if (!url || !type) {
       return NextResponse.json({ error: "URL and Type required" }, { status: 400 });
@@ -20,13 +20,24 @@ export async function POST(req: Request) {
     // Generate a clean lowercase alphanumeric ID
     const shortId = Math.random().toString(36).substring(2, 9).toLowerCase();
 
-    console.log(`Generating QR for ${url} with ID ${shortId}`);
+    // Calculate expiration if provided
+    let expiresAt: Date | undefined = undefined;
+    if (expirationDuration) {
+      const now = Date.now();
+      if (expirationDuration === "1h") expiresAt = new Date(now + 60 * 60 * 1000);
+      else if (expirationDuration === "1d") expiresAt = new Date(now + 24 * 60 * 60 * 1000);
+      else if (expirationDuration === "7d") expiresAt = new Date(now + 7 * 24 * 60 * 60 * 1000);
+      else if (expirationDuration === "30d") expiresAt = new Date(now + 30 * 24 * 60 * 60 * 1000);
+    }
+
+    console.log(`Generating QR for ${url} with ID ${shortId}, expiresAt: ${expiresAt}`);
 
     const newQrEntry = await QRCode.create({
       url,
       type,
       shortId,
       filename: filename || "Untitled",
+      ...(expiresAt && { expiresAt }),
     });
 
     if (!newQrEntry) {
