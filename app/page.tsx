@@ -17,12 +17,13 @@ import { toast } from "sonner"
 import JSZip from "jszip"
 import Link from "next/link"
 
+import { useQRGenerator } from "@/hooks/use-qr-generator"
+import { useBatchGenerator } from "@/hooks/use-batch-generator"
+
 export default function QRCodeGenerator() {
   const [url, setUrl] = useState("https://your-website.com")
-  const [qrValue, setQrValue] = useState("")
   const [isHovered, setIsHovered] = useState(false)
   const [activeTab, setActiveTab] = useState("url")
-  const [isGenerating, setIsGenerating] = useState(false)
   const [expiration, setExpiration] = useState("")
   const [mounted, setMounted] = useState(false)
   
@@ -45,26 +46,6 @@ export default function QRCodeGenerator() {
   const [vCardGithub, setVCardGithub] = useState("")
   const [vCardLinkedin, setVCardLinkedin] = useState("")
 
-  // Batch States
-  const [batchItems, setBatchItems] = useState([{ id: "1", url: "", type: "QuickQR" }])
-  const [isBatching, setIsBatching] = useState(false)
-
-  const addBatchItem = () => {
-    setBatchItems([...batchItems, { id: Math.random().toString(), url: "", type: "QuickQR" }])
-  }
-
-  const removeBatchItem = (id: string) => {
-    if (batchItems.length > 1) {
-      setBatchItems(batchItems.filter(item => item.id !== id))
-    } else {
-      setBatchItems([{ id: Math.random().toString(), url: "", type: "QuickQR" }])
-    }
-  }
-
-  const updateBatchItem = (id: string, field: "url" | "type", value: string) => {
-    setBatchItems(batchItems.map(item => item.id === id ? { ...item, [field]: value } : item))
-  }
-
   // Advanced QR Customizer States
   const [qrColor1, setQrColor1] = useState("#ffffff")
   const [qrColor2, setQrColor2] = useState("#a1a1aa") // zinc-400
@@ -73,13 +54,23 @@ export default function QRCodeGenerator() {
   
   const advancedQrRef = useRef<QRCodeRef>(null)
 
+  // Use Custom Hooks
+  const { isGenerating, qrValue, setQrValue, generateQRCode } = useQRGenerator()
+  const { 
+    batchItems, 
+    isBatching, 
+    addBatchItem, 
+    removeBatchItem, 
+    updateBatchItem, 
+    handleBatchGenerate 
+  } = useBatchGenerator(expiration, usePassword, password, logoFile, dotStyle, qrColor1, qrColor2)
+
   // Initialize once mounted
   useEffect(() => {
     setMounted(true)
     if (typeof window !== "undefined") {
       setQrValue(window.location.origin)
       
-      // Check for errors in the URL (from failed redirects)
       const params = new URLSearchParams(window.location.search)
       if (params.get("error") === "notfound") {
         toast.error("The scanned QR link was not found.")
@@ -87,91 +78,41 @@ export default function QRCodeGenerator() {
         toast.error("The scanned QR link has expired.", { icon: "⏳" })
       }
     }
-  }, [])
+  }, [setQrValue])
 
   // Logo Upload Handler
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
       const reader = new FileReader()
-      reader.onloadend = () => {
-        setLogoFile(reader.result as string)
-      }
+      reader.onloadend = () => setLogoFile(reader.result as string)
       reader.readAsDataURL(file)
     } else {
       setLogoFile(null)
     }
   }
 
-  const handleDownload = () => {
-    if (advancedQrRef.current) {
-      advancedQrRef.current.download()
-    }
-  }
+  const handleDownload = () => advancedQrRef.current?.download()
 
-  // Generates shortlink in the database
-  const generateQRCode = async (inputUrl: string, type: "url" | "doc" | "video" | "audio" | "wifi" | "vcard", filename?: string) => {
-    try {
-      setIsGenerating(true)
-      toast.loading("Registering QR in database...", { id: "qr-gen" })
-      
-      const res = await fetch("/api/qr", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          url: inputUrl, 
-          type, 
-          filename, 
-          expirationDuration: expiration || undefined,
-          password: usePassword && password ? password : undefined,
-          instagram: vCardInstagram || undefined,
-          github: vCardGithub || undefined,
-          linkedin: vCardLinkedin || undefined
-        })
-      })
-      
-      const data = await res.json()
-      
-      if (data.success) {
-        // Build complete URL based on the current window origin pointing to the shortlink
-        let trackingUrl = `${window.location.origin}/q/${data.data.shortId}`
-        
-        // Contextual routing: Appends the filename directly to the URL so that when users scan the QR, 
-        // their smartphone displays the actual filename before they click it, rather than just a random ID.
-        if (filename && type !== "url") {
-          const safeName = filename.replace(/[^a-zA-Z0-9.-]/g, "_")
-          trackingUrl += `/${encodeURIComponent(safeName)}`
-        }
-
-        setQrValue(trackingUrl)
-        console.log("Generated tracking URL:", trackingUrl)
-        toast.success("QR Code ready to scan!", { id: "qr-gen" })
-      } else {
-        console.error("Failed:", data.error)
-        toast.error(`Error: ${data.error || "Generation failed"}`, { id: "qr-gen" })
-      }
-    } catch (error) {
-      console.error(error)
-      toast.error("Network error. Check your connection.", { id: "qr-gen" })
-    } finally {
-      setIsGenerating(false)
-    }
+  const handleGenerateClick = () => {
+    if (activeTab === "url") generateQRCode(url, "url")
+    else if (activeTab === "wifi") generateWifiQR()
+    else if (activeTab === "vcard") generateVCardQR()
   }
 
   const generateWifiQR = () => {
     if (!wifiSsid) {
-      toast.error("Please provide a Network SSID");
-      return;
+      toast.error("Please provide a Network SSID")
+      return
     }
-    const wifiString = `WIFI:S:${wifiSsid};T:${wifiEncryption};P:${wifiPassword};;`
-    setQrValue(wifiString)
+    setQrValue(`WIFI:S:${wifiSsid};T:${wifiEncryption};P:${wifiPassword};;`)
     toast.success("Wi-Fi network encoded!")
   }
 
   const generateVCardQR = () => {
     if (!vCardName) {
-      toast.error("Please provide a Full Name");
-      return;
+      toast.error("Please provide a Full Name")
+      return
     }
     let vcardString = `BEGIN:VCARD
 VERSION:3.0
@@ -188,90 +129,6 @@ TITLE:${vCardTitle}`
     vcardString += `\nEND:VCARD`
     setQrValue(vcardString)
     toast.success("Social Contact Card encoded!")
-  }
-
-  const handleBatchGenerate = async () => {
-    const activeItems = batchItems.filter(item => item.url.trim().length > 0)
-    if (activeItems.length === 0) {
-      toast.error("Please provide at least one URL");
-      return;
-    }
-
-    setIsBatching(true)
-    const zip = new JSZip()
-    const toastId = "batch-gen"
-    toast.loading(`Processing 0/${activeItems.length} items...`, { id: toastId })
-
-    try {
-      // Import styling library for background generation
-      const { default: QRCodeStyling } = await import("qr-code-styling")
-
-      for (let i = 0; i < activeItems.length; i++) {
-        const item = activeItems[i]
-        toast.loading(`Processing ${i + 1}/${activeItems.length}: ${item.url.slice(0, 20)}...`, { id: toastId })
-
-        // 1. Register in Database
-        const res = await fetch("/api/qr", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ 
-            url: item.url, 
-            type: "url",
-            expirationDuration: expiration || undefined,
-            password: usePassword && password ? password : undefined
-          })
-        })
-        const data = await res.json()
-        
-        if (data.success) {
-          const finalUrl = `${window.location.origin}/q/${data.data.shortId}`
-          
-          // 2. Generate Image Blob
-          const qr = new QRCodeStyling({
-            width: 800,
-            height: 800,
-            data: finalUrl,
-            image: logoFile || undefined,
-            dotsOptions: {
-              type: dotStyle as any,
-              gradient: {
-                type: "linear",
-                rotation: Math.PI / 4,
-                colorStops: [{ offset: 0, color: qrColor1 }, { offset: 1, color: qrColor2 }]
-              }
-            },
-            backgroundOptions: { color: "#000000" },
-            imageOptions: { 
-              crossOrigin: "anonymous", 
-              margin: 20, 
-              imageSize: 0.4,
-              hideBackgroundDots: true
-            },
-            cornersSquareOptions: { type: (dotStyle === "square" ? "square" : "extra-rounded") as any, color: qrColor1 },
-            cornersDotOptions: { type: (dotStyle === "square" ? "square" : "dot") as any, color: qrColor2 }
-          })
-
-          const blob = await qr.getRawData("png")
-          if (blob) {
-            const fileName = `${item.type}_${i+1}_${data.data.shortId}.png`
-            zip.file(fileName, blob)
-          }
-        }
-      }
-
-      const content = await zip.generateAsync({ type: "blob" })
-      const link = document.createElement("a")
-      link.href = URL.createObjectURL(content)
-      link.download = `QuickQR_Batch_${Date.now()}.zip`
-      link.click()
-      
-      toast.success(`Batch complete! Generated ${activeItems.length} QR codes.`, { id: toastId })
-    } catch (err) {
-      console.error(err)
-      toast.error("Batch processing failed.", { id: toastId })
-    } finally {
-      setIsBatching(false)
-    }
   }
 
   return (
@@ -313,27 +170,27 @@ TITLE:${vCardTitle}`
           <div className="w-full lg:w-[55%] space-y-6 group bg-black/60 backdrop-blur-md p-8 rounded-3xl border border-zinc-800/50 shadow-2xl relative z-20">
             
             <Tabs defaultValue="url" className="w-full" onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-7 bg-zinc-950 border border-zinc-800/80 rounded-xl mb-8 p-1 overflow-x-auto h-auto min-w-[300px]">
-                <TabsTrigger value="url" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[9px] md:text-xs h-10 p-1">
-                  <LinkIcon className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden md:inline">URL</span>
+              <TabsList className="flex items-center gap-1 w-full bg-zinc-950 border border-zinc-800/80 rounded-xl mb-8 p-1 overflow-x-auto h-auto min-w-0 no-scrollbar">
+                <TabsTrigger value="url" className="flex-1 min-w-[60px] md:min-w-[80px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2">
+                  <LinkIcon className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">URL</span>
                 </TabsTrigger>
-                <TabsTrigger value="doc" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[9px] md:text-xs h-10 p-1">
-                  <FileText className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden md:inline">Docs</span>
+                <TabsTrigger value="doc" className="flex-1 min-w-[60px] md:min-w-[80px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2">
+                  <FileText className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">Docs</span>
                 </TabsTrigger>
-                <TabsTrigger value="video" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[9px] md:text-xs h-10 p-1">
-                  <Video className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden md:inline">Video</span>
+                <TabsTrigger value="video" className="flex-1 min-w-[60px] md:min-w-[80px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2">
+                  <Video className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">Video</span>
                 </TabsTrigger>
-                <TabsTrigger value="audio" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[9px] md:text-xs h-10 p-1">
-                  <Music className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden md:inline">Audio</span>
+                <TabsTrigger value="audio" className="flex-1 min-w-[60px] md:min-w-[80px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2">
+                  <Music className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">Music</span>
                 </TabsTrigger>
-                <TabsTrigger value="wifi" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[9px] md:text-xs h-10 p-1">
-                  <Wifi className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden md:inline">WiFi</span>
+                <TabsTrigger value="wifi" className="flex-1 min-w-[60px] md:min-w-[80px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2">
+                  <Wifi className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">WiFi</span>
                 </TabsTrigger>
-                <TabsTrigger value="vcard" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[9px] md:text-xs h-10 p-1">
-                  <User className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden md:inline">Contact</span>
+                <TabsTrigger value="vcard" className="flex-1 min-w-[60px] md:min-w-[80px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2">
+                  <User className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">Contact</span>
                 </TabsTrigger>
-                <TabsTrigger value="batch" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[9px] md:text-xs h-10 p-1">
-                  <Zap className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden md:inline">Batch</span>
+                <TabsTrigger value="batch" className="flex-1 min-w-[60px] md:min-w-[80px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2">
+                  <Zap className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">Batch</span>
                 </TabsTrigger>
               </TabsList>
 
