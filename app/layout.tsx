@@ -1,6 +1,8 @@
 import "@/styles/globals.css"
 import { Inter } from "next/font/google"
 import type React from "react" // Import React
+import { Viewport } from "next"
+import { Toaster } from "sonner"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -15,16 +17,12 @@ export const metadata = {
   },
 }
 
-import { Viewport } from "next"
-
 export const viewport: Viewport = {
   themeColor: "#000000",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
 }
-
-import { Toaster } from "sonner"
 
 export default function RootLayout({
   children,

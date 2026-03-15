@@ -4,7 +4,7 @@ import QRCode from "@/models/QRCode";
 
 export async function GET(
   req: Request,
-  { params }: { params: { shortId: string } }
+  { params }: { params: Promise<{ shortId: string }> }
 ) {
   try {
     const { shortId } = await params; // NextJS 15 requires awaiting params

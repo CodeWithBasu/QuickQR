@@ -171,6 +171,16 @@ export default function QRCodeGenerator() {
               <TabsContent value="doc" className="mt-0">
                 <div className="space-y-4">
                   <Label className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">Upload Document (PDF, DOCX)</Label>
+                  <UploadDropzone
+                    endpoint="mediaPost"
+                    onClientUploadComplete={(res) => {
+                      if (res && res[0]) {
+                        generateQRCode(res[0].url, "doc", res[0].name)
+                      }
+                    }}
+                    onUploadError={(error: Error) => {
+                      toast.error(`Upload failed: ${error.message}`)
+                    }}
                     content={{
                       label: "PDF, DOCX up to 64MB",
                       allowedContent: "Drop files or click to upload",
@@ -188,6 +198,16 @@ export default function QRCodeGenerator() {
               <TabsContent value="video" className="mt-0">
                 <div className="space-y-4">
                    <Label className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">Upload Video (MP4, MKV)</Label>
+                   <UploadDropzone
+                    endpoint="mediaPost"
+                    onClientUploadComplete={(res) => {
+                      if (res && res[0]) {
+                        generateQRCode(res[0].url, "video", res[0].name)
+                      }
+                    }}
+                    onUploadError={(error: Error) => {
+                      toast.error(`Upload failed: ${error.message}`)
+                    }}
                     content={{
                       label: "MP4, MKV up to 128MB",
                       allowedContent: "Drop files or click to upload",
@@ -205,6 +225,16 @@ export default function QRCodeGenerator() {
               <TabsContent value="audio" className="mt-0">
                 <div className="space-y-4">
                   <Label className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">Upload Audio (MP3, WAV)</Label>
+                  <UploadDropzone
+                    endpoint="mediaPost"
+                    onClientUploadComplete={(res) => {
+                      if (res && res[0]) {
+                        generateQRCode(res[0].url, "audio", res[0].name)
+                      }
+                    }}
+                    onUploadError={(error: Error) => {
+                      toast.error(`Upload failed: ${error.message}`)
+                    }}
                     content={{
                       label: "MP3, WAV up to 64MB",
                       allowedContent: "Drop files or click to upload",
