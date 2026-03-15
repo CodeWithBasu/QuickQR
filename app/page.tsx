@@ -372,6 +372,16 @@ export default function QRCodeGenerator() {
             </div>
           </div>
         </div>
+        
+        {/* Footer */}
+        <div className="mt-16 text-center text-zinc-500 text-sm font-medium tracking-wide">
+          <p className="flex items-center justify-center gap-1">
+            Made with <span className="text-red-500 mx-1 animate-pulse">❤️</span> and <span className="text-amber-700 mx-1">☕</span> by <span className="text-white hover:text-zinc-300 transition-colors cursor-default">Basudev</span>
+          </p>
+          <p className="mt-2 text-xs opacity-60">
+            &copy; {new Date().getFullYear()} QuickQR. All rights reserved.
+          </p>
+        </div>
       </div>
     </div>
   )
