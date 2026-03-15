@@ -171,38 +171,15 @@ export default function QRCodeGenerator() {
               <TabsContent value="doc" className="mt-0">
                 <div className="space-y-4">
                   <Label className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">Upload Document (PDF, DOCX)</Label>
-                  <UploadDropzone
-                    endpoint="mediaPost"
-                    onClientUploadComplete={(res) => {
-                      if (res && res[0]) {
-                        generateQRCode(res[0].url, "doc", res[0].name)
-                      }
-                    }}
-                    onUploadError={(error: Error) => {
-                      toast.error(`Upload failed: ${error.message}`)
-                    }}
                     content={{
-                      label: "PDF, DOCX up to 100MB",
+                      label: "PDF, DOCX up to 64MB",
                       allowedContent: "Drop files or click to upload",
-                      button({ ready, isUploading }) {
-                        return (
-                          <span className="text-black font-semibold">
-                            {isUploading ? "Uploading..." : isGenerating ? "Processing..." : "Choose File"}
-                          </span>
-                        )
-                      }
                     }}
                     appearance={{
-                      button: ({ ready, isUploading }) => {
-                        return cn(
-                          "w-64 h-12 rounded-xl border-0 transition-all duration-300 shadow-lg px-6",
-                          ready ? "bg-white hover:bg-zinc-200 cursor-pointer" : "bg-zinc-800 text-zinc-500",
-                          isUploading && "bg-zinc-900 cursor-not-allowed opacity-50"
-                        )
-                      },
-                      container: "border-zinc-800 bg-zinc-950/30 h-56 rounded-2xl border-2 border-dashed hover:border-zinc-700 transition-colors py-8",
-                      label: "text-zinc-400 font-medium",
-                      allowedContent: "text-zinc-600 text-xs mt-1",
+                      button: "ut-ready:bg-white ut-ready:text-black ut-uploading:bg-zinc-800 ut-uploading:text-white ut-uploading:after:bg-emerald-500 ut-readying:bg-zinc-800 text-sm font-semibold w-64 h-12 rounded-xl border-none shadow-lg transition-all",
+                      container: "border-zinc-800 bg-zinc-950/40 h-56 rounded-2xl border-2 border-dashed hover:border-zinc-600 hover:bg-zinc-900/40 transition-all py-8 group",
+                      label: "text-zinc-200 font-medium group-hover:text-white transition-colors",
+                      allowedContent: "text-zinc-500 text-xs mt-2 group-hover:text-zinc-400 transition-colors",
                     }}
                   />
                 </div>
@@ -211,38 +188,15 @@ export default function QRCodeGenerator() {
               <TabsContent value="video" className="mt-0">
                 <div className="space-y-4">
                    <Label className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">Upload Video (MP4, MKV)</Label>
-                   <UploadDropzone
-                    endpoint="mediaPost"
-                    onClientUploadComplete={(res) => {
-                      if (res && res[0]) {
-                        generateQRCode(res[0].url, "video", res[0].name)
-                      }
-                    }}
-                    onUploadError={(error: Error) => {
-                      toast.error(`Upload failed: ${error.message}`)
-                    }}
                     content={{
                       label: "MP4, MKV up to 128MB",
                       allowedContent: "Drop files or click to upload",
-                      button({ ready, isUploading }) {
-                        return (
-                          <span className="text-black font-semibold">
-                            {isUploading ? "Uploading..." : isGenerating ? "Processing..." : "Choose File"}
-                          </span>
-                        )
-                      }
                     }}
                     appearance={{
-                      button: ({ ready, isUploading }) => {
-                        return cn(
-                          "w-64 h-12 rounded-xl border-0 transition-all duration-300 shadow-lg px-6",
-                          ready ? "bg-white hover:bg-zinc-200 cursor-pointer" : "bg-zinc-800 text-zinc-500",
-                          isUploading && "bg-zinc-900 cursor-not-allowed opacity-50"
-                        )
-                      },
-                      container: "border-zinc-800 bg-zinc-950/30 h-56 rounded-2xl border-2 border-dashed hover:border-zinc-700 transition-colors py-8",
-                      label: "text-zinc-400 font-medium",
-                      allowedContent: "text-zinc-600 text-xs mt-1",
+                      button: "ut-ready:bg-white ut-ready:text-black ut-uploading:bg-zinc-800 ut-uploading:text-white ut-uploading:after:bg-emerald-500 ut-readying:bg-zinc-800 text-sm font-semibold w-64 h-12 rounded-xl border-none shadow-lg transition-all",
+                      container: "border-zinc-800 bg-zinc-950/40 h-56 rounded-2xl border-2 border-dashed hover:border-zinc-600 hover:bg-zinc-900/40 transition-all py-8 group",
+                      label: "text-zinc-200 font-medium group-hover:text-white transition-colors",
+                      allowedContent: "text-zinc-500 text-xs mt-2 group-hover:text-zinc-400 transition-colors",
                     }}
                   />
                 </div>
@@ -251,38 +205,15 @@ export default function QRCodeGenerator() {
               <TabsContent value="audio" className="mt-0">
                 <div className="space-y-4">
                   <Label className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">Upload Audio (MP3, WAV)</Label>
-                  <UploadDropzone
-                    endpoint="mediaPost"
-                    onClientUploadComplete={(res) => {
-                      if (res && res[0]) {
-                        generateQRCode(res[0].url, "audio", res[0].name)
-                      }
-                    }}
-                    onUploadError={(error: Error) => {
-                      toast.error(`Upload failed: ${error.message}`)
-                    }}
                     content={{
                       label: "MP3, WAV up to 64MB",
                       allowedContent: "Drop files or click to upload",
-                      button({ ready, isUploading }) {
-                        return (
-                          <span className="text-black font-semibold">
-                            {isUploading ? "Uploading..." : isGenerating ? "Processing..." : "Choose File"}
-                          </span>
-                        )
-                      }
                     }}
                     appearance={{
-                      button: ({ ready, isUploading }) => {
-                        return cn(
-                          "w-64 h-12 rounded-xl border-0 transition-all duration-300 shadow-lg px-6",
-                          ready ? "bg-white hover:bg-zinc-200 cursor-pointer" : "bg-zinc-800 text-zinc-500",
-                          isUploading && "bg-zinc-900 cursor-not-allowed opacity-50"
-                        )
-                      },
-                      container: "border-zinc-800 bg-zinc-950/30 h-56 rounded-2xl border-2 border-dashed hover:border-zinc-700 transition-colors py-8",
-                      label: "text-zinc-400 font-medium",
-                      allowedContent: "text-zinc-600 text-xs mt-1",
+                      button: "ut-ready:bg-white ut-ready:text-black ut-uploading:bg-zinc-800 ut-uploading:text-white ut-uploading:after:bg-emerald-500 ut-readying:bg-zinc-800 text-sm font-semibold w-64 h-12 rounded-xl border-none shadow-lg transition-all",
+                      container: "border-zinc-800 bg-zinc-950/40 h-56 rounded-2xl border-2 border-dashed hover:border-zinc-600 hover:bg-zinc-900/40 transition-all py-8 group",
+                      label: "text-zinc-200 font-medium group-hover:text-white transition-colors",
+                      allowedContent: "text-zinc-500 text-xs mt-2 group-hover:text-zinc-400 transition-colors",
                     }}
                   />
                 </div>
