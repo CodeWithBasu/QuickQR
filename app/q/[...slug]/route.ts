@@ -40,8 +40,14 @@ export async function GET(
       return NextResponse.redirect(new URL(`/unlock/${shortId}`, req.url));
     }
 
-    // Redirect the user to the actual destination URL
-    // Ensure the URL is absolute
+    // If it's a file type (doc, video, audio), redirect to the viewer page
+    // This allows showing creator socials and a professional download button
+    if (qrData.type === "doc" || qrData.type === "video" || qrData.type === "audio") {
+      console.log(`File scan detected. Redirecting to viewer for ID: ${shortId}`);
+      return NextResponse.redirect(new URL(`/viewer/${shortId}`, req.url));
+    }
+
+    // Redirect standard URLs directly to the destination
     const destination = qrData.url.startsWith('http') ? qrData.url : `https://${qrData.url}`;
     
     return NextResponse.redirect(new URL(destination));

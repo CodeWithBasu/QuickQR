@@ -5,8 +5,10 @@ export interface IQRCode extends Document {
   type: "url" | "doc" | "video" | "audio" | "wifi" | "vcard";
   shortId: string;
   filename?: string;
+  instagram?: string;
+  github?: string;
+  linkedin?: string;
   password?: string;
-  createdAt: Date;
   expiresAt?: Date;
 }
 
@@ -19,10 +21,12 @@ const QRCodeSchema: Schema = new Schema({
   },
   shortId: { type: String, required: true, unique: true },
   filename: { type: String },
+  instagram: { type: String },
+  github: { type: String },
+  linkedin: { type: String },
   password: { type: String },
-  createdAt: { type: Date, default: Date.now },
-  expiresAt: { type: Date, expires: 0 },
-});
+  expiresAt: { type: Date },
+}, { timestamps: true });
 
 // Since Next.js API Routes might recompile this file during dev,
 // we prevent re-declaring the model.

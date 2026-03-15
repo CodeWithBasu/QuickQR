@@ -26,10 +26,11 @@ export async function POST(
       return NextResponse.json({ error: "Invalid PIN" }, { status: 401 });
     }
 
-    // Success - return the actual destination
+    // Success - return the actual destination and type
     const destination = qrData.url.startsWith('http') ? qrData.url : `https://${qrData.url}`;
+    const type = qrData.type;
 
-    return NextResponse.json({ success: true, url: destination });
+    return NextResponse.json({ success: true, url: destination, type });
   } catch (error: any) {
     console.error("Unlock Error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

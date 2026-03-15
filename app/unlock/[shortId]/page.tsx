@@ -34,7 +34,13 @@ export default function UnlockPage({ params }: { params: Promise<{ shortId: stri
       const data = await res.json();
       if (data.success && data.url) {
         toast.success("Access Granted. Redirecting...", { icon: "🔓" });
-        window.location.href = data.url;
+        
+        // If it's a file type, go to the viewer instead of direct download
+        if (["doc", "video", "audio"].includes(data.type)) {
+          router.push(`/viewer/${shortId}`);
+        } else {
+          window.location.href = data.url;
+        }
       } else {
         toast.error(data.error || "Invalid PIN. Access Denied.");
         setPin("");

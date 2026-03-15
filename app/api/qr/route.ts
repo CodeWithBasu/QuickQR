@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     await dbConnect();
 
     const body = await req.json();
-    const { url, type, filename, expirationDuration, password } = body;
+    const { url, type, filename, expirationDuration, password, instagram, github, linkedin } = body;
 
     if (!url || !type) {
       return NextResponse.json({ error: "URL and Type required" }, { status: 400 });
@@ -38,6 +38,9 @@ export async function POST(req: Request) {
       shortId,
       filename: filename || "Untitled",
       password: password || undefined,
+      instagram: instagram || undefined,
+      github: github || undefined,
+      linkedin: linkedin || undefined,
       ...(expiresAt && { expiresAt }),
     });
 
