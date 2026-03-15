@@ -801,76 +801,56 @@ TITLE:${vCardTitle}`
               </div>
             </div>
           </div>
-        </div>
-        
-
-        {/* Documentation & Engine Section */}
-        <div className="mt-36 max-w-4xl mx-auto border-t border-zinc-900/50 pt-24 pb-12">
-           <div className="flex flex-col md:flex-row gap-16 items-start">
+             {/* Documentation Section */}
+        <div className="mt-32 max-w-4xl mx-auto border-t border-zinc-900 pt-20">
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+              <div className="space-y-6">
+                 <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                       <FileText className="w-5 h-5 text-emerald-500" />
+                    </div>
+                    <h2 className="text-xl font-bold text-white tracking-tight">Project Documentation</h2>
+                 </div>
+                 <p className="text-zinc-500 text-sm leading-relaxed">
+                    QuickQR is a high-performance engine engineered for secure and contextual data sharing. 
+                    Our system leverages unique shortlink identifiers to track engagement metrics while 
+                    maintaining maximum security through PIN-based encryption protocols.
+                 </p>
+                 <ul className="space-y-4 pt-2">
+                    <li className="flex items-start gap-4 group">
+                       <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center shrink-0 group-hover:border-emerald-500/30 transition-colors">
+                          <Shield className="w-4 h-4 text-zinc-500 group-hover:text-emerald-500 transition-colors" />
+                       </div>
+                       <div>
+                          <h3 className="text-xs font-bold text-zinc-300 uppercase tracking-widest mb-1">Secure Registration</h3>
+                          <p className="text-[11px] text-zinc-600 leading-normal">Every generated QR is logged into our database, enabling expiration control and password protection for sensitive media.</p>
+                       </div>
+                    </li>
+                    <li className="flex items-start gap-4 group">
+                       <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center shrink-0 group-hover:border-emerald-500/30 transition-colors">
+                          <ExternalLink className="w-4 h-4 text-zinc-500 group-hover:text-emerald-400 transition-colors" />
+                       </div>
+                       <div>
+                          <h3 className="text-xs font-bold text-zinc-300 uppercase tracking-widest mb-1">Contextual Routing</h3>
+                          <p className="text-[11px] text-zinc-600 leading-normal">Smart URL appending adds original filenames to shortlinks so scanners see what they are about to access before clicking.</p>
+                       </div>
+                    </li>
+                 </ul>
+              </div>
               
-              <div className="flex-1 space-y-8">
-                 <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                       <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center">
-                          <FileText className="w-5 h-5 text-emerald-500" />
-                       </div>
-                       <h2 className="text-2xl font-bold tracking-tight text-white">Project Engine</h2>
-                    </div>
-                    <p className="text-zinc-500 text-sm leading-relaxed max-w-md">
-                       QuickQR is a next-generation matrix generator engineered for secure data distribution. 
-                       Unlike static QR codes, our engine uses a dynamic routing layer that enables advanced 
-                       features like analytics tracking, password masking, and content expiration.
-                    </p>
-                 </div>
-
-                 <div className="space-y-6">
-                    <div className="flex gap-4 group">
-                       <div className="w-8 h-8 rounded-lg bg-zinc-950 border border-zinc-900 flex items-center justify-center shrink-0 group-hover:border-zinc-700 transition-colors">
-                          <Zap className="w-4 h-4 text-emerald-500" />
-                       </div>
-                       <div>
-                          <h3 className="text-xs font-bold text-zinc-200 uppercase tracking-widest mb-1">Dynamic Shortlinks</h3>
-                          <p className="text-[11px] text-zinc-600 leading-normal">Every QR is mapped to a unique database record, allowing you to update destination data or revoke access instantly without reprinting.</p>
-                       </div>
-                    </div>
-
-                    <div className="flex gap-4 group">
-                       <div className="w-8 h-8 rounded-lg bg-zinc-950 border border-zinc-900 flex items-center justify-center shrink-0 group-hover:border-zinc-700 transition-colors">
-                          <Shield className="w-4 h-4 text-emerald-500" />
-                       </div>
-                       <div>
-                          <h3 className="text-xs font-bold text-zinc-200 uppercase tracking-widest mb-1">PIN Encryption</h3>
-                          <p className="text-[11px] text-zinc-600 leading-normal">Secure your media and documents with 4-digit PIN protection. Content is masked until the correct security key is authenticated.</p>
-                       </div>
-                    </div>
-                 </div>
+              <div className="bg-zinc-950/30 border border-zinc-800/50 rounded-3xl p-8 space-y-6 backdrop-blur-sm self-center">
+                 <div className="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.3em] mb-2">Technical Core</div>
+                 <h3 className="text-xl font-semibold text-white tracking-tight leading-tight">Engineered for Privacy & Efficiency.</h3>
+                 <p className="text-zinc-500 text-sm leading-relaxed">
+                    Whether distributing enterprise documents, internal company media, or simple URL redirects, 
+                    the QuickQR platform ensures your data stays masked until the correct credentials are provided.
+                 </p>
+                 <Link href="/docs" className="w-full inline-block">
+                   <Button variant="outline" className="w-full bg-zinc-900/50 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700 h-12 rounded-xl text-xs font-bold uppercase tracking-widest">
+                      <Zap className="w-3.5 h-3.5 mr-2 text-emerald-500" /> System Architecture
+                   </Button>
+                 </Link>
               </div>
-
-              <div className="w-full md:w-[320px] bg-zinc-950/40 backdrop-blur-sm border border-zinc-900/50 rounded-3xl p-8 space-y-6 shadow-2xl relative overflow-hidden group/card shadow-[0_0_50px_rgba(0,0,0,0.5)]">
-                 <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 blur-[80px] rounded-full pointer-events-none" />
-                 
-                 <div className="space-y-4">
-                    <div className="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.4em]">Core Architecture</div>
-                    <h3 className="text-xl font-semibold text-white tracking-tight leading-snug">Built for Professional Distribution.</h3>
-                    <p className="text-zinc-500 text-xs leading-relaxed">
-                       Perfect for enterprise documents, private media shares, and high-security network access. QuickQR ensures your data stays in your control.
-                    </p>
-                 </div>
-
-                 <div className="pt-4 flex flex-col gap-3">
-                    <Link href="/docs" className="w-full">
-                      <Button variant="outline" className="w-full h-11 bg-zinc-900/50 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700 text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all group-hover/card:bg-zinc-900">
-                         Full Docs Guide
-                      </Button>
-                    </Link>
-                    <div className="flex items-center justify-center gap-1.5 opacity-30 select-none">
-                       <div className="w-1 h-1 rounded-full bg-zinc-500" />
-                       <div className="w-1 h-1 rounded-full bg-zinc-500" />
-                       <div className="w-1 h-1 rounded-full bg-zinc-500" />
-                    </div>
-                 </div>
-              </div>
-
            </div>
         </div>
 
@@ -928,11 +908,11 @@ TITLE:${vCardTitle}`
             </p>
             <div className="h-1 w-8 bg-gradient-to-r from-transparent via-zinc-800 to-transparent rounded-full" />
             <p className="text-[8px] text-zinc-800 uppercase tracking-widest font-bold">
-              All Rights Reserved
             </p>
           </div>
         </div>
       </div>
+    </div>
     </div>
   )
 }
