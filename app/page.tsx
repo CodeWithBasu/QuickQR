@@ -3,13 +3,14 @@
 import { useState, useRef, useEffect } from "react"
 import { cn } from "@/lib/utils"
 import { DotPattern } from "@/components/ui/dot-pattern"
-import { QRCodeSVG } from "qrcode.react"
+import AdvancedQRCode, { QRCodeRef } from "@/components/ui/AdvancedQRCode"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Download, Link as LinkIcon, QrCode, FileText, Video, Music, Loader2, Zap, Clock } from "lucide-react"
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
+import { Download, Link as LinkIcon, QrCode, FileText, Video, Music, Loader2, Zap, Clock, Palette, Image as ImageIcon } from "lucide-react"
 import { UploadDropzone } from "@/lib/uploadthing"
 import { toast } from "sonner"
 
@@ -21,6 +22,14 @@ export default function QRCodeGenerator() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [expiration, setExpiration] = useState("")
   const [mounted, setMounted] = useState(false)
+
+  // Advanced QR Customizer States
+  const [qrColor1, setQrColor1] = useState("#ffffff")
+  const [qrColor2, setQrColor2] = useState("#a1a1aa") // zinc-400
+  const [dotStyle, setDotStyle] = useState("square")
+  const [logoFile, setLogoFile] = useState<string | null>(null)
+  
+  const advancedQrRef = useRef<QRCodeRef>(null)
 
   // Initialize once mounted
   useEffect(() => {
@@ -38,30 +47,24 @@ export default function QRCodeGenerator() {
     }
   }, [])
 
-  // Hardcoded optimized defaults
-  const QR_COLOR = "#ffffff"
-  const QR_BG_COLOR = "#000000"
-  const QR_SIZE = 280
-  const QR_LEVEL = "H"
+  // Logo Upload Handler
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setLogoFile(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    } else {
+      setLogoFile(null)
+    }
+  }
 
   const handleDownload = () => {
-    const svg = document.getElementById("qr-code-svg")
-    if (!svg) return
-    const svgData = new XMLSerializer().serializeToString(svg)
-    const canvas = document.createElement("canvas")
-    const ctx = canvas.getContext("2d")
-    const img = new Image()
-    img.onload = () => {
-      canvas.width = QR_SIZE
-      canvas.height = QR_SIZE
-      ctx?.drawImage(img, 0, 0)
-      const pngFile = canvas.toDataURL("image/png")
-      const downloadLink = document.createElement("a")
-      downloadLink.download = "quickqr.png"
-      downloadLink.href = `${pngFile}`
-      downloadLink.click()
+    if (advancedQrRef.current) {
+      advancedQrRef.current.download()
     }
-    img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)))
   }
 
   // Generates shortlink in the database
@@ -295,6 +298,81 @@ export default function QRCodeGenerator() {
               </p>
             </div>
 
+            {/* Advanced QR Customizer Accordion */}
+            <div className="mt-8">
+              <Accordion type="single" collapsible className="w-full bg-zinc-950/40 border border-zinc-800 rounded-2xl px-4 py-2">
+                <AccordionItem value="customize" className="border-b-0">
+                  <AccordionTrigger className="hover:no-underline py-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center">
+                        <Palette className="w-4 h-4 text-emerald-400" />
+                      </div>
+                      <span className="text-zinc-200 font-medium tracking-wide">Advanced Visual Settings</span>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="pt-2 pb-6 space-y-6">
+                    {/* Dot Styles */}
+                    <div className="space-y-3">
+                      <Label className="text-zinc-400 text-[10px] font-semibold uppercase tracking-wider">Dot Style</Label>
+                      <Select value={dotStyle} onValueChange={setDotStyle}>
+                        <SelectTrigger className="w-full h-12 bg-zinc-900 border-zinc-800 text-zinc-300 focus:ring-emerald-500/20 rounded-xl">
+                          <SelectValue placeholder="Select dot style" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                          <SelectItem value="square">Sharp Squares</SelectItem>
+                          <SelectItem value="rounded">Rounded Squares</SelectItem>
+                          <SelectItem value="dots">Circular Dots</SelectItem>
+                          <SelectItem value="classy">Classy Curves</SelectItem>
+                          <SelectItem value="extra-rounded">Extra Rounded</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Color Gradients */}
+                    <div className="space-y-4">
+                      <Label className="text-zinc-400 text-[10px] font-semibold uppercase tracking-wider">Gradient Colors</Label>
+                      <div className="flex items-center gap-4">
+                        <div className="flex flex-col gap-2 flex-1">
+                          <span className="text-zinc-600 text-[10px] uppercase">Primary</span>
+                          <div className="flex items-center gap-3 bg-zinc-900 border border-zinc-800 p-2 rounded-xl">
+                            <input type="color" value={qrColor1} onChange={(e) => setQrColor1(e.target.value)} className="w-8 h-8 rounded shrink-0 bg-transparent border-0 p-0 cursor-pointer" />
+                            <span className="text-zinc-400 text-sm font-mono">{qrColor1}</span>
+                          </div>
+                        </div>
+                        <div className="flex flex-col gap-2 flex-1">
+                          <span className="text-zinc-600 text-[10px] uppercase">Secondary</span>
+                          <div className="flex items-center gap-3 bg-zinc-900 border border-zinc-800 p-2 rounded-xl">
+                            <input type="color" value={qrColor2} onChange={(e) => setQrColor2(e.target.value)} className="w-8 h-8 rounded shrink-0 bg-transparent border-0 p-0 cursor-pointer" />
+                            <span className="text-zinc-400 text-sm font-mono">{qrColor2}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Custom Logo */}
+                    <div className="space-y-3">
+                      <Label className="text-zinc-400 text-[10px] font-semibold uppercase tracking-wider">Center Logo (Optional)</Label>
+                      <label htmlFor="logo-upload" className="flex items-center justify-center gap-2 w-full h-12 bg-zinc-900 border border-zinc-800 border-dashed rounded-xl cursor-pointer hover:bg-zinc-800/50 transition-colors">
+                        <ImageIcon className="w-4 h-4 text-zinc-500" />
+                        <span className="text-zinc-400 text-sm">{logoFile ? "Change Logo Image" : "Upload Logo Image"}</span>
+                        <input id="logo-upload" type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} />
+                      </label>
+                      {logoFile && (
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          onClick={() => setLogoFile(null)}
+                          className="w-full text-red-500 hover:text-red-400 hover:bg-red-500/10 h-10 mt-2 rounded-lg"
+                        >
+                          Remove Current Logo
+                        </Button>
+                      )}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </div>
+
           </div>
 
           {/* Minimalist Output Display */}
@@ -320,21 +398,19 @@ export default function QRCodeGenerator() {
                 onMouseLeave={() => setIsHovered(false)}
               >
                 <div 
-                  className="p-4 rounded-xl shadow-2xl border"
+                  className="p-4 rounded-xl shadow-xl border flex items-center justify-center min-h-[250px] min-w-[250px]"
                   style={{ 
-                    backgroundColor: QR_BG_COLOR,
+                    backgroundColor: "#000000",
                     borderColor: 'rgba(255,255,255,0.05)'
                   }}
                 >
-                  <QRCodeSVG
-                    id="qr-code-svg"
-                    value={qrValue}
-                    size={200}
-                    fgColor={QR_COLOR}
-                    bgColor={QR_BG_COLOR}
-                    level={QR_LEVEL}
-                    includeMargin={true}
-                    className="block relative z-20"
+                  <AdvancedQRCode 
+                    ref={advancedQrRef}
+                    data={qrValue}
+                    color1={qrColor1}
+                    color2={qrColor2}
+                    dotStyle={dotStyle}
+                    logoFile={logoFile}
                   />
                 </div>
               </div>
