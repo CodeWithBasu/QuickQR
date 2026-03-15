@@ -153,14 +153,21 @@ TITLE:${vCardTitle}`
         
         {/* Sleek Header Section */}
         <div className="flex flex-col items-center mb-16 space-y-5">
-          <div className="w-14 h-14 bg-zinc-900 border border-zinc-800 rounded-2xl flex items-center justify-center shadow-2xl mb-2 group transition-all duration-500 hover:border-zinc-700 hover:shadow-[0_0_30px_rgba(255,255,255,0.05)]">
-            <QrCode className="w-6 h-6 text-zinc-100 group-hover:scale-110 transition-transform duration-500" />
+          <div className="w-16 h-16 bg-zinc-900 border border-zinc-800 rounded-3xl flex items-center justify-center shadow-2xl mb-2 group transition-all duration-500 hover:border-emerald-500/30 hover:shadow-[0_0_40px_rgba(16,185,129,0.1)]">
+            {activeTab === "link" && <LinkIcon className="w-7 h-7 text-emerald-500 animate-in zoom-in-50 duration-500" />}
+            {activeTab === "social" && <Instagram className="w-7 h-7 text-pink-500 animate-in zoom-in-50 duration-500" />}
+            {activeTab === "doc" && <FileText className="w-7 h-7 text-blue-500 animate-in zoom-in-50 duration-500" />}
+            {activeTab === "video" && <Video className="w-7 h-7 text-red-500 animate-in zoom-in-50 duration-500" />}
+            {activeTab === "audio" && <Music className="w-7 h-7 text-purple-500 animate-in zoom-in-50 duration-500" />}
+            {activeTab === "wifi" && <Wifi className="w-7 h-7 text-amber-500 animate-in zoom-in-50 duration-500" />}
+            {activeTab === "vcard" && <User className="w-7 h-7 text-zinc-100 animate-in zoom-in-50 duration-500" />}
+            {activeTab === "batch" && <Zap className="w-7 h-7 text-yellow-500 animate-in zoom-in-50 duration-500" />}
           </div>
-          <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-white mb-2">
-            QuickQR
+          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-2">
+            QuickQR <span className="text-emerald-500">.</span>
           </h1>
           <p className="text-zinc-500 text-lg font-light tracking-wide max-w-lg text-center">
-            Generate pristine matrices for URLs, documents, and media.
+            Professional-grade matrices for your digital assets.
           </p>
         </div>
 
@@ -170,9 +177,9 @@ TITLE:${vCardTitle}`
           <div className="w-full lg:w-[55%] space-y-6 group bg-black/60 backdrop-blur-md p-8 rounded-3xl border border-zinc-800/50 shadow-2xl relative z-20">
             
             <Tabs defaultValue="link" className="w-full" onValueChange={setActiveTab}>
-              <TabsList className="relative w-full flex items-center gap-1 bg-zinc-950/80 border border-zinc-800/50 rounded-2xl mb-8 p-1 overflow-x-auto no-scrollbar shadow-inner">
-                <TabsTrigger value="link" className="flex-1 min-w-[75px] md:min-w-[95px] data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-xl rounded-xl text-[10px] md:text-sm h-11 px-3 transition-all duration-300 font-bold tracking-tight">
-                  <LinkIcon className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">Link</span>
+              <TabsList className="relative w-full flex items-center gap-1 bg-zinc-950/80 border border-zinc-800/50 rounded-2xl mb-8 p-1.5 overflow-x-auto no-scrollbar shadow-inner">
+                <TabsTrigger value="link" className="flex-1 min-w-[85px] md:min-w-[105px] data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-xl rounded-xl text-[10px] md:text-sm h-11 px-4 transition-all duration-300 font-bold tracking-tight">
+                  <LinkIcon className="w-3.5 h-3.5 mr-2" /> <span>Link</span>
                 </TabsTrigger>
                 <TabsTrigger value="social" className="flex-1 min-w-[75px] md:min-w-[95px] data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-xl rounded-xl text-[10px] md:text-sm h-11 px-3 transition-all duration-300 font-bold tracking-tight">
                   <Instagram className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">Social</span>
