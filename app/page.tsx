@@ -156,7 +156,7 @@ EMAIL:${vCardEmail}
 ORG:${vCardOrg}
 TITLE:${vCardTitle}`
 
-    if (vCardInstagram) vcardString += `\nURL:https://www.instagram.com/wandersoul________?igsh=MTR2dDJua2NpeHI5Yw%3D%3D/${vCardInstagram.replace('@', '')}`
+    if (vCardInstagram) vcardString += `\nURL:https://instagram.com/${vCardInstagram.replace('@', '')}`
     if (vCardGithub) vcardString += `\nURL:https://github.com/${vCardGithub}`
     if (vCardLinkedin) vcardString += `\nURL:${vCardLinkedin.startsWith('http') ? vCardLinkedin : `https://linkedin.com/in/${vCardLinkedin}`}`
     
@@ -818,10 +818,10 @@ TITLE:${vCardTitle}`
                 <a href="https://github.com/CodeWithBasu" target="_blank" rel="noopener noreferrer" className="p-2 text-zinc-500 hover:text-white hover:bg-zinc-800/50 rounded-lg transition-all duration-300">
                   <Github className="w-4.5 h-4.5" />
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="p-2 text-zinc-500 hover:text-pink-500 hover:bg-zinc-800/50 rounded-lg transition-all duration-300">
+                <a href="https://www.instagram.com/wandersoul________?igsh=MTR2dDJua2NpeHI5Yw%3D%3D" target="_blank" rel="noopener noreferrer" className="p-2 text-zinc-500 hover:text-pink-500 hover:bg-zinc-800/50 rounded-lg transition-all duration-300">
                   <Instagram className="w-4.5 h-4.5" />
                 </a>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="p-2 text-zinc-500 hover:text-blue-400 hover:bg-zinc-800/50 rounded-lg transition-all duration-300">
+                <a href="https://www.linkedin.com/in/basudev-moharana" target="_blank" rel="noopener noreferrer" className="p-2 text-zinc-500 hover:text-blue-400 hover:bg-zinc-800/50 rounded-lg transition-all duration-300">
                   <Linkedin className="w-4.5 h-4.5" />
                 </a>
               </div>
