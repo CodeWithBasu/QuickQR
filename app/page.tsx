@@ -137,7 +137,8 @@ export default function QRCodeGenerator() {
 
   const generateWifiQR = () => {
     const wifiString = `WIFI:S:${wifiSsid};T:${wifiEncryption};P:${wifiPassword};;`
-    generateQRCode(wifiString, "wifi", `WiFi-${wifiSsid}`)
+    setQrValue(wifiString)
+    toast.success("Wi-Fi network encoded!")
   }
 
   const generateVCardQR = () => {
@@ -149,7 +150,8 @@ EMAIL:${vCardEmail}
 ORG:${vCardOrg}
 TITLE:${vCardTitle}
 END:VCARD`
-    generateQRCode(vcardString, "vcard", `Contact-${vCardName.split(' ')[0]}`)
+    setQrValue(vcardString)
+    toast.success("Contact Card encoded!")
   }
 
   const handleBatchGenerate = async () => {
