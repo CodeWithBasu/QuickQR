@@ -41,10 +41,6 @@ export default function QRCodeGenerator() {
   const [vCardEmail, setVCardEmail] = useState("")
   const [vCardOrg, setVCardOrg] = useState("")
   const [vCardTitle, setVCardTitle] = useState("")
-  const [vCardInstagram, setVCardInstagram] = useState("")
-  const [vCardGithub, setVCardGithub] = useState("")
-  const [vCardLinkedin, setVCardLinkedin] = useState("")
-
   // Batch States
   const [batchInput, setBatchInput] = useState("")
   const [isBatching, setIsBatching] = useState(false)
@@ -108,9 +104,6 @@ export default function QRCodeGenerator() {
           filename, 
           expirationDuration: expiration || undefined,
           password: usePassword && password ? password : undefined,
-          instagram: vCardInstagram || undefined,
-          github: vCardGithub || undefined,
-          linkedin: vCardLinkedin || undefined
         })
       })
       
@@ -156,10 +149,6 @@ TEL:${vCardPhone}
 EMAIL:${vCardEmail}
 ORG:${vCardOrg}
 TITLE:${vCardTitle}`
-
-    if (vCardInstagram) vcardString += `\nURL:https://instagram.com/${vCardInstagram.replace('@', '')}`
-    if (vCardGithub) vcardString += `\nURL:https://github.com/${vCardGithub}`
-    if (vCardLinkedin) vcardString += `\nURL:${vCardLinkedin.startsWith('http') ? vCardLinkedin : `https://linkedin.com/in/${vCardLinkedin}`}`
     
     vcardString += `\nEND:VCARD`
     setQrValue(vcardString)
@@ -352,26 +341,6 @@ TITLE:${vCardTitle}`
                       allowedContent: "text-zinc-500 text-xs mt-2 group-hover:text-zinc-400 transition-colors",
                     }}
                   />
-                  {/* Creator Profile for Docs */}
-                  <div className="pt-4 border-t border-zinc-800/50 space-y-4">
-                    <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest flex items-center gap-2">
-                       <User className="w-3 h-3" /> Creator Profile (Optional)
-                    </Label>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                       <div className="relative">
-                          <Instagram className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                          <Input placeholder="Instagram" value={vCardInstagram} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardInstagram(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
-                       </div>
-                       <div className="relative">
-                          <Github className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                          <Input placeholder="GitHub" value={vCardGithub} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardGithub(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
-                       </div>
-                       <div className="relative">
-                          <Linkedin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                          <Input placeholder="LinkedIn" value={vCardLinkedin} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardLinkedin(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
-                       </div>
-                    </div>
-                  </div>
                 </div>
               </TabsContent>
 
@@ -399,26 +368,6 @@ TITLE:${vCardTitle}`
                       allowedContent: "text-zinc-500 text-xs mt-2 group-hover:text-zinc-400 transition-colors",
                     }}
                   />
-                  {/* Creator Profile for Video */}
-                  <div className="pt-4 border-t border-zinc-800/50 space-y-4">
-                    <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest flex items-center gap-2">
-                       <User className="w-3 h-3" /> Creator Profile (Optional)
-                    </Label>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                       <div className="relative">
-                          <Instagram className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                          <Input placeholder="Instagram" value={vCardInstagram} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardInstagram(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
-                       </div>
-                       <div className="relative">
-                          <Github className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                          <Input placeholder="GitHub" value={vCardGithub} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardGithub(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
-                       </div>
-                       <div className="relative">
-                          <Linkedin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                          <Input placeholder="LinkedIn" value={vCardLinkedin} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardLinkedin(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
-                       </div>
-                    </div>
-                  </div>
                 </div>
               </TabsContent>
 
@@ -446,26 +395,6 @@ TITLE:${vCardTitle}`
                       allowedContent: "text-zinc-500 text-xs mt-2 group-hover:text-zinc-400 transition-colors",
                     }}
                   />
-                  {/* Creator Profile for Audio */}
-                  <div className="pt-4 border-t border-zinc-800/50 space-y-4">
-                    <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest flex items-center gap-2">
-                       <User className="w-3 h-3" /> Creator Profile (Optional)
-                    </Label>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                       <div className="relative">
-                          <Instagram className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                          <Input placeholder="Instagram" value={vCardInstagram} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardInstagram(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
-                       </div>
-                       <div className="relative">
-                          <Github className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                          <Input placeholder="GitHub" value={vCardGithub} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardGithub(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
-                       </div>
-                       <div className="relative">
-                          <Linkedin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                          <Input placeholder="LinkedIn" value={vCardLinkedin} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardLinkedin(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
-                       </div>
-                    </div>
-                  </div>
                 </div>
               </TabsContent>
 
@@ -746,16 +675,6 @@ TITLE:${vCardTitle}`
                   />
                 </div>
 
-                {/* Profile Attribution Preview */}
-                {(vCardInstagram || vCardGithub || vCardLinkedin) && (
-                  <div className="flex gap-4 mt-4 py-2 px-4 bg-white/5 border border-white/10 rounded-full animate-in fade-in slide-in-from-bottom-2 duration-500">
-                    {vCardInstagram && <Instagram className="w-4 h-4 text-pink-500" />}
-                    {vCardGithub && <Github className="w-4 h-4 text-zinc-300" />}
-                    {vCardLinkedin && <Linkedin className="w-4 h-4 text-blue-400" />}
-                  </div>
-                )}
-              </div>
-
               {/* Debug URL Link */}
               <div className="w-full mb-6 px-4 py-3 bg-zinc-950/50 border border-zinc-800/50 rounded-xl flex items-center justify-between group/url">
                 <div className="flex flex-col overflow-hidden">
@@ -858,6 +777,7 @@ TITLE:${vCardTitle}`
             <div className="h-1 w-8 bg-gradient-to-r from-transparent via-zinc-800 to-transparent rounded-full" />
             <p className="text-[8px] text-zinc-800 uppercase tracking-widest font-bold">
             </p>
+          </div>
           </div>
         </div>
       </div>
