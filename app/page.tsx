@@ -801,58 +801,6 @@ TITLE:${vCardTitle}`
               </div>
             </div>
           </div>
-             {/* Documentation Section */}
-        <div className="mt-32 max-w-4xl mx-auto border-t border-zinc-900 pt-20">
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
-              <div className="space-y-6">
-                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-                       <FileText className="w-5 h-5 text-emerald-500" />
-                    </div>
-                    <h2 className="text-xl font-bold text-white tracking-tight">Project Documentation</h2>
-                 </div>
-                 <p className="text-zinc-500 text-sm leading-relaxed">
-                    QuickQR is a high-performance engine engineered for secure and contextual data sharing. 
-                    Our system leverages unique shortlink identifiers to track engagement metrics while 
-                    maintaining maximum security through PIN-based encryption protocols.
-                 </p>
-                 <ul className="space-y-4 pt-2">
-                    <li className="flex items-start gap-4 group">
-                       <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center shrink-0 group-hover:border-emerald-500/30 transition-colors">
-                          <Shield className="w-4 h-4 text-zinc-500 group-hover:text-emerald-500 transition-colors" />
-                       </div>
-                       <div>
-                          <h3 className="text-xs font-bold text-zinc-300 uppercase tracking-widest mb-1">Secure Registration</h3>
-                          <p className="text-[11px] text-zinc-600 leading-normal">Every generated QR is logged into our database, enabling expiration control and password protection for sensitive media.</p>
-                       </div>
-                    </li>
-                    <li className="flex items-start gap-4 group">
-                       <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center shrink-0 group-hover:border-emerald-500/30 transition-colors">
-                          <ExternalLink className="w-4 h-4 text-zinc-500 group-hover:text-emerald-400 transition-colors" />
-                       </div>
-                       <div>
-                          <h3 className="text-xs font-bold text-zinc-300 uppercase tracking-widest mb-1">Contextual Routing</h3>
-                          <p className="text-[11px] text-zinc-600 leading-normal">Smart URL appending adds original filenames to shortlinks so scanners see what they are about to access before clicking.</p>
-                       </div>
-                    </li>
-                 </ul>
-              </div>
-              
-              <div className="bg-zinc-950/30 border border-zinc-800/50 rounded-3xl p-8 space-y-6 backdrop-blur-sm self-center">
-                 <div className="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.3em] mb-2">Technical Core</div>
-                 <h3 className="text-xl font-semibold text-white tracking-tight leading-tight">Engineered for Privacy & Efficiency.</h3>
-                 <p className="text-zinc-500 text-sm leading-relaxed">
-                    Whether distributing enterprise documents, internal company media, or simple URL redirects, 
-                    the QuickQR platform ensures your data stays masked until the correct credentials are provided.
-                 </p>
-                 <Link href="/docs" className="w-full inline-block">
-                   <Button variant="outline" className="w-full bg-zinc-900/50 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700 h-12 rounded-xl text-xs font-bold uppercase tracking-widest">
-                      <Zap className="w-3.5 h-3.5 mr-2 text-emerald-500" /> System Architecture
-                   </Button>
-                 </Link>
-              </div>
-           </div>
-        </div>
 
         {/* Footer */}
         <div className="mt-20 flex flex-col items-center space-y-8 pb-10">
