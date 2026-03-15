@@ -169,32 +169,35 @@ TITLE:${vCardTitle}`
           {/* Main Controls Console */}
           <div className="w-full lg:w-[55%] space-y-6 group bg-black/60 backdrop-blur-md p-8 rounded-3xl border border-zinc-800/50 shadow-2xl relative z-20">
             
-            <Tabs defaultValue="url" className="w-full" onValueChange={setActiveTab}>
-              <TabsList className="flex items-center gap-1 w-full bg-zinc-950 border border-zinc-800/80 rounded-xl mb-8 p-1 overflow-x-auto h-auto min-w-0 no-scrollbar">
-                <TabsTrigger value="url" className="flex-1 min-w-[60px] md:min-w-[80px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2">
-                  <LinkIcon className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">URL</span>
+            <Tabs defaultValue="link" className="w-full" onValueChange={setActiveTab}>
+              <TabsList className="flex items-center gap-1 w-full bg-zinc-950 border border-zinc-800/80 rounded-xl mb-8 p-1 overflow-x-auto h-auto min-w-0 no-scrollbar items-start">
+                <TabsTrigger value="link" className="flex-1 min-w-[70px] md:min-w-[90px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2 transition-all">
+                  <LinkIcon className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">Link</span>
                 </TabsTrigger>
-                <TabsTrigger value="doc" className="flex-1 min-w-[60px] md:min-w-[80px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2">
+                <TabsTrigger value="social" className="flex-1 min-w-[70px] md:min-w-[90px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2 transition-all">
+                  <Instagram className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">Social</span>
+                </TabsTrigger>
+                <TabsTrigger value="doc" className="flex-1 min-w-[70px] md:min-w-[90px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2 transition-all">
                   <FileText className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">Docs</span>
                 </TabsTrigger>
-                <TabsTrigger value="video" className="flex-1 min-w-[60px] md:min-w-[80px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2">
+                <TabsTrigger value="video" className="flex-1 min-w-[70px] md:min-w-[90px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2 transition-all">
                   <Video className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">Video</span>
                 </TabsTrigger>
-                <TabsTrigger value="audio" className="flex-1 min-w-[60px] md:min-w-[80px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2">
+                <TabsTrigger value="audio" className="flex-1 min-w-[70px] md:min-w-[90px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2 transition-all">
                   <Music className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">Music</span>
                 </TabsTrigger>
-                <TabsTrigger value="wifi" className="flex-1 min-w-[60px] md:min-w-[80px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2">
+                <TabsTrigger value="wifi" className="flex-1 min-w-[70px] md:min-w-[90px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2 transition-all">
                   <Wifi className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">WiFi</span>
                 </TabsTrigger>
-                <TabsTrigger value="vcard" className="flex-1 min-w-[60px] md:min-w-[80px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2">
+                <TabsTrigger value="vcard" className="flex-1 min-w-[70px] md:min-w-[90px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2 transition-all">
                   <User className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">Contact</span>
                 </TabsTrigger>
-                <TabsTrigger value="batch" className="flex-1 min-w-[60px] md:min-w-[80px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2">
+                <TabsTrigger value="batch" className="flex-1 min-w-[70px] md:min-w-[90px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2 transition-all">
                   <Zap className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">Batch</span>
                 </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="url" className="mt-0 space-y-4">
+              <TabsContent value="link" className="mt-0 space-y-4">
                 <Label htmlFor="url" className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase mb-3">
                   <LinkIcon className="w-4 h-4 mr-3 text-zinc-500" />
                   Destination URL
@@ -204,16 +207,74 @@ TITLE:${vCardTitle}`
                   type="url"
                   placeholder="https://your-domain.com"
                   value={url}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setUrl(e.target.value)
+                    // If the URL is empty, reset back to origin for a clean preview, 
+                    // otherwise let the user generate a tracker.
+                    if (!e.target.value) setQrValue(window.location.origin)
+                  }}
                   className="w-full bg-zinc-950/50 border-zinc-800 text-white placeholder:text-zinc-700 h-16 rounded-xl px-5 text-lg focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:border-white/20 transition-all font-mono shadow-inner hover:border-zinc-700"
                 />
                 <Button 
                   onClick={() => generateQRCode(url, "url")}
                   disabled={isGenerating || !url}
-                  className="w-full h-14 mt-4 bg-white/10 hover:bg-white/20 text-white border border-zinc-700 rounded-xl font-medium tracking-wide transition-all duration-300"
+                  className="w-full h-14 mt-4 bg-white/10 hover:bg-white/20 text-white border border-zinc-700 rounded-xl font-medium tracking-wide transition-all duration-300 shadow-lg shadow-white/5 group"
                 >
-                  {isGenerating ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Zap className="w-4 h-4 mr-2" /> Generate Secure QR</>}
+                  {isGenerating ? <Loader2 className="w-5 h-5 animate-spin" /> : (
+                    <div className="flex items-center">
+                      <Zap className="w-4 h-4 mr-2 text-amber-400 group-hover:scale-110 transition-transform" /> 
+                      Generate Professional QR Link
+                    </div>
+                  )}
                 </Button>
+              </TabsContent>
+
+              <TabsContent value="social" className="mt-0 space-y-5">
+                <div className="space-y-4">
+                  <Label className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase mb-3">
+                    <Instagram className="w-4 h-4 mr-3 text-zinc-500" />
+                    Social Platform Link
+                  </Label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest pl-1">Platform</Label>
+                      <Select defaultValue="instagram" onValueChange={(val) => {
+                        if (val === "instagram") setUrl("https://instagram.com/")
+                        else if (val === "facebook") setUrl("https://facebook.com/")
+                        else if (val === "twitter") setUrl("https://twitter.com/")
+                        else if (val === "youtube") setUrl("https://youtube.com/")
+                        else if (val === "linkedin") setUrl("https://linkedin.com/in/")
+                      }}>
+                        <SelectTrigger className="bg-zinc-950 border-zinc-800 h-12">
+                          <SelectValue placeholder="Select Platform" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                          <SelectItem value="instagram">Instagram</SelectItem>
+                          <SelectItem value="facebook">Facebook</SelectItem>
+                          <SelectItem value="twitter">X (Twitter)</SelectItem>
+                          <SelectItem value="youtube">YouTube</SelectItem>
+                          <SelectItem value="linkedin">LinkedIn</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest pl-1">Direct Link</Label>
+                      <Input 
+                        placeholder="username or full-link" 
+                        value={url} 
+                        onChange={(e) => setUrl(e.target.value)}
+                        className="bg-zinc-950 border-zinc-800 h-12" 
+                      />
+                    </div>
+                  </div>
+                  <Button 
+                    onClick={() => generateQRCode(url, "url")}
+                    disabled={isGenerating || !url}
+                    className="w-full h-14 bg-white/10 hover:bg-white/20 text-white rounded-xl border border-zinc-700 flex items-center justify-center gap-2 font-medium"
+                  >
+                    {isGenerating ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Instagram className="w-4 h-4" /> Generate Social QR</>}
+                  </Button>
+                </div>
               </TabsContent>
 
               <TabsContent value="doc" className="mt-0">
