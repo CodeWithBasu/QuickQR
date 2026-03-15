@@ -40,6 +40,9 @@ export default function QRCodeGenerator() {
   const [vCardEmail, setVCardEmail] = useState("")
   const [vCardOrg, setVCardOrg] = useState("")
   const [vCardTitle, setVCardTitle] = useState("")
+  const [vCardInstagram, setVCardInstagram] = useState("")
+  const [vCardGithub, setVCardGithub] = useState("")
+  const [vCardLinkedin, setVCardLinkedin] = useState("")
 
   // Batch States
   const [batchInput, setBatchInput] = useState("")
@@ -142,16 +145,21 @@ export default function QRCodeGenerator() {
   }
 
   const generateVCardQR = () => {
-    const vcardString = `BEGIN:VCARD
+    let vcardString = `BEGIN:VCARD
 VERSION:3.0
 FN:${vCardName}
 TEL:${vCardPhone}
 EMAIL:${vCardEmail}
 ORG:${vCardOrg}
-TITLE:${vCardTitle}
-END:VCARD`
+TITLE:${vCardTitle}`
+
+    if (vCardInstagram) vcardString += `\nURL:https://instagram.com/${vCardInstagram.replace('@', '')}`
+    if (vCardGithub) vcardString += `\nURL:https://github.com/${vCardGithub}`
+    if (vCardLinkedin) vcardString += `\nURL:${vCardLinkedin.startsWith('http') ? vCardLinkedin : `https://linkedin.com/in/${vCardLinkedin}`}`
+    
+    vcardString += `\nEND:VCARD`
     setQrValue(vcardString)
-    toast.success("Contact Card encoded!")
+    toast.success("Social Contact Card encoded!")
   }
 
   const handleBatchGenerate = async () => {
@@ -456,6 +464,22 @@ END:VCARD`
                           <Input placeholder="Lead Developer" value={vCardTitle} onChange={(e) => setVCardTitle(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
                        </div>
                     </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                       <div className="space-y-2">
+                          <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Instagram</Label>
+                          <Input placeholder="@username" value={vCardInstagram} onChange={(e) => setVCardInstagram(e.target.value)} className="bg-zinc-950 border-zinc-800 h-10 text-xs" />
+                       </div>
+                       <div className="space-y-2">
+                          <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">GitHub</Label>
+                          <Input placeholder="username" value={vCardGithub} onChange={(e) => setVCardGithub(e.target.value)} className="bg-zinc-950 border-zinc-800 h-10 text-xs" />
+                       </div>
+                       <div className="space-y-2">
+                          <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">LinkedIn</Label>
+                          <Input placeholder="username" value={vCardLinkedin} onChange={(e) => setVCardLinkedin(e.target.value)} className="bg-zinc-950 border-zinc-800 h-10 text-xs" />
+                       </div>
+                    </div>
+
                     <Button onClick={generateVCardQR} disabled={isGenerating || !vCardName} className="w-full h-14 bg-white/10 hover:bg-white/20 text-white rounded-xl border border-zinc-700">
                       {isGenerating ? <Loader2 className="w-5 h-5 animate-spin" /> : "Generate Business Card QR"}
                     </Button>
