@@ -38,15 +38,28 @@ sequenceDiagram
 
 ---
 
-## ✨ Features that Wow
+## 🔥 Key Repository Features
 
-- **📂 Multi-Format Engine:** Support for URLs, Documents (PDF/DOCX), Videos (MP4/MKV), and Audio (MP3/WAV).
-- **📦 Dynamic Batch Processor:** Generate hundreds of QR codes at once with individual categorization (Instagram, GitHub, etc.) and auto-naming.
-- **🛡️ Shield Protocol:** 4-Digit PIN protection gateway for sensitive enterprise documents and media.
-- **⏳ Pulse Expiry (TTL):** Set precision expiration windows (1h, 1d, 7d, 30d) that auto-purge from the database.
-- **🎨 Advanced QR Customizer:** Premium gradients, unique dot styles (Classy Curves, Sharp Squares), and custom logo embedding.
-- **📱 Responsive by Design:** Seamless, modular UI built for Desktop, Tablet, and Mobile with scrollable navigation and fit-to-view layouts.
-- **📦 Native PWA:** Install it on your device for a full native browser-less experience.
+### 🛠️ Versatile QR Generation Modules
+QuickQR isn't just a link shortener; it's a full-suite matrix engine:
+- **🔗 Smart URL Generator:** Clean, tracking-enabled links for any web destination.
+- **📄 Document Vault:** Securely host and share PDFs, DOCX, and Text files (Up to 64MB).
+- **🎬 Cinematic Video:** High-speed streaming for MP4, MKV, and MOV (Up to 128MB).
+- **🎵 Crystal Audio:** Direct-play matrices for MP3 and WAV (Up to 64MB).
+- **📡 WiFi Auto-Connect:** Instant SSID and Password encoding for seamless guest access.
+- **📇 Pro Business Card (vCard):** Full contact details including Social (LinkedIn, GitHub, Insta) in one scan.
+- **📦 Dynamic Batch Engine:** Generate, categorize, and download hundreds of QRs in a single `.zip` bundle.
+
+### 🛡️ Enterprise-Grade Security (The Shield)
+- **4-Digit PIN Protection:** Add a mandatory security gateway to any QR link.
+- **Contextual Redirection:** smartphone cameras display the *actual filename* in the preview for higher trust.
+- **Pulse Expiry (TTL):** Automated database eviction of expired links (1h to 30d).
+
+### 🎨 Design & Performance
+- **Custom Designer:** Gradients, unique dot styles, and logo overlays.
+- **Modern Tech:** Next.js 15, React 19, MongoDB, and Tailwind CSS.
+- **Optimized View:** Adaptive layout that fits perfectly on Mobile, Tablet, and Desktop.
+- **Native PWA:** Full offline manifest support for home-screen installation.
 
 ---
 
