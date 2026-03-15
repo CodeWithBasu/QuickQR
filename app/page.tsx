@@ -441,26 +441,6 @@ TITLE:${vCardTitle}`
                       allowedContent: "text-zinc-500 text-xs mt-2 group-hover:text-zinc-400 transition-colors",
                     }}
                   />
-                  {/* Creator Profile for Video */}
-                  <div className="pt-4 border-t border-zinc-800/50 space-y-4">
-                    <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest flex items-center gap-2">
-                       <User className="w-3 h-3" /> Creator Profile (Optional)
-                    </Label>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                       <div className="relative">
-                          <Instagram className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                          <Input placeholder="Instagram" value={vCardInstagram} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardInstagram(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
-                       </div>
-                       <div className="relative">
-                          <Github className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                          <Input placeholder="GitHub" value={vCardGithub} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardGithub(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
-                       </div>
-                       <div className="relative">
-                          <Linkedin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                          <Input placeholder="LinkedIn" value={vCardLinkedin} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardLinkedin(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
-                       </div>
-                    </div>
-                  </div>
                 </div>
               </TabsContent>
 
