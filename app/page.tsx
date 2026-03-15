@@ -170,7 +170,7 @@ TITLE:${vCardTitle}`
           <div className="w-full lg:w-[55%] space-y-6 group bg-black/60 backdrop-blur-md p-8 rounded-3xl border border-zinc-800/50 shadow-2xl relative z-20">
             
             <Tabs defaultValue="link" className="w-full" onValueChange={setActiveTab}>
-              <TabsList className="flex items-center gap-1 w-full bg-zinc-950 border border-zinc-800/80 rounded-xl mb-8 p-1 overflow-x-auto h-auto min-w-0 no-scrollbar items-start">
+              <TabsList className="flex items-center gap-1 w-full bg-zinc-950 border border-zinc-800/80 rounded-xl mb-8 p-1 overflow-x-auto h-auto min-w-0 no-scrollbar">
                 <TabsTrigger value="link" className="flex-1 min-w-[70px] md:min-w-[90px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2 transition-all">
                   <LinkIcon className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">Link</span>
                 </TabsTrigger>
