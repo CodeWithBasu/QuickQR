@@ -10,9 +10,11 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
-import { Download, Link as LinkIcon, QrCode, FileText, Video, Music, Loader2, Zap, Clock, Palette, Image as ImageIcon } from "lucide-react"
+import { Switch } from "@/components/ui/switch"
+import { Download, Link as LinkIcon, QrCode, FileText, Video, Music, Loader2, Zap, Clock, Palette, Image as ImageIcon, Wifi, User, Shield, Phone, Mail, Building, Briefcase, Lock } from "lucide-react"
 import { UploadDropzone } from "@/lib/uploadthing"
 import { toast } from "sonner"
+import JSZip from "jszip"
 
 export default function QRCodeGenerator() {
   const [url, setUrl] = useState("https://your-website.com")
@@ -22,6 +24,26 @@ export default function QRCodeGenerator() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [expiration, setExpiration] = useState("")
   const [mounted, setMounted] = useState(false)
+  
+  // Password Protection States
+  const [usePassword, setUsePassword] = useState(false)
+  const [password, setPassword] = useState("")
+
+  // Wi-Fi States
+  const [wifiSsid, setWifiSsid] = useState("")
+  const [wifiPassword, setWifiPassword] = useState("")
+  const [wifiEncryption, setWifiEncryption] = useState("WPA")
+
+  // vCard States
+  const [vCardName, setVCardName] = useState("")
+  const [vCardPhone, setVCardPhone] = useState("")
+  const [vCardEmail, setVCardEmail] = useState("")
+  const [vCardOrg, setVCardOrg] = useState("")
+  const [vCardTitle, setVCardTitle] = useState("")
+
+  // Batch States
+  const [batchInput, setBatchInput] = useState("")
+  const [isBatching, setIsBatching] = useState(false)
 
   // Advanced QR Customizer States
   const [qrColor1, setQrColor1] = useState("#ffffff")
@@ -68,7 +90,7 @@ export default function QRCodeGenerator() {
   }
 
   // Generates shortlink in the database
-  const generateQRCode = async (inputUrl: string, type: "url" | "doc" | "video" | "audio", filename?: string) => {
+  const generateQRCode = async (inputUrl: string, type: "url" | "doc" | "video" | "audio" | "wifi" | "vcard", filename?: string) => {
     try {
       setIsGenerating(true)
       toast.loading("Registering QR in database...", { id: "qr-gen" })
@@ -80,7 +102,8 @@ export default function QRCodeGenerator() {
           url: inputUrl, 
           type, 
           filename, 
-          expirationDuration: expiration || undefined 
+          expirationDuration: expiration || undefined,
+          password: usePassword && password ? password : undefined
         })
       })
       
@@ -109,6 +132,100 @@ export default function QRCodeGenerator() {
       toast.error("Network error. Check your connection.", { id: "qr-gen" })
     } finally {
       setIsGenerating(false)
+    }
+  }
+
+  const generateWifiQR = () => {
+    const wifiString = `WIFI:S:${wifiSsid};T:${wifiEncryption};P:${wifiPassword};;`
+    generateQRCode(wifiString, "wifi", `WiFi-${wifiSsid}`)
+  }
+
+  const generateVCardQR = () => {
+    const vcardString = `BEGIN:VCARD
+VERSION:3.0
+FN:${vCardName}
+TEL:${vCardPhone}
+EMAIL:${vCardEmail}
+ORG:${vCardOrg}
+TITLE:${vCardTitle}
+END:VCARD`
+    generateQRCode(vcardString, "vcard", `Contact-${vCardName.split(' ')[0]}`)
+  }
+
+  const handleBatchGenerate = async () => {
+    const lines = batchInput.split("\n").filter(l => l.trim().length > 0)
+    if (lines.length === 0) return
+
+    setIsBatching(true)
+    const zip = new JSZip()
+    const toastId = "batch-gen"
+    toast.loading(`Processing 0/${lines.length} items...`, { id: toastId })
+
+    try {
+      // Import styling library for background generation
+      const { default: QRCodeStyling } = await import("qr-code-styling")
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim()
+        toast.loading(`Processing ${i + 1}/${lines.length}: ${line.slice(0, 20)}...`, { id: toastId })
+
+        // 1. Register in Database
+        const res = await fetch("/api/qr", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            url: line, 
+            type: "url",
+            expirationDuration: expiration || undefined,
+            password: usePassword && password ? password : undefined
+          })
+        })
+        const data = await res.json()
+        
+        if (data.success) {
+          const finalUrl = `${window.location.origin}/q/${data.data.shortId}`
+          
+          // 2. Generate Image Blob
+          const qr = new QRCodeStyling({
+            width: 500,
+            height: 500,
+            data: finalUrl,
+            image: logoFile || undefined,
+            dotsOptions: {
+              type: dotStyle as any,
+              gradient: {
+                type: "linear",
+                rotation: Math.PI / 4,
+                colorStops: [{ offset: 0, color: qrColor1 }, { offset: 1, color: qrColor2 }]
+              }
+            },
+            backgroundOptions: { color: "#ffffff" },
+            imageOptions: { crossOrigin: "anonymous", margin: 10, imageSize: 0.4 },
+            cornersSquareOptions: { type: (dotStyle === "square" ? "square" : "extra-rounded") as any, color: qrColor1 },
+            cornersDotOptions: { type: (dotStyle === "square" ? "square" : "dot") as any, color: qrColor2 }
+          })
+
+          const blob = await qr.getRawData("png")
+          if (blob) {
+            const fileName = `QR_${i+1}_${data.data.shortId}.png`
+            zip.file(fileName, blob)
+          }
+        }
+      }
+
+      const content = await zip.generateAsync({ type: "blob" })
+      const link = document.createElement("a")
+      link.href = URL.createObjectURL(content)
+      link.download = `QuickQR_Batch_${Date.now()}.zip`
+      link.click()
+      
+      toast.success(`Batch complete! Generated ${lines.length} QR codes.`, { id: toastId })
+      setBatchInput("")
+    } catch (err) {
+      console.error(err)
+      toast.error("Batch processing failed.", { id: toastId })
+    } finally {
+      setIsBatching(false)
     }
   }
 
@@ -151,18 +268,27 @@ export default function QRCodeGenerator() {
           <div className="w-full lg:w-[55%] space-y-6 group bg-black/60 backdrop-blur-md p-8 rounded-3xl border border-zinc-800/50 shadow-2xl relative z-20">
             
             <Tabs defaultValue="url" className="w-full" onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-4 bg-zinc-950 border border-zinc-800/80 rounded-xl mb-8 p-1">
-                <TabsTrigger value="url" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-xs md:text-sm h-10">
-                  <LinkIcon className="w-3.5 h-3.5 md:mr-2" /> <span className="hidden md:inline">URL</span>
+              <TabsList className="grid w-full grid-cols-7 bg-zinc-950 border border-zinc-800/80 rounded-xl mb-8 p-1 overflow-x-auto h-auto min-w-[300px]">
+                <TabsTrigger value="url" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[9px] md:text-xs h-10 p-1">
+                  <LinkIcon className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden md:inline">URL</span>
                 </TabsTrigger>
-                <TabsTrigger value="doc" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-xs md:text-sm h-10">
-                  <FileText className="w-3.5 h-3.5 md:mr-2" /> <span className="hidden md:inline">Document</span>
+                <TabsTrigger value="doc" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[9px] md:text-xs h-10 p-1">
+                  <FileText className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden md:inline">Docs</span>
                 </TabsTrigger>
-                <TabsTrigger value="video" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-xs md:text-sm h-10">
-                  <Video className="w-3.5 h-3.5 md:mr-2" /> <span className="hidden md:inline">Video</span>
+                <TabsTrigger value="video" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[9px] md:text-xs h-10 p-1">
+                  <Video className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden md:inline">Video</span>
                 </TabsTrigger>
-                <TabsTrigger value="audio" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-xs md:text-sm h-10">
-                  <Music className="w-3.5 h-3.5 md:mr-2" /> <span className="hidden md:inline">Audio</span>
+                <TabsTrigger value="audio" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[9px] md:text-xs h-10 p-1">
+                  <Music className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden md:inline">Audio</span>
+                </TabsTrigger>
+                <TabsTrigger value="wifi" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[9px] md:text-xs h-10 p-1">
+                  <Wifi className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden md:inline">WiFi</span>
+                </TabsTrigger>
+                <TabsTrigger value="vcard" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[9px] md:text-xs h-10 p-1">
+                  <User className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden md:inline">Contact</span>
+                </TabsTrigger>
+                <TabsTrigger value="batch" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[9px] md:text-xs h-10 p-1">
+                  <Zap className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden md:inline">Batch</span>
                 </TabsTrigger>
               </TabsList>
 
@@ -268,6 +394,94 @@ export default function QRCodeGenerator() {
                   />
                 </div>
               </TabsContent>
+
+              <TabsContent value="wifi" className="mt-0 space-y-5">
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                       <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Network SSID</Label>
+                       <Input placeholder="Home Wi-Fi" value={wifiSsid} onChange={(e) => setWifiSsid(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
+                    </div>
+                    <div className="space-y-2">
+                       <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Encryption</Label>
+                       <Select value={wifiEncryption} onValueChange={setWifiEncryption}>
+                          <SelectTrigger className="bg-zinc-950 border-zinc-800 h-12">
+                             <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                             <SelectItem value="WPA">WPA/WPA2</SelectItem>
+                             <SelectItem value="WEP">WEP</SelectItem>
+                             <SelectItem value="nopass">No Password</SelectItem>
+                          </SelectContent>
+                       </Select>
+                    </div>
+                  </div>
+                  {wifiEncryption !== "nopass" && (
+                    <div className="space-y-2">
+                       <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Password</Label>
+                       <Input type="password" placeholder="••••••••" value={wifiPassword} onChange={(e) => setWifiPassword(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
+                    </div>
+                  )}
+                  <Button onClick={generateWifiQR} disabled={isGenerating || !wifiSsid} className="w-full h-14 bg-white/10 hover:bg-white/20 text-white rounded-xl border border-zinc-700">
+                    {isGenerating ? <Loader2 className="w-5 h-5 animate-spin" /> : "Generate Wi-Fi QR"}
+                  </Button>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="vcard" className="mt-0 space-y-4">
+                 <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                       <div className="space-y-2">
+                          <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Full Name</Label>
+                          <Input placeholder="Basudev" value={vCardName} onChange={(e) => setVCardName(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
+                       </div>
+                       <div className="space-y-2">
+                          <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Phone Number</Label>
+                          <Input placeholder="+91 1234567890" value={vCardPhone} onChange={(e) => setVCardPhone(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
+                       </div>
+                    </div>
+                    <div className="space-y-2">
+                       <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Email Address</Label>
+                       <Input type="email" placeholder="basu@example.com" value={vCardEmail} onChange={(e) => setVCardEmail(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                       <div className="space-y-2">
+                          <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Organization</Label>
+                          <Input placeholder="CodeWithBasu" value={vCardOrg} onChange={(e) => setVCardOrg(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
+                       </div>
+                       <div className="space-y-2">
+                          <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Job Title</Label>
+                          <Input placeholder="Lead Developer" value={vCardTitle} onChange={(e) => setVCardTitle(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
+                       </div>
+                    </div>
+                    <Button onClick={generateVCardQR} disabled={isGenerating || !vCardName} className="w-full h-14 bg-white/10 hover:bg-white/20 text-white rounded-xl border border-zinc-700">
+                      {isGenerating ? <Loader2 className="w-5 h-5 animate-spin" /> : "Generate Business Card QR"}
+                    </Button>
+                 </div>
+              </TabsContent>
+
+              <TabsContent value="batch" className="mt-0 space-y-4">
+                 <div className="space-y-4">
+                    <Label className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">Batch URL Processor (One per line)</Label>
+                    <textarea 
+                      placeholder="https://google.com&#10;https://github.com&#10;https://basudev.dev"
+                      value={batchInput}
+                      onChange={(e) => setBatchInput(e.target.value)}
+                      className="w-full bg-zinc-950/50 border-zinc-800 text-white placeholder:text-zinc-700 h-40 rounded-xl px-5 py-4 text-sm focus-visible:ring-1 focus-visible:ring-white/20 font-mono resize-none"
+                    />
+                    <div className="flex items-center gap-2 p-3 bg-zinc-900/50 rounded-xl border border-zinc-800">
+                       <Zap className="w-4 h-4 text-amber-500" />
+                       <p className="text-[10px] text-zinc-500">Each link will be registered in the database with your current visual settings.</p>
+                    </div>
+                    <Button 
+                      onClick={handleBatchGenerate} 
+                      disabled={isBatching || !batchInput.trim()} 
+                      className="w-full h-14 bg-white text-black hover:bg-zinc-200 transition-all font-bold rounded-xl"
+                    >
+                      {isBatching ? <Loader2 className="w-5 h-5 animate-spin" /> : "Generate Bundle (.zip)"}
+                    </Button>
+                 </div>
+              </TabsContent>
             </Tabs>
             
             <div className="pt-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -311,6 +525,36 @@ export default function QRCodeGenerator() {
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="pt-2 pb-6 space-y-6">
+                    {/* Password Protection */}
+                    <div className="p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-xl space-y-4">
+                       <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                             <Shield className="w-4 h-4 text-emerald-500" />
+                             <div className="flex flex-col">
+                                <span className="text-zinc-200 text-sm font-medium">Password Protection</span>
+                                <span className="text-zinc-500 text-[10px]">Require a 4-digit PIN to scan</span>
+                             </div>
+                          </div>
+                          <Switch checked={usePassword} onCheckedChange={setUsePassword} />
+                       </div>
+                       {usePassword && (
+                          <div className="space-y-2 pt-2 border-t border-emerald-500/10">
+                             <Label className="text-zinc-400 text-[10px] font-semibold uppercase tracking-wider">Secret 4-Digit PIN</Label>
+                             <div className="flex items-center gap-3">
+                                <Lock className="w-4 h-4 text-zinc-500" />
+                                <Input 
+                                  maxLength={4} 
+                                  placeholder="0000" 
+                                  value={password} 
+                                  onChange={(e) => setPassword(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                                  className="bg-zinc-900 border-zinc-800 h-12 text-center text-xl tracking-[0.5em] font-mono text-emerald-400 focus:border-emerald-500/50"
+                                />
+                             </div>
+                             <p className="text-zinc-600 text-[9px] italic">Scanners will be prompted for this PIN before redirecting.</p>
+                          </div>
+                       )}
+                    </div>
+
                     {/* Dot Styles */}
                     <div className="space-y-3">
                       <Label className="text-zinc-400 text-[10px] font-semibold uppercase tracking-wider">Dot Style</Label>

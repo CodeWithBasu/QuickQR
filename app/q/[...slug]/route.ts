@@ -34,6 +34,12 @@ export async function GET(
       return NextResponse.redirect(new URL("/?error=expired", req.url));
     }
 
+    // Password protection check
+    if (qrData.password) {
+      console.log(`Password required for ID: ${shortId}. Redirecting to unlock page.`);
+      return NextResponse.redirect(new URL(`/unlock/${shortId}`, req.url));
+    }
+
     // Redirect the user to the actual destination URL
     // Ensure the URL is absolute
     const destination = qrData.url.startsWith('http') ? qrData.url : `https://${qrData.url}`;

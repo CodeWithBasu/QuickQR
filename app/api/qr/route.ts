@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     await dbConnect();
 
     const body = await req.json();
-    const { url, type, filename, expirationDuration } = body;
+    const { url, type, filename, expirationDuration, password } = body;
 
     if (!url || !type) {
       return NextResponse.json({ error: "URL and Type required" }, { status: 400 });
@@ -37,6 +37,7 @@ export async function POST(req: Request) {
       type,
       shortId,
       filename: filename || "Untitled",
+      password: password || undefined,
       ...(expiresAt && { expiresAt }),
     });
 
