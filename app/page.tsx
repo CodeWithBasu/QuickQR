@@ -170,61 +170,63 @@ TITLE:${vCardTitle}`
           <div className="w-full lg:w-[55%] space-y-6 group bg-black/60 backdrop-blur-md p-8 rounded-3xl border border-zinc-800/50 shadow-2xl relative z-20">
             
             <Tabs defaultValue="link" className="w-full" onValueChange={setActiveTab}>
-              <TabsList className="flex items-center gap-1 w-full bg-zinc-950 border border-zinc-800/80 rounded-xl mb-8 p-1 overflow-x-auto h-auto min-w-0 no-scrollbar">
-                <TabsTrigger value="link" className="flex-1 min-w-[70px] md:min-w-[90px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2 transition-all">
+              <TabsList className="relative w-full flex items-center gap-1 bg-zinc-950/80 border border-zinc-800/50 rounded-2xl mb-8 p-1 overflow-x-auto no-scrollbar shadow-inner">
+                <TabsTrigger value="link" className="flex-1 min-w-[75px] md:min-w-[95px] data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-xl rounded-xl text-[10px] md:text-sm h-11 px-3 transition-all duration-300 font-bold tracking-tight">
                   <LinkIcon className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">Link</span>
                 </TabsTrigger>
-                <TabsTrigger value="social" className="flex-1 min-w-[70px] md:min-w-[90px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2 transition-all">
+                <TabsTrigger value="social" className="flex-1 min-w-[75px] md:min-w-[95px] data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-xl rounded-xl text-[10px] md:text-sm h-11 px-3 transition-all duration-300 font-bold tracking-tight">
                   <Instagram className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">Social</span>
                 </TabsTrigger>
-                <TabsTrigger value="doc" className="flex-1 min-w-[70px] md:min-w-[90px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2 transition-all">
+                <TabsTrigger value="doc" className="flex-1 min-w-[75px] md:min-w-[95px] data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-xl rounded-xl text-[10px] md:text-sm h-11 px-3 transition-all duration-300 font-bold tracking-tight">
                   <FileText className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">Docs</span>
                 </TabsTrigger>
-                <TabsTrigger value="video" className="flex-1 min-w-[70px] md:min-w-[90px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2 transition-all">
+                <TabsTrigger value="video" className="flex-1 min-w-[75px] md:min-w-[95px] data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-xl rounded-xl text-[10px] md:text-sm h-11 px-3 transition-all duration-300 font-bold tracking-tight">
                   <Video className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">Video</span>
                 </TabsTrigger>
-                <TabsTrigger value="audio" className="flex-1 min-w-[70px] md:min-w-[90px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2 transition-all">
+                <TabsTrigger value="audio" className="flex-1 min-w-[75px] md:min-w-[95px] data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-xl rounded-xl text-[10px] md:text-sm h-11 px-3 transition-all duration-300 font-bold tracking-tight">
                   <Music className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">Music</span>
                 </TabsTrigger>
-                <TabsTrigger value="wifi" className="flex-1 min-w-[70px] md:min-w-[90px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2 transition-all">
+                <TabsTrigger value="wifi" className="flex-1 min-w-[75px] md:min-w-[95px] data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-xl rounded-xl text-[10px] md:text-sm h-11 px-3 transition-all duration-300 font-bold tracking-tight">
                   <Wifi className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">WiFi</span>
                 </TabsTrigger>
-                <TabsTrigger value="vcard" className="flex-1 min-w-[70px] md:min-w-[90px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2 transition-all">
+                <TabsTrigger value="vcard" className="flex-1 min-w-[75px] md:min-w-[95px] data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-xl rounded-xl text-[10px] md:text-sm h-11 px-3 transition-all duration-300 font-bold tracking-tight">
                   <User className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">Contact</span>
                 </TabsTrigger>
-                <TabsTrigger value="batch" className="flex-1 min-w-[70px] md:min-w-[90px] data-[state=active]:bg-zinc-800 data-[state=active]:text-white rounded-lg text-[10px] md:text-xs h-10 px-2 transition-all">
+                <TabsTrigger value="batch" className="flex-1 min-w-[75px] md:min-w-[95px] data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-xl rounded-xl text-[10px] md:text-sm h-11 px-3 transition-all duration-300 font-bold tracking-tight">
                   <Zap className="w-3.5 h-3.5 md:mr-1.5" /> <span className="hidden sm:inline">Batch</span>
                 </TabsTrigger>
               </TabsList>
 
               <TabsContent value="link" className="mt-0 space-y-4">
-                <Label htmlFor="url" className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase mb-3">
-                  <LinkIcon className="w-4 h-4 mr-3 text-zinc-500" />
-                  Destination URL
+                <Label htmlFor="url" className="text-zinc-400 flex items-center text-[10px] font-bold tracking-[0.2em] uppercase mb-1">
+                  <LinkIcon className="w-4 h-4 mr-3 text-emerald-500" />
+                  Global Website Link
                 </Label>
                 <Input
                   id="url"
                   type="url"
-                  placeholder="https://your-domain.com"
+                  placeholder="https://any-website.com"
                   value={url}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setUrl(e.target.value)
-                    // If the URL is empty, reset back to origin for a clean preview, 
-                    // otherwise let the user generate a tracker.
                     if (!e.target.value) setQrValue(window.location.origin)
                   }}
-                  className="w-full bg-zinc-950/50 border-zinc-800 text-white placeholder:text-zinc-700 h-16 rounded-xl px-5 text-lg focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:border-white/20 transition-all font-mono shadow-inner hover:border-zinc-700"
+                  className="w-full bg-zinc-950/50 border-zinc-800 text-white placeholder:text-zinc-700 h-16 rounded-xl px-5 text-lg focus-visible:ring-1 focus-visible:ring-emerald-500/20 focus-visible:border-emerald-500/20 transition-all font-mono shadow-inner hover:border-zinc-700"
                 />
+                <div className="flex items-start gap-3 p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl">
+                   <Zap className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                   <p className="text-[10px] text-zinc-500 leading-relaxed font-medium">Use this section for ANY URL (Personal Blogs, Portfolios, or Enterprise Sites). These links are registered in our global matrix for tracking and secure routing.</p>
+                </div>
                 <Button 
                   onClick={() => generateQRCode(url, "url")}
                   disabled={isGenerating || !url}
-                  className="w-full h-14 mt-4 bg-white/10 hover:bg-white/20 text-white border border-zinc-700 rounded-xl font-medium tracking-wide transition-all duration-300 shadow-lg shadow-white/5 group"
+                  className="w-full h-14 bg-white text-black hover:bg-zinc-200 rounded-xl font-bold tracking-wide transition-all duration-300 shadow-xl shadow-white/5 active:scale-95 flex items-center justify-center gap-2 group"
                 >
                   {isGenerating ? <Loader2 className="w-5 h-5 animate-spin" /> : (
-                    <div className="flex items-center">
-                      <Zap className="w-4 h-4 mr-2 text-amber-400 group-hover:scale-110 transition-transform" /> 
-                      Generate Professional QR Link
-                    </div>
+                    <>
+                      <Zap className="w-4 h-4 text-emerald-600 group-hover:scale-125 transition-transform" /> 
+                      Generate Professional QR Matrix
+                    </>
                   )}
                 </Button>
               </TabsContent>
