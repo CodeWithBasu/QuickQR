@@ -64,120 +64,264 @@ export default function DocsPage() {
         </div>
 
         {/* Content Sections */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
           
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-16">
+          <div className="lg:col-span-8 space-y-24">
             
-            <section id="introduction" className="space-y-6">
-              <h2 className="text-xl font-bold text-white flex items-center gap-3">
-                <div className="w-1.5 h-6 bg-emerald-500 rounded-full" />
-                System Overview
-              </h2>
-              <p className="text-zinc-400 leading-relaxed text-sm">
-                QuickQR functions as a dynamic routing layer between your data and the end-user. 
-                Unlike traditional QR codes that hardcode URLs, our engine generates unique 
-                shortlink identifiers (`/q/shortId`) that point to records in our secure database.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-                <div className="p-6 bg-zinc-950/50 border border-zinc-900 rounded-2xl space-y-3">
-                  <Database className="w-5 h-5 text-emerald-500" />
-                  <h3 className="text-sm font-bold text-white tracking-wide uppercase">Data Persistence</h3>
-                  <p className="text-zinc-500 text-xs">All matrices are registered in MongoDB, enabling full lifecycle control including expirations and revocations.</p>
-                </div>
-                <div className="p-6 bg-zinc-950/50 border border-zinc-900 rounded-2xl space-y-3">
-                  <Server className="w-5 h-5 text-emerald-500" />
-                  <h3 className="text-sm font-bold text-white tracking-wide uppercase">Edge Routing</h3>
-                  <p className="text-zinc-500 text-xs">Our Next.js router handles incoming scans, validating security protocols before redirecting to the destination.</p>
-                </div>
-              </div>
-            </section>
-
-            <section id="security" className="space-y-6">
-              <h2 className="text-xl font-bold text-white flex items-center gap-3">
-                <div className="w-1.5 h-6 bg-emerald-500 rounded-full" />
-                Security Protocols
-              </h2>
-              <div className="space-y-8">
-                <div className="flex gap-6 items-start">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
-                    <Shield className="w-5 h-5 text-emerald-500" />
-                  </div>
-                  <div className="space-y-2">
-                    <h3 className="text-base font-bold text-emerald-500 uppercase tracking-widest">Shield Protocol (PIN)</h3>
-                    <p className="text-zinc-400 text-sm leading-relaxed">
-                      Sensitive media or documents can be protected with 4-digit PIN encryption. 
-                      Upon scanning, the user is redirected to a secure unlock page (`/unlock/[id]`) 
-                      where the correct key must be entered to decrypt access.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-6 items-start">
-                  <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center shrink-0">
-                    <Zap className="w-5 h-5 text-zinc-500" />
-                  </div>
-                  <div className="space-y-2">
-                    <h3 className="text-base font-bold text-zinc-200 uppercase tracking-widest">Expiration Control</h3>
-                    <p className="text-zinc-400 text-sm leading-relaxed">
-                      Set TTL (Time-To-Live) values on your matrices. Once the expiration window passes, 
-                      the shortlink automatically invalidates, and viewers will receive an "Expired" status.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <section id="features" className="space-y-6">
-              <h2 className="text-xl font-bold text-white flex items-center gap-3">
-                <div className="w-1.5 h-6 bg-emerald-500 rounded-full" />
-                Contextual Routing
-              </h2>
-              <div className="p-8 bg-zinc-950/30 border border-zinc-800 rounded-3xl space-y-4">
-                <p className="text-zinc-400 text-sm leading-relaxed">
-                  Our engine appends the original filename to the short-URL structure. 
-                  This "Contextual Routing" ensures that when a recipient scans a QR for a document named `Invoice_2026.pdf`, 
-                  the browser preview displays the filename, building trust before the redirect occurs.
+            {/* System Overview */}
+            <section id="overview" className="space-y-8 relative">
+              <div className="absolute -left-6 top-1.5 w-1.5 h-12 bg-emerald-500 rounded-r-full hidden md:block" />
+              <div className="space-y-3">
+                <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight flex items-center gap-4">
+                  <span className="bg-emerald-500/10 text-emerald-500 px-3 py-1 rounded-lg text-sm font-mono tracking-widest uppercase mb-1 hidden sm:inline-block">Core</span>
+                  System Architecture
+                </h2>
+                <p className="text-zinc-400 text-lg leading-relaxed font-light">
+                  QuickQR functions as a dynamic routing layer between your data and the end-user. 
+                  Unlike traditional QR codes that hardcode static URLs, our engine generates unique 
+                  identifiers that act as pointers to rich, controllable database records.
                 </p>
-                <div className="bg-black/50 p-4 rounded-xl border border-zinc-800 font-mono text-[11px] text-zinc-500">
-                  <span className="text-emerald-500">GET</span> /q/Abc123XY/<span className="text-zinc-300 underline underline-offset-4 decoration-emerald-500/30">Invoice_2026.pdf</span>
+              </div>
+
+              {/* Architecture Diagram Visualization */}
+              <div className="relative h-64 w-full bg-zinc-950/50 border border-zinc-800/80 rounded-3xl overflow-hidden flex items-center justify-center group">
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+                
+                <div className="flex items-center justify-between w-full max-w-lg px-8 relative z-10">
+                  {/* Step 1 */}
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-14 h-14 bg-zinc-900 border border-zinc-700 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.05)] group-hover:-translate-y-2 transition-transform duration-500">
+                      <Zap className="w-6 h-6 text-zinc-300" />
+                    </div>
+                    <span className="text-[10px] text-zinc-500 font-mono tracking-widest uppercase">Generate</span>
+                  </div>
+
+                  {/* Connect Line */}
+                  <div className="flex-1 h-[2px] bg-gradient-to-r from-zinc-800 via-emerald-500/50 to-zinc-800 relative">
+                     <div className="absolute right-1/2 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)] animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]" />
+                  </div>
+
+                  {/* Step 2 */}
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/30 rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(16,185,129,0.1)] relative group-hover:scale-110 transition-transform duration-500">
+                      <div className="absolute inset-0 border border-emerald-500/20 rounded-full animate-[spin_4s_linear_infinite]" />
+                      <Database className="w-7 h-7 text-emerald-500" />
+                    </div>
+                    <span className="text-[10px] text-emerald-500 font-bold font-mono tracking-widest uppercase">MongoDB Store</span>
+                  </div>
+
+                  {/* Connect Line */}
+                  <div className="flex-1 h-[2px] bg-gradient-to-r from-zinc-800 via-emerald-500/50 to-zinc-800 relative">
+                    <div className="absolute left-1/4 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.8)] animate-[ping_2.5s_cubic-bezier(0,0,0.2,1)_infinite]" />
+                  </div>
+
+                  {/* Step 3 */}
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-14 h-14 bg-zinc-900 border border-zinc-700 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.05)] group-hover:translate-x-2 transition-transform duration-500">
+                      <Server className="w-6 h-6 text-zinc-300" />
+                    </div>
+                    <span className="text-[10px] text-zinc-500 font-mono tracking-widest uppercase">Edge Route</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                <div className="p-8 bg-zinc-900/40 hover:bg-zinc-900/60 transition-colors border border-zinc-800/80 rounded-3xl space-y-4">
+                  <Database className="w-6 h-6 text-emerald-500" />
+                  <h3 className="text-base font-bold text-white tracking-wide uppercase">High-Speed Persistence</h3>
+                  <p className="text-zinc-500 text-sm leading-relaxed">
+                    Every generated matrix is registered in our NoSQL structure, enabling rapid read/write operations for dynamic tracking and live metric updates.
+                  </p>
+                </div>
+                <div className="p-8 bg-zinc-900/40 hover:bg-zinc-900/60 transition-colors border border-zinc-800/80 rounded-3xl space-y-4">
+                  <Server className="w-6 h-6 text-emerald-500" />
+                  <h3 className="text-base font-bold text-white tracking-wide uppercase">Next.js Edge Middleware</h3>
+                  <p className="text-zinc-500 text-sm leading-relaxed">
+                    Routing is handled securely at the edge. Incoming scans are intercepted to validate access tokens and protocol compliance prior to redirect.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            {/* Defense Mechanisms */}
+            <section id="security" className="space-y-10 relative">
+              <div className="absolute -left-6 top-1.5 w-1.5 h-12 bg-emerald-500 rounded-r-full hidden md:block" />
+              <div className="space-y-3">
+                <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight flex items-center gap-4">
+                  <span className="bg-emerald-500/10 text-emerald-500 px-3 py-1 rounded-lg text-sm font-mono tracking-widest uppercase mb-1 hidden sm:inline-block">Security</span>
+                  Defense Mechanisms
+                </h2>
+                <p className="text-zinc-400 text-lg leading-relaxed font-light">
+                  When distributing sensitive documents or private enterprise media, default URLs expose your resources. 
+                  QuickQR wraps your destination in layers of protection.
+                </p>
+              </div>
+
+              <div className="grid gap-6">
+                
+                {/* Shield Protocol Feature Block */}
+                <div className="relative overflow-hidden p-8 md:p-10 bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-[2.5rem] group">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-[100px] rounded-full pointer-events-none group-hover:bg-emerald-500/10 transition-colors duration-700" />
+                  
+                  <div className="flex flex-col md:flex-row gap-8 items-start relative z-10">
+                    <div className="w-16 h-16 rounded-2xl bg-zinc-950 border border-emerald-500/30 flex items-center justify-center shrink-0 shadow-[0_0_30px_rgba(16,185,129,0.1)]">
+                      <Shield className="w-8 h-8 text-emerald-500" />
+                    </div>
+                    <div className="space-y-4 flex-1">
+                      <div className="space-y-1">
+                        <h3 className="text-xl font-bold text-white tracking-tight">Shield Protocol <span className="text-zinc-600 font-normal">/</span> PIN Encrypted Gateway</h3>
+                        <p className="text-emerald-500/80 text-[11px] font-mono uppercase tracking-[0.3em]">Advanced Protection</p>
+                      </div>
+                      <p className="text-zinc-400 text-base leading-relaxed">
+                        Rather than directly exposing the target URL, the engine halts the connection at an intermediary 
+                        `<span className="text-zinc-200">/unlock/[id]</span>` route. The true destination URL remains securely 
+                        hidden on the server-side until the client provides a correct mathematical match for the 4-digit PIN hash.
+                      </p>
+                      <div className="flex items-center gap-3 text-xs font-mono text-zinc-500 pt-2">
+                        <Lock className="w-4 h-4 text-emerald-500/50" />
+                        <span>Max 5 attempt limit before temporary cooldown.</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Expiration Control Feature Block */}
+                <div className="relative overflow-hidden p-8 md:p-10 bg-gradient-to-br from-zinc-900/80 to-black border border-zinc-800 rounded-[2.5rem] group">
+                  
+                  <div className="flex flex-col md:flex-row gap-8 items-start relative z-10">
+                    <div className="w-16 h-16 rounded-2xl bg-zinc-950 border border-zinc-800 flex items-center justify-center shrink-0">
+                      <Zap className="w-8 h-8 text-zinc-400" />
+                    </div>
+                    <div className="space-y-4 flex-1">
+                      <div className="space-y-1">
+                        <h3 className="text-xl font-bold text-white tracking-tight">Time-To-Live (TTL) Control</h3>
+                        <p className="text-zinc-500 text-[11px] font-mono uppercase tracking-[0.3em]">Automated Expiration</p>
+                      </div>
+                      <p className="text-zinc-400 text-base leading-relaxed">
+                        Attach precise expiration windows (1H, 1D, 7D, 30D) to your generated matrices. 
+                        Our database utilizes automated TTL indexes to instantly invalidate records 
+                        the millisecond they expire, preventing unauthorized access to stale campaigns or sensitive temporary documents.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+            </section>
+
+            {/* Smart Context */}
+            <section id="context" className="space-y-8 relative">
+              <div className="absolute -left-6 top-1.5 w-1.5 h-12 bg-emerald-500 rounded-r-full hidden md:block" />
+              <div className="space-y-3">
+                <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight flex items-center gap-4">
+                  <span className="bg-emerald-500/10 text-emerald-500 px-3 py-1 rounded-lg text-sm font-mono tracking-widest uppercase mb-1 hidden sm:inline-block">UX</span>
+                  Contextual Routing
+                </h2>
+                <p className="text-zinc-400 text-lg leading-relaxed font-light">
+                  Trust is critical. When a user scans an obscure shortlink like `/q/A8Hj23`, they hesitate. 
+                  Our engine solves this through intelligent URL appending.
+                </p>
+              </div>
+
+              <div className="p-10 bg-zinc-950/60 border border-zinc-800 rounded-[2.5rem] space-y-6">
+                <p className="text-zinc-400 text-base leading-relaxed max-w-2xl">
+                  By dynamically attaching the original uploaded file's exact name to the end of the shortlink, 
+                  modern smartphone cameras preview the <span className="text-white font-medium">actual filename</span> to the user before they even click to open the browser.
+                </p>
+                
+                {/* Code UI Block */}
+                <div className="bg-[#0c0c0c] p-6 rounded-2xl border border-zinc-900 shadow-2xl relative overflow-hidden group">
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500/0 via-emerald-500/50 to-emerald-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                  
+                  <div className="flex items-center gap-2 mb-4 opacity-50">
+                    <div className="w-3 h-3 rounded-full bg-red-500/50" />
+                    <div className="w-3 h-3 rounded-full bg-amber-500/50" />
+                    <div className="w-3 h-3 rounded-full bg-green-500/50" />
+                  </div>
+                  
+                  <div className="font-mono text-sm space-y-3">
+                    <div className="text-zinc-500">
+                      <span className="text-zinc-600">// Standard Shortlink Preview (Low Trust)</span><br/>
+                      <span className="text-blue-400">GET</span> https://quickqr.app/q/A8Hj23
+                    </div>
+                    
+                    <div className="text-zinc-300">
+                      <span className="text-zinc-600">// QuickQR Contextual Preview (High Trust)</span><br/>
+                      <span className="text-emerald-400">GET</span> https://quickqr.app/q/A8Hj23/<span className="text-white bg-white/10 px-1 rounded">Q4_Financial_Report.pdf</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </section>
 
           </div>
 
-          {/* Sidebar */}
-          <div className="space-y-8">
-            <div className="p-8 bg-zinc-900/30 backdrop-blur-md border border-zinc-800 rounded-3xl space-y-6">
-              <div className="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.3em] mb-2">Technical Core</div>
-              <h3 className="text-lg font-semibold text-white tracking-tight leading-snug">Engineered for Privacy.</h3>
-              <p className="text-zinc-500 text-xs leading-relaxed">
-                QuickQR ensures your data stays masked until the correct credentials are provided. Perfect for enterprise media distribution.
-              </p>
-              <div className="pt-4 flex flex-col gap-3">
-                <Button className="w-full bg-emerald-500 text-black hover:bg-emerald-400 text-[10px] font-bold uppercase tracking-widest rounded-xl">
-                  Contact Support
-                </Button>
-              </div>
-            </div>
+          {/* Sticky Sidebar */}
+          <div className="lg:col-span-4 space-y-8 relative">
+            <div className="sticky top-12 space-y-8">
+              
+              {/* Directory Navigation */}
+              <div className="p-8 bg-zinc-900/30 backdrop-blur-md border border-zinc-800/80 rounded-3xl space-y-6">
+                <div className="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.3em] mb-4">Documentation Directory</div>
+                
+                <ul className="space-y-4">
+                  <li>
+                    <a href="#overview" className="flex items-center gap-3 text-sm font-medium text-zinc-300 hover:text-white group">
+                      <div className="w-8 h-8 rounded-lg bg-zinc-950 border border-zinc-800 flex items-center justify-center group-hover:border-zinc-700 transition-colors">
+                        <Cpu className="w-4 h-4 text-zinc-500 group-hover:text-white transition-colors" />
+                      </div>
+                      System Architecture
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#security" className="flex items-center gap-3 text-sm font-medium text-zinc-300 hover:text-white group">
+                      <div className="w-8 h-8 rounded-lg bg-zinc-950 border border-zinc-800 flex items-center justify-center group-hover:border-emerald-500/50 transition-colors">
+                        <Lock className="w-4 h-4 text-zinc-500 group-hover:text-emerald-500 transition-colors" />
+                      </div>
+                      Defense Mechanisms
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#context" className="flex items-center gap-3 text-sm font-medium text-zinc-300 hover:text-white group">
+                      <div className="w-8 h-8 rounded-lg bg-zinc-950 border border-zinc-800 flex items-center justify-center group-hover:border-zinc-700 transition-colors">
+                        <ArrowRight className="w-4 h-4 text-zinc-500 group-hover:text-white transition-colors" />
+                      </div>
+                      Contextual Routing
+                    </a>
+                  </li>
+                </ul>
 
-            <div className="p-8 border border-zinc-900 rounded-3xl space-y-4">
-              <h3 className="text-xs font-bold text-zinc-500 uppercase tracking-widest leading-none">Powered By</h3>
-              <div className="flex flex-wrap gap-4 pt-2">
-                <div className="flex items-center gap-2 group cursor-default">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 group-hover:scale-125 transition-transform" />
-                  <span className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest">Next.js 15</span>
-                </div>
-                <div className="flex items-center gap-2 group cursor-default">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 group-hover:scale-125 transition-transform" />
-                  <span className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest">MongoDB</span>
-                </div>
-                <div className="flex items-center gap-2 group cursor-default">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 group-hover:scale-125 transition-transform" />
-                  <span className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest">Lucide Icons</span>
+                <div className="pt-6 mt-6 border-t border-zinc-800/50">
+                  <h3 className="text-lg font-semibold text-white tracking-tight leading-snug mb-2">Need Technical Help?</h3>
+                  <p className="text-zinc-500 text-xs leading-relaxed mb-4">
+                    Our engineering team is available for custom enterprise deployments.
+                  </p>
+                  <Button className="w-full h-12 bg-white text-black hover:bg-zinc-200 text-xs font-bold uppercase tracking-widest rounded-xl transition-colors">
+                    Contact Support
+                  </Button>
                 </div>
               </div>
+
+              {/* Tech Stack Box */}
+              <div className="p-8 border border-zinc-900 bg-zinc-950/50 rounded-3xl space-y-5 shadow-inner">
+                <h3 className="text-xs font-bold text-zinc-500 uppercase tracking-widest leading-none">Core Technologies</h3>
+                <div className="flex flex-col gap-3 pt-2">
+                  <div className="flex items-center gap-3 p-3 bg-zinc-900 border border-zinc-800 rounded-xl">
+                    <div className="w-2 h-2 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+                    <span className="text-xs text-zinc-300 font-medium">Next.js 15 App Router</span>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 bg-zinc-900 border border-zinc-800 rounded-xl">
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
+                    <span className="text-xs text-zinc-300 font-medium">MongoDB Native Provider</span>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 bg-zinc-900 border border-zinc-800 rounded-xl">
+                    <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.8)]" />
+                    <span className="text-xs text-zinc-300 font-medium">UploadThing SDK</span>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
 
