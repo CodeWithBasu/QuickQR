@@ -590,16 +590,16 @@ TITLE:${vCardTitle}`
 
             {/* Advanced Configuration */}
             <div className="mt-8 space-y-4">
-              {/* Password Protection */}
-              <div className="p-5 bg-gradient-to-br from-emerald-500/10 via-zinc-900/40 to-black border border-emerald-500/20 rounded-2xl space-y-4 shadow-[0_0_20px_rgba(16,185,129,0.05)] transition-all duration-500 hover:border-emerald-500/30 group/pw">
+              {/* Shield Protocol (Password Protection) */}
+              <div className="p-6 bg-gradient-to-br from-emerald-500/10 via-zinc-900/40 to-black border border-emerald-500/20 rounded-3xl space-y-5 shadow-[0_0_30px_rgba(16,185,129,0.05)] transition-all duration-500 hover:border-emerald-500/30 group/shield">
                  <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                       <div className="p-2.5 bg-zinc-950 border border-emerald-500/20 rounded-xl group-hover/pw:border-emerald-500/40 transition-colors">
-                          <Shield className="w-5 h-5 text-emerald-500" />
+                       <div className="w-12 h-12 rounded-2xl bg-zinc-950 border border-emerald-500/20 flex items-center justify-center group-hover/shield:scale-105 transition-transform duration-500">
+                          <Shield className="w-6 h-6 text-emerald-500" />
                        </div>
                        <div className="flex flex-col">
                           <span className="text-zinc-100 text-sm font-semibold tracking-wide">Shield Protocol</span>
-                          <span className="text-zinc-500 text-[10px] uppercase tracking-wider font-bold">Encrypted Scanning</span>
+                          <span className="text-zinc-500 text-[10px] uppercase font-bold tracking-[0.2em] leading-none mt-1">Encrypted Gateway</span>
                        </div>
                     </div>
                     <Switch 
@@ -608,10 +608,11 @@ TITLE:${vCardTitle}`
                       className="data-[state=checked]:bg-emerald-500 data-[state=unchecked]:bg-zinc-800 scale-110 shadow-lg"
                     />
                  </div>
+                 
                  {usePassword && (
-                    <div className="space-y-3 pt-3 border-t border-emerald-500/10 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <div className="space-y-4 pt-4 border-t border-emerald-500/10 animate-in fade-in slide-in-from-top-3 duration-500">
                        <div className="flex items-center justify-between">
-                          <Label className="text-zinc-400 text-[10px] font-bold uppercase tracking-widest leading-none">Security Access Pin</Label>
+                          <Label className="text-zinc-400 text-[10px] font-bold uppercase tracking-[0.2em]">Secret 4-Digit PIN</Label>
                           <Lock className="w-3 h-3 text-emerald-500/50" />
                        </div>
                        <Input 
@@ -619,11 +620,11 @@ TITLE:${vCardTitle}`
                          placeholder="0000" 
                          value={password} 
                          onChange={(e) => setPassword(e.target.value.replace(/\D/g, '').slice(0, 4))}
-                         className="bg-zinc-950 border-emerald-500/20 h-14 text-center text-2xl tracking-[0.8em] font-mono text-emerald-400 focus:border-emerald-500/50 shadow-inner rounded-xl"
+                         className="bg-zinc-950 border-emerald-500/20 h-16 text-center text-3xl tracking-[0.8em] font-mono text-emerald-400 focus:border-emerald-500/50 shadow-inner rounded-2xl"
                        />
-                       <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/5 border border-emerald-500/10 rounded-lg">
-                          <Zap className="w-3 h-3 text-emerald-500" />
-                          <p className="text-zinc-600 text-[9px] font-medium leading-none">Scanners must enter this PIN to unlock the destination.</p>
+                       <div className="flex items-center gap-2.5 px-4 py-2 bg-emerald-500/5 border border-emerald-500/10 rounded-xl">
+                          <Zap className="w-3.5 h-3.5 text-emerald-500" />
+                          <p className="text-zinc-500 text-[10px] font-medium leading-normal">Scanners will be prompted for this PIN before redirection.</p>
                        </div>
                     </div>
                  )}
@@ -852,6 +853,76 @@ TITLE:${vCardTitle}`
            </div>
         </div>
 
+        {/* Documentation & Engine Section */}
+        <div className="mt-36 max-w-4xl mx-auto border-t border-zinc-900/50 pt-24 pb-12">
+           <div className="flex flex-col md:flex-row gap-16 items-start">
+              
+              <div className="flex-1 space-y-8">
+                 <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                       <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center">
+                          <FileText className="w-5 h-5 text-emerald-500" />
+                       </div>
+                       <h2 className="text-2xl font-bold tracking-tight text-white">Project Engine</h2>
+                    </div>
+                    <p className="text-zinc-500 text-sm leading-relaxed max-w-md">
+                       QuickQR is a next-generation matrix generator engineered for secure data distribution. 
+                       Unlike static QR codes, our engine uses a dynamic routing layer that enables advanced 
+                       features like analytics tracking, password masking, and content expiration.
+                    </p>
+                 </div>
+
+                 <div className="space-y-6">
+                    <div className="flex gap-4 group">
+                       <div className="w-8 h-8 rounded-lg bg-zinc-950 border border-zinc-900 flex items-center justify-center shrink-0 group-hover:border-zinc-700 transition-colors">
+                          <Zap className="w-4 h-4 text-emerald-500" />
+                       </div>
+                       <div>
+                          <h3 className="text-xs font-bold text-zinc-200 uppercase tracking-widest mb-1">Dynamic Shortlinks</h3>
+                          <p className="text-[11px] text-zinc-600 leading-normal">Every QR is mapped to a unique database record, allowing you to update destination data or revoke access instantly without reprinting.</p>
+                       </div>
+                    </div>
+
+                    <div className="flex gap-4 group">
+                       <div className="w-8 h-8 rounded-lg bg-zinc-950 border border-zinc-900 flex items-center justify-center shrink-0 group-hover:border-zinc-700 transition-colors">
+                          <Shield className="w-4 h-4 text-emerald-500" />
+                       </div>
+                       <div>
+                          <h3 className="text-xs font-bold text-zinc-200 uppercase tracking-widest mb-1">PIN Encryption</h3>
+                          <p className="text-[11px] text-zinc-600 leading-normal">Secure your media and documents with 4-digit PIN protection. Content is masked until the correct security key is authenticated.</p>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+
+              <div className="w-full md:w-[320px] bg-zinc-950/40 backdrop-blur-sm border border-zinc-900/50 rounded-3xl p-8 space-y-6 shadow-2xl relative overflow-hidden group/card shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+                 <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 blur-[80px] rounded-full pointer-events-none" />
+                 
+                 <div className="space-y-4">
+                    <div className="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.4em]">Core Architecture</div>
+                    <h3 className="text-xl font-semibold text-white tracking-tight leading-snug">Built for Professional Distribution.</h3>
+                    <p className="text-zinc-500 text-xs leading-relaxed">
+                       Perfect for enterprise documents, private media shares, and high-security network access. QuickQR ensures your data stays in your control.
+                    </p>
+                 </div>
+
+                 <div className="pt-4 flex flex-col gap-3">
+                    <Link href="/docs" className="w-full">
+                      <Button variant="outline" className="w-full h-11 bg-zinc-900/50 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700 text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all group-hover/card:bg-zinc-900">
+                         Full Docs Guide
+                      </Button>
+                    </Link>
+                    <div className="flex items-center justify-center gap-1.5 opacity-30 select-none">
+                       <div className="w-1 h-1 rounded-full bg-zinc-500" />
+                       <div className="w-1 h-1 rounded-full bg-zinc-500" />
+                       <div className="w-1 h-1 rounded-full bg-zinc-500" />
+                    </div>
+                 </div>
+              </div>
+
+           </div>
+        </div>
+
         {/* Footer */}
         <div className="mt-20 flex flex-col items-center space-y-8 pb-10">
           
@@ -893,10 +964,10 @@ TITLE:${vCardTitle}`
               
               <div className="w-[1px] h-8 bg-zinc-800/50" />
               
-              <a href="/docs" className="flex items-center gap-2.5 px-4 py-2 bg-emerald-500/5 border border-emerald-500/10 rounded-xl text-emerald-500/60 hover:text-emerald-400 hover:bg-emerald-500/10 hover:border-emerald-500/20 text-[10px] font-bold uppercase tracking-[0.1em] transition-all duration-500 group">
+              <Link href="/docs" className="flex items-center gap-2.5 px-4 py-2 bg-emerald-500/5 border border-emerald-500/10 rounded-xl text-emerald-500/60 hover:text-emerald-400 hover:bg-emerald-500/10 hover:border-emerald-500/20 text-[10px] font-bold uppercase tracking-[0.1em] transition-all duration-500 group">
                 <FileText className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" /> 
                 Documentation
-              </a>
+              </Link>
             </div>
           </div>
 
