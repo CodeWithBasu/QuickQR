@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { cn } from "@/lib/utils"
 import { DotPattern } from "@/components/ui/dot-pattern"
 import AdvancedQRCode, { QRCodeRef } from "@/components/ui/AdvancedQRCode"
@@ -315,7 +315,7 @@ TITLE:${vCardTitle}`
                   type="url"
                   placeholder="https://your-domain.com"
                   value={url}
-                  onChange={(e) => setUrl(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUrl(e.target.value)}
                   className="w-full bg-zinc-950/50 border-zinc-800 text-white placeholder:text-zinc-700 h-16 rounded-xl px-5 text-lg focus-visible:ring-1 focus-visible:ring-white/20 focus-visible:border-white/20 transition-all font-mono shadow-inner hover:border-zinc-700"
                 />
                 <Button 
@@ -359,15 +359,15 @@ TITLE:${vCardTitle}`
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                        <div className="relative">
                           <Instagram className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                          <Input placeholder="Instagram" value={vCardInstagram} onChange={(e) => setVCardInstagram(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
+                          <Input placeholder="Instagram" value={vCardInstagram} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardInstagram(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
                        </div>
                        <div className="relative">
                           <Github className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                          <Input placeholder="GitHub" value={vCardGithub} onChange={(e) => setVCardGithub(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
+                          <Input placeholder="GitHub" value={vCardGithub} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardGithub(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
                        </div>
                        <div className="relative">
                           <Linkedin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                          <Input placeholder="LinkedIn" value={vCardLinkedin} onChange={(e) => setVCardLinkedin(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
+                          <Input placeholder="LinkedIn" value={vCardLinkedin} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardLinkedin(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
                        </div>
                     </div>
                   </div>
@@ -406,15 +406,15 @@ TITLE:${vCardTitle}`
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                        <div className="relative">
                           <Instagram className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                          <Input placeholder="Instagram" value={vCardInstagram} onChange={(e) => setVCardInstagram(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
+                          <Input placeholder="Instagram" value={vCardInstagram} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardInstagram(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
                        </div>
                        <div className="relative">
                           <Github className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                          <Input placeholder="GitHub" value={vCardGithub} onChange={(e) => setVCardGithub(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
+                          <Input placeholder="GitHub" value={vCardGithub} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardGithub(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
                        </div>
                        <div className="relative">
                           <Linkedin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                          <Input placeholder="LinkedIn" value={vCardLinkedin} onChange={(e) => setVCardLinkedin(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
+                          <Input placeholder="LinkedIn" value={vCardLinkedin} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardLinkedin(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
                        </div>
                     </div>
                   </div>
@@ -453,15 +453,15 @@ TITLE:${vCardTitle}`
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                        <div className="relative">
                           <Instagram className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                          <Input placeholder="Instagram" value={vCardInstagram} onChange={(e) => setVCardInstagram(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
+                          <Input placeholder="Instagram" value={vCardInstagram} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardInstagram(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
                        </div>
                        <div className="relative">
                           <Github className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                          <Input placeholder="GitHub" value={vCardGithub} onChange={(e) => setVCardGithub(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
+                          <Input placeholder="GitHub" value={vCardGithub} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardGithub(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
                        </div>
                        <div className="relative">
                           <Linkedin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                          <Input placeholder="LinkedIn" value={vCardLinkedin} onChange={(e) => setVCardLinkedin(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
+                          <Input placeholder="LinkedIn" value={vCardLinkedin} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardLinkedin(e.target.value)} className="bg-zinc-950/30 border-zinc-800 h-10 pl-9 text-xs" />
                        </div>
                     </div>
                   </div>
@@ -473,7 +473,7 @@ TITLE:${vCardTitle}`
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                        <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Network SSID</Label>
-                       <Input placeholder="Home Wi-Fi" value={wifiSsid} onChange={(e) => setWifiSsid(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
+                       <Input placeholder="Home Wi-Fi" value={wifiSsid} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setWifiSsid(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
                     </div>
                     <div className="space-y-2">
                        <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Encryption</Label>
@@ -492,7 +492,7 @@ TITLE:${vCardTitle}`
                   {wifiEncryption !== "nopass" && (
                     <div className="space-y-2">
                        <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Password</Label>
-                       <Input type="password" placeholder="••••••••" value={wifiPassword} onChange={(e) => setWifiPassword(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
+                       <Input type="password" placeholder="••••••••" value={wifiPassword} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setWifiPassword(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
                     </div>
                   )}
                   <Button onClick={generateWifiQR} disabled={isGenerating || !wifiSsid} className="w-full h-14 bg-white/10 hover:bg-white/20 text-white rounded-xl border border-zinc-700">
@@ -506,25 +506,25 @@ TITLE:${vCardTitle}`
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                        <div className="space-y-2">
                           <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Full Name</Label>
-                          <Input placeholder="Basudev" value={vCardName} onChange={(e) => setVCardName(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
+                          <Input placeholder="Basudev" value={vCardName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardName(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
                        </div>
                        <div className="space-y-2">
                           <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Phone Number</Label>
-                          <Input placeholder="+91 1234567890" value={vCardPhone} onChange={(e) => setVCardPhone(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
+                           <Input placeholder="+91 1234567890" value={vCardPhone} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardPhone(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
                        </div>
                     </div>
                     <div className="space-y-2">
                        <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Email Address</Label>
-                       <Input type="email" placeholder="basu@example.com" value={vCardEmail} onChange={(e) => setVCardEmail(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
+                        <Input type="email" placeholder="basu@example.com" value={vCardEmail} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardEmail(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                        <div className="space-y-2">
                           <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Organization</Label>
-                          <Input placeholder="CodeWithBasu" value={vCardOrg} onChange={(e) => setVCardOrg(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
+                           <Input placeholder="CodeWithBasu" value={vCardOrg} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardOrg(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
                        </div>
                        <div className="space-y-2">
                           <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Job Title</Label>
-                          <Input placeholder="Lead Developer" value={vCardTitle} onChange={(e) => setVCardTitle(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
+                           <Input placeholder="Lead Developer" value={vCardTitle} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardTitle(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
                        </div>
                     </div>
 
@@ -533,21 +533,21 @@ TITLE:${vCardTitle}`
                           <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">Instagram</Label>
                           <div className="relative">
                              <Instagram className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-                             <Input placeholder="@username" value={vCardInstagram} onChange={(e) => setVCardInstagram(e.target.value)} className="bg-zinc-950 border-zinc-800 h-10 pl-10 text-xs" />
+                             <Input placeholder="@username" value={vCardInstagram} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardInstagram(e.target.value)} className="bg-zinc-950 border-zinc-800 h-10 pl-10 text-xs" />
                           </div>
                        </div>
                        <div className="space-y-2 relative">
                           <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">GitHub</Label>
                           <div className="relative">
                              <Github className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-                             <Input placeholder="username" value={vCardGithub} onChange={(e) => setVCardGithub(e.target.value)} className="bg-zinc-950 border-zinc-800 h-10 pl-10 text-xs" />
+                             <Input placeholder="username" value={vCardGithub} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardGithub(e.target.value)} className="bg-zinc-950 border-zinc-800 h-10 pl-10 text-xs" />
                           </div>
                        </div>
                        <div className="space-y-2 relative">
                           <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">LinkedIn</Label>
                           <div className="relative">
                              <Linkedin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-                             <Input placeholder="username" value={vCardLinkedin} onChange={(e) => setVCardLinkedin(e.target.value)} className="bg-zinc-950 border-zinc-800 h-10 pl-10 text-xs" />
+                              <Input placeholder="username" value={vCardLinkedin} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVCardLinkedin(e.target.value)} className="bg-zinc-950 border-zinc-800 h-10 pl-10 text-xs" />
                           </div>
                        </div>
                     </div>
@@ -810,36 +810,37 @@ TITLE:${vCardTitle}`
         </div>
         
         {/* Footer */}
-        <div className="mt-16 text-center space-y-4">
-          <div className="flex items-center justify-center gap-3 text-zinc-500 text-sm font-medium tracking-wide">
-             <span>Made with <span className="text-red-500 mx-0.5 animate-pulse">❤️</span> by</span>
-             <a href="https://github.com/CodeWithBasu" target="_blank" rel="noopener noreferrer" className="text-white hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">
-               Basudev <ExternalLink className="w-3 h-3 text-zinc-600 group-hover:text-emerald-400 transition-colors" />
-             </a>
-          </div>
-          
-          <div className="flex items-center justify-center gap-5 pt-2">
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="p-2 bg-zinc-950 border border-zinc-900 rounded-lg text-zinc-500 hover:text-white transition-all hover:scale-110">
-              <Github className="w-4 h-4" />
-            </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="p-2 bg-zinc-950 border border-zinc-900 rounded-lg text-zinc-500 hover:text-pink-500 transition-all hover:scale-110">
-              <Instagram className="w-4 h-4" />
-            </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="p-2 bg-zinc-950 border border-zinc-900 rounded-lg text-zinc-500 hover:text-blue-400 transition-all hover:scale-110">
-              <Linkedin className="w-4 h-4" />
-            </a>
-            <div className="w-[1px] h-6 bg-zinc-900 mx-1" />
-            <a href="#" className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/5 border border-emerald-500/10 rounded-lg text-emerald-500/60 hover:text-emerald-400 text-[10px] font-bold uppercase tracking-widest transition-all">
-              <FileText className="w-3.5 h-3.5" /> Documentation
-            </a>
+        <div className="mt-16 text-center space-y-6">
+          <div className="flex flex-col items-center gap-4">
+            <div className="flex items-center justify-center gap-3 text-zinc-500 text-sm font-medium tracking-wide">
+               <span>Made with <span className="text-red-500 mx-0.5 animate-pulse">❤️</span> and ☕ by</span>
+               <a href="https://github.com/CodeWithBasu" target="_blank" rel="noopener noreferrer" className="text-white hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">
+                  Basudev <ExternalLink className="w-3 h-3 text-zinc-600 group-hover:text-emerald-400 transition-colors" />
+               </a>
+            </div>
+            
+            <div className="flex items-center justify-center gap-5">
+              <a href="https://github.com/CodeWithBasu" target="_blank" rel="noopener noreferrer" className="p-2 bg-zinc-950 border border-zinc-900 rounded-lg text-zinc-500 hover:text-white transition-all hover:scale-110">
+                <Github className="w-4 h-4" />
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="p-2 bg-zinc-950 border border-zinc-900 rounded-lg text-zinc-500 hover:text-pink-500 transition-all hover:scale-110">
+                <Instagram className="w-4 h-4" />
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="p-2 bg-zinc-950 border border-zinc-900 rounded-lg text-zinc-500 hover:text-blue-400 transition-all hover:scale-110">
+                <Linkedin className="w-4 h-4" />
+              </a>
+              <div className="w-[1px] h-6 bg-zinc-900 mx-1" />
+              <a href="/docs" className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/5 border border-emerald-500/10 rounded-lg text-emerald-500/60 hover:text-emerald-400 text-[10px] font-bold uppercase tracking-widest transition-all">
+                <FileText className="w-3.5 h-3.5" /> Documentation
+              </a>
+            </div>
           </div>
 
-          <p className="pt-4 text-[10px] text-zinc-600 opacity-40 uppercase tracking-[0.2em]">
-            &copy; {new Date().getFullYear()} QuickQR Engine v1.0
+          <p className="pt-2 text-[10px] text-zinc-600 opacity-40 uppercase tracking-[0.2em] font-medium">
+            &copy; 2026 QuickQR. All rights reserved.
           </p>
         </div>
       </div>
     </div>
   )
 }
-
