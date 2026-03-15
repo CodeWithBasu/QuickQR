@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import { cn } from "@/lib/utils"
 import { DotPattern } from "@/components/ui/dot-pattern"
+import MagicRings from "@/components/ui/MagicRings"
 import { QRCodeSVG } from "qrcode.react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -106,6 +107,35 @@ export default function QRCodeGenerator() {
       
       {/* MagicUI Animated Dot Pattern Background */}
       <div className="fixed inset-0 z-0 pointer-events-none">
+        
+        {/* Layer 1: Magic Rings (Deep Background) */}
+        <div className="absolute inset-0 z-0 opacity-40">
+          <MagicRings
+            color="#27272a" // zinc-800
+            colorTwo="#52525b" // zinc-600
+            ringCount={8}
+            speed={0.5}
+            attenuation={15}
+            lineThickness={1.5}
+            baseRadius={0.4}
+            radiusStep={0.15}
+            scaleRate={0.08}
+            opacity={0.3}
+            blur={4}
+            noiseAmount={0.05}
+            rotation={45}
+            ringGap={2.0}
+            fadeIn={0.4}
+            fadeOut={0.6}
+            followMouse={true}
+            mouseInfluence={0.1}
+            hoverScale={1.05}
+            parallax={0.02}
+            clickBurst={false}
+          />
+        </div>
+
+        {/* Layer 2: Dot Pattern */}
         <DotPattern
           width={40}
           height={40}
@@ -114,7 +144,7 @@ export default function QRCodeGenerator() {
           cr={1.5}
           glow={true}
           className={cn(
-            "[mask-image:radial-gradient(1000px_circle_at_center,white,transparent)] fill-white/50 opacity-100 h-screen w-screen"
+            "[mask-image:radial-gradient(1000px_circle_at_center,white,transparent)] fill-white/50 opacity-100 h-screen w-screen absolute inset-0 z-10"
           )}
         />
       </div>
