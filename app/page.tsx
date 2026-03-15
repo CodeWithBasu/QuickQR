@@ -48,6 +48,7 @@ export default function QRCodeGenerator() {
   // Batch States
   const [batchInput, setBatchInput] = useState("")
   const [isBatching, setIsBatching] = useState(false)
+  const [batchNameType, setBatchNameType] = useState("QuickQR")
 
   // Advanced QR Customizer States
   const [qrColor1, setQrColor1] = useState("#ffffff")
@@ -212,8 +213,8 @@ TITLE:${vCardTitle}`
           
           // 2. Generate Image Blob
           const qr = new QRCodeStyling({
-            width: 500,
-            height: 500,
+            width: 800,
+            height: 800,
             data: finalUrl,
             image: logoFile || undefined,
             dotsOptions: {
@@ -224,15 +225,20 @@ TITLE:${vCardTitle}`
                 colorStops: [{ offset: 0, color: qrColor1 }, { offset: 1, color: qrColor2 }]
               }
             },
-            backgroundOptions: { color: "#ffffff" },
-            imageOptions: { crossOrigin: "anonymous", margin: 10, imageSize: 0.4 },
+            backgroundOptions: { color: "#000000" },
+            imageOptions: { 
+              crossOrigin: "anonymous", 
+              margin: 20, 
+              imageSize: 0.4,
+              hideBackgroundDots: true
+            },
             cornersSquareOptions: { type: (dotStyle === "square" ? "square" : "extra-rounded") as any, color: qrColor1 },
             cornersDotOptions: { type: (dotStyle === "square" ? "square" : "dot") as any, color: qrColor2 }
           })
 
           const blob = await qr.getRawData("png")
           if (blob) {
-            const fileName = `QR_${i+1}_${data.data.shortId}.png`
+            const fileName = `${batchNameType}_${i+1}_${data.data.shortId}.png`
             zip.file(fileName, blob)
           }
         }
@@ -576,9 +582,29 @@ TITLE:${vCardTitle}`
                       onChange={(e) => setBatchInput(e.target.value)}
                       className="w-full bg-zinc-950/50 border-zinc-800 text-white placeholder:text-zinc-700 h-40 rounded-xl px-5 py-4 text-sm focus-visible:ring-1 focus-visible:ring-white/20 font-mono resize-none"
                     />
-                    <div className="flex items-center gap-2 p-3 bg-zinc-900/50 rounded-xl border border-zinc-800">
-                       <Zap className="w-4 h-4 text-amber-500" />
-                       <p className="text-[10px] text-zinc-500">Each link will be registered in the database with your current visual settings.</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest flex items-center gap-2">
+                          <LinkIcon className="w-3 h-3" /> Campaign Label
+                        </Label>
+                        <Select value={batchNameType} onValueChange={setBatchNameType}>
+                          <SelectTrigger className="bg-zinc-950/50 border-zinc-800 h-10 text-xs">
+                            <SelectValue placeholder="Select type" />
+                          </SelectTrigger>
+                          <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                            <SelectItem value="Instagram">Instagram</SelectItem>
+                            <SelectItem value="GitHub">GitHub</SelectItem>
+                            <SelectItem value="LinkedIn">LinkedIn</SelectItem>
+                            <SelectItem value="Portfolio">Portfolio</SelectItem>
+                            <SelectItem value="Business">Business</SelectItem>
+                            <SelectItem value="QuickQR">Generic (QuickQR)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="flex items-center gap-2 p-3 bg-zinc-900/50 rounded-xl border border-zinc-800 h-10 self-end">
+                        <Zap className="w-4 h-4 text-amber-500" />
+                        <p className="text-[9px] text-zinc-500">Links will use your current visual settings.</p>
+                      </div>
                     </div>
                     <Button 
                       onClick={handleBatchGenerate} 
