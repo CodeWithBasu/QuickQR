@@ -143,12 +143,20 @@ export default function QRCodeGenerator() {
   }
 
   const generateWifiQR = () => {
+    if (!wifiSsid) {
+      toast.error("Please provide a Network SSID");
+      return;
+    }
     const wifiString = `WIFI:S:${wifiSsid};T:${wifiEncryption};P:${wifiPassword};;`
     setQrValue(wifiString)
     toast.success("Wi-Fi network encoded!")
   }
 
   const generateVCardQR = () => {
+    if (!vCardName) {
+      toast.error("Please provide a Full Name");
+      return;
+    }
     let vcardString = `BEGIN:VCARD
 VERSION:3.0
 FN:${vCardName}
@@ -168,7 +176,10 @@ TITLE:${vCardTitle}`
 
   const handleBatchGenerate = async () => {
     const lines = batchInput.split("\n").filter(l => l.trim().length > 0)
-    if (lines.length === 0) return
+    if (lines.length === 0) {
+      toast.error("Please provide at least one URL");
+      return;
+    }
 
     setIsBatching(true)
     const zip = new JSZip()
@@ -383,6 +394,14 @@ TITLE:${vCardTitle}`
                    <Label className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">Upload Video (MP4, MKV)</Label>
                    <UploadDropzone
                     endpoint="videoUploader"
+                    onBeforeUploadBegin={(files) => {
+                      const isVideo = files.every(file => file.type.includes('video'));
+                      if (!isVideo) {
+                        toast.error("Please provide a video file");
+                        return [];
+                      }
+                      return files;
+                    }}
                     onClientUploadComplete={(res) => {
                       if (res && res[0]) {
                         generateQRCode(res[0].url, "video", res[0].name)
@@ -430,6 +449,14 @@ TITLE:${vCardTitle}`
                   <Label className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">Upload Audio (MP3, WAV)</Label>
                   <UploadDropzone
                     endpoint="audioUploader"
+                    onBeforeUploadBegin={(files) => {
+                      const isAudio = files.every(file => file.type.includes('audio'));
+                      if (!isAudio) {
+                        toast.error("Please provide an audio file");
+                        return [];
+                      }
+                      return files;
+                    }}
                     onClientUploadComplete={(res) => {
                       if (res && res[0]) {
                         generateQRCode(res[0].url, "audio", res[0].name)
@@ -499,7 +526,7 @@ TITLE:${vCardTitle}`
                        <Input type="password" placeholder="••••••••" value={wifiPassword} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setWifiPassword(e.target.value)} className="bg-zinc-950 border-zinc-800 h-12" />
                     </div>
                   )}
-                  <Button onClick={generateWifiQR} disabled={isGenerating || !wifiSsid} className="w-full h-14 bg-white/10 hover:bg-white/20 text-white rounded-xl border border-zinc-700">
+                  <Button onClick={generateWifiQR} disabled={isGenerating} className="w-full h-14 bg-white/10 hover:bg-white/20 text-white rounded-xl border border-zinc-700">
                     {isGenerating ? <Loader2 className="w-5 h-5 animate-spin" /> : "Generate Wi-Fi QR"}
                   </Button>
                 </div>
@@ -534,7 +561,7 @@ TITLE:${vCardTitle}`
 
 
 
-                    <Button onClick={generateVCardQR} disabled={isGenerating || !vCardName} className="w-full h-14 bg-white/10 hover:bg-white/20 text-white rounded-xl border border-zinc-700">
+                    <Button onClick={generateVCardQR} disabled={isGenerating} className="w-full h-14 bg-white/10 hover:bg-white/20 text-white rounded-xl border border-zinc-700">
                       {isGenerating ? <Loader2 className="w-5 h-5 animate-spin" /> : "Generate Business Card QR"}
                     </Button>
                  </div>
@@ -555,7 +582,7 @@ TITLE:${vCardTitle}`
                     </div>
                     <Button 
                       onClick={handleBatchGenerate} 
-                      disabled={isBatching || !batchInput.trim()} 
+                      disabled={isBatching} 
                       className="w-full h-14 bg-white text-black hover:bg-zinc-200 transition-all font-bold rounded-xl"
                     >
                       {isBatching ? <Loader2 className="w-5 h-5 animate-spin" /> : "Generate Bundle (.zip)"}
