@@ -514,8 +514,39 @@ END:VCARD`
               </p>
             </div>
 
-            {/* Advanced QR Customizer Accordion */}
-            <div className="mt-8">
+            {/* Advanced Configuration */}
+            <div className="mt-8 space-y-4">
+              {/* Password Protection */}
+              <div className="p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-xl space-y-4">
+                 <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                       <Shield className="w-4 h-4 text-emerald-500" />
+                       <div className="flex flex-col">
+                          <span className="text-zinc-200 text-sm font-medium">Password Protection</span>
+                          <span className="text-zinc-500 text-[10px]">Require a 4-digit PIN to scan</span>
+                       </div>
+                    </div>
+                    <Switch checked={usePassword} onCheckedChange={setUsePassword} />
+                 </div>
+                 {usePassword && (
+                    <div className="space-y-2 pt-2 border-t border-emerald-500/10">
+                       <Label className="text-zinc-400 text-[10px] font-semibold uppercase tracking-wider">Secret 4-Digit PIN</Label>
+                       <div className="flex items-center gap-3">
+                          <Lock className="w-4 h-4 text-zinc-500" />
+                          <Input 
+                            maxLength={4} 
+                            placeholder="0000" 
+                            value={password} 
+                            onChange={(e) => setPassword(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                            className="bg-zinc-900 border-zinc-800 h-12 text-center text-xl tracking-[0.5em] font-mono text-emerald-400 focus:border-emerald-500/50"
+                          />
+                       </div>
+                       <p className="text-zinc-600 text-[9px] italic">Scanners will be prompted for this PIN before redirecting.</p>
+                    </div>
+                 )}
+              </div>
+
+              {/* Advanced QR Customizer Accordion */}
               <Accordion type="single" collapsible className="w-full bg-zinc-950/40 border border-zinc-800 rounded-2xl px-4 py-2">
                 <AccordionItem value="customize" className="border-b-0">
                   <AccordionTrigger className="hover:no-underline py-3">
@@ -527,36 +558,6 @@ END:VCARD`
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="pt-2 pb-6 space-y-6">
-                    {/* Password Protection */}
-                    <div className="p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-xl space-y-4">
-                       <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                             <Shield className="w-4 h-4 text-emerald-500" />
-                             <div className="flex flex-col">
-                                <span className="text-zinc-200 text-sm font-medium">Password Protection</span>
-                                <span className="text-zinc-500 text-[10px]">Require a 4-digit PIN to scan</span>
-                             </div>
-                          </div>
-                          <Switch checked={usePassword} onCheckedChange={setUsePassword} />
-                       </div>
-                       {usePassword && (
-                          <div className="space-y-2 pt-2 border-t border-emerald-500/10">
-                             <Label className="text-zinc-400 text-[10px] font-semibold uppercase tracking-wider">Secret 4-Digit PIN</Label>
-                             <div className="flex items-center gap-3">
-                                <Lock className="w-4 h-4 text-zinc-500" />
-                                <Input 
-                                  maxLength={4} 
-                                  placeholder="0000" 
-                                  value={password} 
-                                  onChange={(e) => setPassword(e.target.value.replace(/\D/g, '').slice(0, 4))}
-                                  className="bg-zinc-900 border-zinc-800 h-12 text-center text-xl tracking-[0.5em] font-mono text-emerald-400 focus:border-emerald-500/50"
-                                />
-                             </div>
-                             <p className="text-zinc-600 text-[9px] italic">Scanners will be prompted for this PIN before redirecting.</p>
-                          </div>
-                       )}
-                    </div>
-
                     {/* Dot Styles */}
                     <div className="space-y-3">
                       <Label className="text-zinc-400 text-[10px] font-semibold uppercase tracking-wider">Dot Style</Label>
