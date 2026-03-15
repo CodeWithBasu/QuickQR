@@ -23,7 +23,7 @@ import { useBatchGenerator } from "@/hooks/use-batch-generator"
 export default function QRCodeGenerator() {
   const [url, setUrl] = useState("https://your-website.com")
   const [isHovered, setIsHovered] = useState(false)
-  const [activeTab, setActiveTab] = useState("url")
+  const [activeTab, setActiveTab] = useState("link")
   const [expiration, setExpiration] = useState("")
   const [mounted, setMounted] = useState(false)
   
@@ -95,7 +95,7 @@ export default function QRCodeGenerator() {
   const handleDownload = () => advancedQrRef.current?.download()
 
   const handleGenerateClick = () => {
-    if (activeTab === "url") generateQRCode(url, "url")
+    if (activeTab === "link") generateQRCode(url, "url")
     else if (activeTab === "wifi") generateWifiQR()
     else if (activeTab === "vcard") generateVCardQR()
   }
