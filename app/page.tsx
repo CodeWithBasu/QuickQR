@@ -156,7 +156,7 @@ EMAIL:${vCardEmail}
 ORG:${vCardOrg}
 TITLE:${vCardTitle}`
 
-    if (vCardInstagram) vcardString += `\nURL:https://instagram.com/${vCardInstagram.replace('@', '')}`
+    if (vCardInstagram) vcardString += `\nURL:https://www.instagram.com/wandersoul________?igsh=MTR2dDJua2NpeHI5Yw%3D%3D/${vCardInstagram.replace('@', '')}`
     if (vCardGithub) vcardString += `\nURL:https://github.com/${vCardGithub}`
     if (vCardLinkedin) vcardString += `\nURL:${vCardLinkedin.startsWith('http') ? vCardLinkedin : `https://linkedin.com/in/${vCardLinkedin}`}`
     
