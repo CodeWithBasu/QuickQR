@@ -332,7 +332,29 @@ TITLE:${vCardTitle}`
                 <div className="space-y-4">
                   <Label className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">Upload Document (PDF, DOCX)</Label>
                   <UploadDropzone
-                    endpoint="mediaPost"
+                    endpoint="docUploader"
+                    onBeforeUploadBegin={(files) => {
+                      const isDoc = files.every(file => 
+                        file.type.includes('pdf') || 
+                        file.type.includes('word') || 
+                        file.type.includes('text') ||
+                        file.name.endsWith('.pdf') || 
+                        file.name.endsWith('.docx') || 
+                        file.name.endsWith('.doc') || 
+                        file.name.endsWith('.txt')
+                      );
+                      
+                      const isVideoOrAudio = files.some(file => 
+                        file.type.includes('video') || 
+                        file.type.includes('audio')
+                      );
+
+                      if (isVideoOrAudio || !isDoc) {
+                        toast.error("Please provide a docs or pdf");
+                        return [];
+                      }
+                      return files;
+                    }}
                     onClientUploadComplete={(res) => {
                       if (res && res[0]) {
                         generateQRCode(res[0].url, "doc", res[0].name)
@@ -360,7 +382,7 @@ TITLE:${vCardTitle}`
                 <div className="space-y-4">
                    <Label className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">Upload Video (MP4, MKV)</Label>
                    <UploadDropzone
-                    endpoint="mediaPost"
+                    endpoint="videoUploader"
                     onClientUploadComplete={(res) => {
                       if (res && res[0]) {
                         generateQRCode(res[0].url, "video", res[0].name)
@@ -407,7 +429,7 @@ TITLE:${vCardTitle}`
                 <div className="space-y-4">
                   <Label className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">Upload Audio (MP3, WAV)</Label>
                   <UploadDropzone
-                    endpoint="mediaPost"
+                    endpoint="audioUploader"
                     onClientUploadComplete={(res) => {
                       if (res && res[0]) {
                         generateQRCode(res[0].url, "audio", res[0].name)
