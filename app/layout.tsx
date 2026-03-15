@@ -7,7 +7,21 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata = {
   title: "QuickQR - The Modern QR Generator",
   description: "Generate QR codes from URLs, documents, audio, and video files securely and easily.",
-    generator: 'v0.app'
+  applicationName: "QuickQR",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "QuickQR",
+  },
+}
+
+import { Viewport } from "next"
+
+export const viewport: Viewport = {
+  themeColor: "#000000",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 }
 
 import { Toaster } from "sonner"
