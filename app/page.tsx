@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
 import { Switch } from "@/components/ui/switch"
-import { Download, Link as LinkIcon, QrCode, FileText, Video, Music, Loader2, Zap, Clock, Palette, Image as ImageIcon, Wifi, User, Shield, Phone, Mail, Building, Briefcase, Lock, Instagram, Github, Linkedin, ExternalLink, Code2, Coffee, Heart } from "lucide-react"
+import { Download, Link as LinkIcon, QrCode, FileText, Video, Music, Loader2, Zap, Clock, Palette, Image as ImageIcon, Wifi, User, Shield, Phone, Mail, Building, Briefcase, Lock, Instagram, Github, Linkedin, ExternalLink, Code2, Coffee, Heart, Plus, Trash2 } from "lucide-react"
 import { UploadDropzone } from "@/lib/uploadthing"
 import { toast } from "sonner"
 import JSZip from "jszip"
@@ -46,9 +46,24 @@ export default function QRCodeGenerator() {
   const [vCardLinkedin, setVCardLinkedin] = useState("")
 
   // Batch States
-  const [batchInput, setBatchInput] = useState("")
+  const [batchItems, setBatchItems] = useState([{ id: "1", url: "", type: "QuickQR" }])
   const [isBatching, setIsBatching] = useState(false)
-  const [batchNameType, setBatchNameType] = useState("QuickQR")
+
+  const addBatchItem = () => {
+    setBatchItems([...batchItems, { id: Math.random().toString(), url: "", type: "QuickQR" }])
+  }
+
+  const removeBatchItem = (id: string) => {
+    if (batchItems.length > 1) {
+      setBatchItems(batchItems.filter(item => item.id !== id))
+    } else {
+      setBatchItems([{ id: Math.random().toString(), url: "", type: "QuickQR" }])
+    }
+  }
+
+  const updateBatchItem = (id: string, field: "url" | "type", value: string) => {
+    setBatchItems(batchItems.map(item => item.id === id ? { ...item, [field]: value } : item))
+  }
 
   // Advanced QR Customizer States
   const [qrColor1, setQrColor1] = useState("#ffffff")
@@ -176,8 +191,8 @@ TITLE:${vCardTitle}`
   }
 
   const handleBatchGenerate = async () => {
-    const lines = batchInput.split("\n").filter(l => l.trim().length > 0)
-    if (lines.length === 0) {
+    const activeItems = batchItems.filter(item => item.url.trim().length > 0)
+    if (activeItems.length === 0) {
       toast.error("Please provide at least one URL");
       return;
     }
@@ -185,22 +200,22 @@ TITLE:${vCardTitle}`
     setIsBatching(true)
     const zip = new JSZip()
     const toastId = "batch-gen"
-    toast.loading(`Processing 0/${lines.length} items...`, { id: toastId })
+    toast.loading(`Processing 0/${activeItems.length} items...`, { id: toastId })
 
     try {
       // Import styling library for background generation
       const { default: QRCodeStyling } = await import("qr-code-styling")
 
-      for (let i = 0; i < lines.length; i++) {
-        const line = lines[i].trim()
-        toast.loading(`Processing ${i + 1}/${lines.length}: ${line.slice(0, 20)}...`, { id: toastId })
+      for (let i = 0; i < activeItems.length; i++) {
+        const item = activeItems[i]
+        toast.loading(`Processing ${i + 1}/${activeItems.length}: ${item.url.slice(0, 20)}...`, { id: toastId })
 
         // 1. Register in Database
         const res = await fetch("/api/qr", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ 
-            url: line, 
+            url: item.url, 
             type: "url",
             expirationDuration: expiration || undefined,
             password: usePassword && password ? password : undefined
@@ -238,7 +253,7 @@ TITLE:${vCardTitle}`
 
           const blob = await qr.getRawData("png")
           if (blob) {
-            const fileName = `${batchNameType}_${i+1}_${data.data.shortId}.png`
+            const fileName = `${item.type}_${i+1}_${data.data.shortId}.png`
             zip.file(fileName, blob)
           }
         }
@@ -250,8 +265,7 @@ TITLE:${vCardTitle}`
       link.download = `QuickQR_Batch_${Date.now()}.zip`
       link.click()
       
-      toast.success(`Batch complete! Generated ${lines.length} QR codes.`, { id: toastId })
-      setBatchInput("")
+      toast.success(`Batch complete! Generated ${activeItems.length} QR codes.`, { id: toastId })
     } catch (err) {
       console.error(err)
       toast.error("Batch processing failed.", { id: toastId })
@@ -575,43 +589,71 @@ TITLE:${vCardTitle}`
 
               <TabsContent value="batch" className="mt-0 space-y-4">
                  <div className="space-y-4">
-                    <Label className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">Batch URL Processor (One per line)</Label>
-                    <textarea 
-                      placeholder="https://google.com&#10;https://github.com&#10;https://basudev.dev"
-                      value={batchInput}
-                      onChange={(e) => setBatchInput(e.target.value)}
-                      className="w-full bg-zinc-950/50 border-zinc-800 text-white placeholder:text-zinc-700 h-40 rounded-xl px-5 py-4 text-sm focus-visible:ring-1 focus-visible:ring-white/20 font-mono resize-none"
-                    />
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest flex items-center gap-2">
-                          <LinkIcon className="w-3 h-3" /> Campaign Label
-                        </Label>
-                        <Select value={batchNameType} onValueChange={setBatchNameType}>
-                          <SelectTrigger className="bg-zinc-950/50 border-zinc-800 h-10 text-xs">
-                            <SelectValue placeholder="Select type" />
-                          </SelectTrigger>
-                          <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
-                            <SelectItem value="Instagram">Instagram</SelectItem>
-                            <SelectItem value="GitHub">GitHub</SelectItem>
-                            <SelectItem value="LinkedIn">LinkedIn</SelectItem>
-                            <SelectItem value="Portfolio">Portfolio</SelectItem>
-                            <SelectItem value="Business">Business</SelectItem>
-                            <SelectItem value="QuickQR">Generic (QuickQR)</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="flex items-center gap-2 p-3 bg-zinc-900/50 rounded-xl border border-zinc-800 h-10 self-end">
+                    <Label className="text-zinc-400 flex items-center text-xs font-semibold tracking-widest uppercase">Dynamic Batch Generator</Label>
+                    
+                    <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                      {batchItems.map((item, index) => (
+                        <div key={item.id} className="flex flex-col md:flex-row gap-3 p-4 bg-zinc-950/40 border border-zinc-800/50 rounded-xl group relative hover:border-zinc-700 transition-all">
+                          <div className="w-full md:w-32">
+                            <Select value={item.type} onValueChange={(val) => updateBatchItem(item.id, "type", val)}>
+                              <SelectTrigger className="bg-zinc-950/50 border-zinc-800 h-10 text-[10px] font-bold uppercase tracking-wider">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-300">
+                                <SelectItem value="Instagram">Instagram</SelectItem>
+                                <SelectItem value="GitHub">GitHub</SelectItem>
+                                <SelectItem value="LinkedIn">LinkedIn</SelectItem>
+                                <SelectItem value="Portfolio">Portfolio</SelectItem>
+                                <SelectItem value="Business">Business</SelectItem>
+                                <SelectItem value="QuickQR">Other</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="flex-1 relative">
+                            <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-600" />
+                            <Input 
+                              placeholder="https://example.com" 
+                              value={item.url}
+                              onChange={(e) => updateBatchItem(item.id, "url", e.target.value)}
+                              className="bg-zinc-950/50 border-zinc-800 h-10 pl-9 text-xs"
+                            />
+                          </div>
+                          <button 
+                            onClick={() => removeBatchItem(item.id)}
+                            className="p-2.5 text-zinc-600 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="flex flex-col md:flex-row gap-4 items-center">
+                      <Button 
+                        onClick={addBatchItem}
+                        variant="outline" 
+                        className="w-full md:w-auto border-zinc-800 bg-zinc-950/20 hover:bg-zinc-900 text-zinc-400 h-10 px-6 rounded-xl text-xs flex items-center gap-2"
+                      >
+                        <Plus className="w-3.5 h-3.5" /> Add Another Link
+                      </Button>
+                      
+                      <div className="flex-1 flex items-center gap-2 p-3 bg-zinc-900/50 rounded-xl border border-zinc-800 h-10">
                         <Zap className="w-4 h-4 text-amber-500" />
-                        <p className="text-[9px] text-zinc-500">Links will use your current visual settings.</p>
+                        <p className="text-[9px] text-zinc-500">Each entry will use your current visual settings and label.</p>
                       </div>
                     </div>
+
                     <Button 
                       onClick={handleBatchGenerate} 
                       disabled={isBatching} 
-                      className="w-full h-14 bg-white text-black hover:bg-zinc-200 transition-all font-bold rounded-xl"
+                      className="w-full h-14 bg-white text-black hover:bg-zinc-200 transition-all font-bold rounded-xl shadow-lg shadow-white/5"
                     >
-                      {isBatching ? <Loader2 className="w-5 h-5 animate-spin" /> : "Generate Bundle (.zip)"}
+                      {isBatching ? (
+                        <div className="flex items-center gap-2">
+                          <Loader2 className="w-5 h-5 animate-spin" />
+                          <span>Generating Bundle...</span>
+                        </div>
+                      ) : "Generate & Download Bundle (.zip)"}
                     </Button>
                  </div>
               </TabsContent>
