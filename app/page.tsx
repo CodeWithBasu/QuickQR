@@ -85,7 +85,15 @@ export default function QRCodeGenerator() {
       
       if (data.success) {
         // Build complete URL based on the current window origin pointing to the shortlink
-        const trackingUrl = `${window.location.origin}/q/${data.data.shortId}`
+        let trackingUrl = `${window.location.origin}/q/${data.data.shortId}`
+        
+        // Contextual routing: Appends the filename directly to the URL so that when users scan the QR, 
+        // their smartphone displays the actual filename before they click it, rather than just a random ID.
+        if (filename && type !== "url") {
+          const safeName = filename.replace(/[^a-zA-Z0-9.-]/g, "_")
+          trackingUrl += `/${encodeURIComponent(safeName)}`
+        }
+
         setQrValue(trackingUrl)
         console.log("Generated tracking URL:", trackingUrl)
         toast.success("QR Code ready to scan!", { id: "qr-gen" })

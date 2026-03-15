@@ -4,10 +4,11 @@ import QRCode from "@/models/QRCode";
 
 export async function GET(
   req: Request,
-  { params }: { params: Promise<{ shortId: string }> }
+  { params }: { params: Promise<{ slug: string[] }> }
 ) {
   try {
-    const { shortId } = await params;
+    const { slug } = await params;
+    const shortId = slug?.[0];
     
     if (!shortId) {
       console.error("Missing shortId in request");
