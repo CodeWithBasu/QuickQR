@@ -801,6 +801,7 @@ TITLE:${vCardTitle}`
               </div>
             </div>
           </div>
+        </div>
 
         {/* Footer */}
         <div className="mt-20 flex flex-col items-center space-y-8 pb-10">
@@ -860,7 +861,6 @@ TITLE:${vCardTitle}`
           </div>
         </div>
       </div>
-    </div>
     </div>
   )
 }
