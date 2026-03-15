@@ -37,7 +37,7 @@ export default function UnlockPage({ params }: { params: Promise<{ shortId: stri
         
         // If it's a file type, go to the viewer instead of direct download
         if (["doc", "video", "audio"].includes(data.type)) {
-          router.push(`/viewer/${shortId}`);
+          router.push(`/viewer/${shortId}?code=${pin}`);
         } else {
           window.location.href = data.url;
         }

@@ -6,10 +6,13 @@ import { Button } from "@/components/ui/button";
 
 export default async function FileViewer({
   params,
+  searchParams,
 }: {
   params: Promise<{ shortId: string }>;
+  searchParams: Promise<{ code?: string }>;
 }) {
   const { shortId } = await params;
+  const { code } = await searchParams;
 
   await dbConnect();
   const qrData = await QRCode.findOne({ shortId });
@@ -18,11 +21,11 @@ export default async function FileViewer({
     redirect("/?error=notfound");
   }
 
-  // If password protected and not authenticated (this is a simple viewer, 
-  // the logic usually goes through the /q route first which redirects to /unlock)
-  // If they landed here directly, we should still handle it.
+  // If password protected, verify the PIN from searchParams
   if (qrData.password) {
-    redirect(`/unlock/${shortId}`);
+    if (!code || code !== qrData.password) {
+      redirect(`/unlock/${shortId}`);
+    }
   }
 
   const destination = qrData.url.startsWith("http") ? qrData.url : `https://${qrData.url}`;
