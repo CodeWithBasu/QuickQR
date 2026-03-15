@@ -15,6 +15,7 @@ import { Download, Link as LinkIcon, QrCode, FileText, Video, Music, Loader2, Za
 import { UploadDropzone } from "@/lib/uploadthing"
 import { toast } from "sonner"
 import JSZip from "jszip"
+import Link from "next/link"
 
 export default function QRCodeGenerator() {
   const [url, setUrl] = useState("https://your-website.com")
